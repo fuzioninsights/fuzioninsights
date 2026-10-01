@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://fuzioninsights.netlify.app/</loc></url>
+  <url><loc>https://fuzioninsights.netlify.app/sobre.html</loc></url>
+  <url><loc>https://fuzioninsights.netlify.app/contato.html</loc></url>
+  <url><loc>https://fuzioninsights.netlify.app/privacidade.html</loc></url>
+  <url><loc>https://fuzioninsights.netlify.app/termos.html</loc></url>
+  <!-- Adicione aqui cada artigo: <url><loc>https://fuzioninsights.netlify.app/artigo.html?id=ID-DO-ARTIGO</loc><lastmod>AAAA-MM-DD</lastmod></url> -->
+</urlset>

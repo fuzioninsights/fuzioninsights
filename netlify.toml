@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Card de compartilhamento (título + resumo + imagem)
+[[redirects]]
+  from = "/s/:id"
+  to = "/.netlify/functions/share?id=:id"
+  status = 200
+
+[[redirects]]
+  from = "/img/:id"
+  to = "/.netlify/functions/og-image?id=:id"
+  status = 200
