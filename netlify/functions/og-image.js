@@ -2,7 +2,9 @@
 const DB = 'https://fuzion-insights-default-rtdb.firebaseio.com';
 
 exports.handler = async (event) => {
-  const id = ((event.queryStringParameters || {}).id || '').replace(/\.jpg$/i, '').trim();
+  let id = ((event.queryStringParameters || {}).id || '').trim();
+  if (!id) { const m = /\/img\/([^/?#]+)/.exec(event.rawUrl || event.path || ''); try { id = m ? decodeURIComponent(m[1]) : ''; } catch (e) {} }
+  id = id.replace(/\.jpg$/i, '').trim();
   if (!id) return { statusCode: 404, body: 'Not found' };
   try {
     const url = `${DB}/artigos.json?orderBy=${encodeURIComponent('"id"')}&equalTo=${encodeURIComponent(JSON.stringify(id))}`;
