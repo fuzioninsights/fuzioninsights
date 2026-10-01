@@ -3,10 +3,20 @@
 const DB = 'https://fuzion-insights-default-rtdb.firebaseio.com';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+// Lê o ID do artigo: primeiro do parâmetro ?id=, depois direto do endereço original (/s/ID)
+function getId(event) {
+  const q = ((event.queryStringParameters || {}).id || '').trim();
+  if (q) return q;
+  const src = event.rawUrl || event.path || '';
+  const m = /\/s\/([^/?#]+)/.exec(src) || /\/share\/([^/?#]+)/.exec(src);
+  try { return m ? decodeURIComponent(m[1]).trim() : ''; } catch (e) { return ''; }
+}
+
 exports.handler = async (event) => {
   const site = (process.env.URL || 'https://fuzioninsights.netlify.app').replace(/\/$/, '');
-  const id = ((event.queryStringParameters || {}).id || '').trim();
-  if (id === '_ping') return { statusCode: 204, headers: { 'x-fz-share': '1', 'cache-control': 'no-store' } };
+  const id = getId(event);
+  if (id === '_ping') return { statusCode: 200, headers: { 'content-type': 'text/plain; charset=utf-8', 'x-fz-share': '1', 'cache-control': 'no-store' }, body: 'Fuzion Insights: função de compartilhamento ativa ✔' };
+  if (!id) return { statusCode: 200, headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store' }, body: 'Função ativa, mas nenhum ID de artigo foi informado. Use /s/ID-DO-ARTIGO' };
 
   const target = `${site}/artigo.html?id=${encodeURIComponent(id)}`;
   let a = null;
@@ -15,7 +25,7 @@ exports.handler = async (event) => {
     const d = await (await fetch(url)).json();
     if (d && !d.error) a = Object.values(d)[0] || null;
   } catch (e) {}
-  if (!a) return { statusCode: 302, headers: { Location: id ? target : site } };
+  if (!a) return { statusCode: 302, headers: { Location: target } };
 
   let published = '';
   if (a.date) published = new Date(a.date).toISOString();
