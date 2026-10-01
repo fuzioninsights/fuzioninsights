@@ -12,3 +12,10 @@
   from = "/img/:id"
   to = "/.netlify/functions/og-image?id=:id"
   status = 200
+
+# Sitemap gerado automaticamente com todos os artigos
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/.netlify/functions/sitemap"
+  status = 200
+  force = true
