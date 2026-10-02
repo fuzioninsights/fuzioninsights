@@ -173,9 +173,32 @@
                 if (adminToken) { const b = $('btn-edit'); b.href = 'index.html?editar=' + encodeURIComponent(a.id); b.style.display = 'inline-block'; }
 
                 // dados estruturados (SEO / Google News)
-                const ld = { '@context': 'https://schema.org', '@type': 'NewsArticle', headline: a.title, author: { '@type': 'Person', name: a.author },
-                    publisher: { '@type': 'Organization', name: SITE.name }, mainEntityOfPage: location.href, articleSection: a.category };
-                if (pub) ld.datePublished = pub.toISOString(); if (upd && !isNaN(upd)) ld.dateModified = upd.toISOString();
+                const autorSlug = (a.author || 'redacao').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                const ld = {
+                  '@context': 'https://schema.org',
+                  '@type': 'NewsArticle',
+                  headline: a.title,
+                  description: (a.excerpt || '').replace(/…$/, ''),
+                  image: a.image ? [a.image] : undefined,
+                  datePublished: pub ? pub.toISOString() : undefined,
+                  dateModified: (upd && !isNaN(upd)) ? upd.toISOString() : (pub ? pub.toISOString() : undefined),
+                  author: {
+                    '@type': 'Person',
+                    name: a.author,
+                    url: `https://fuzioninsights.netlify.app/autor.html?slug=${encodeURIComponent(autorSlug)}`
+                  },
+                  publisher: {
+                    '@type': 'Organization',
+                    name: SITE.name,
+                    logo: {
+                      '@type': 'ImageObject',
+                      url: 'https://fuzioninsights.netlify.app/favicon.svg'
+                    }
+                  },
+                  mainEntityOfPage: { '@type': 'WebPage', '@id': location.href },
+                  articleSection: a.category,
+                  inLanguage: 'pt-BR'
+                };
                 const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(ld); document.head.appendChild(s);
 
                 // leia também
