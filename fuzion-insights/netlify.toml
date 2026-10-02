@@ -1,0 +1,22 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Sitemap dinâmico (com suporte a Google News para artigos das últimas 48h)
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/.netlify/functions/sitemap"
+  status = 200
+  force = true
+
+# Card de compartilhamento (título + resumo + imagem) para WhatsApp/Facebook/X/LinkedIn
+[[redirects]]
+  from = "/s/:id"
+  to = "/.netlify/functions/share?id=:id"
+  status = 200
+
+# Imagem de capa servida como JPEG (para og:image)
+[[redirects]]
+  from = "/img/:id"
+  to = "/.netlify/functions/og-image?id=:id"
+  status = 200

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://fuzioninsights.netlify.app/">
+    <title>Fuzion Insights | Análises de Estratégia, Liderança, Negócios e Mercado</title>
+    <meta name="description" content="Fuzion Insights publica análises independentes sobre estratégia, liderança, negócios e mercado para executivos e profissionais.">
+    <meta property="og:url" content="https://fuzioninsights.netlify.app/"><meta property="og:title" content="Fuzion Insights"><meta property="og:type" content="website">
+    <meta property="og:description" content="Análises independentes sobre estratégia, liderança, negócios e mercado.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>try{if(localStorage.getItem('fz_consent')==='essential'){(window.adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=1}}catch(e){}</script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6909799094388328" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .status-bar{background:var(--bg-s);border-bottom:1px solid var(--border);padding:.45rem var(--gutter)}
+        .status-in{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem 1rem;font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:600}
+        .status-l{display:flex;align-items:center;flex-wrap:wrap;gap:.3rem .8rem;min-width:0}
+        #dt{white-space:nowrap}
+        .status-in .live-dot{flex:none}
+        .live-tag{display:inline-flex;align-items:center;gap:.4rem;flex:none;white-space:nowrap;color:var(--gold-d);font-weight:700;font-size:.65rem;letter-spacing:.4px}
+        .search-wrapper{display:flex;align-items:center;background:#FFF;border:1px solid var(--border);padding:.3rem .6rem;width:220px}
+        .search-box{border:none;color:#000;font-size:.78rem;width:100%;font-weight:500;background:transparent}.search-box:focus{outline:none}
+        .search-icon-svg{width:12px;height:12px;flex:none;fill:none;stroke:#71717A;stroke-width:2.5;margin-right:6px}
+
+        main{max-width:1200px;margin:2rem auto 0;padding:0 var(--gutter);display:grid;grid-template-columns:minmax(0,1fr);gap:2.5rem}
+        @media(min-width:992px){main{grid-template-columns:minmax(0,2.3fr) minmax(280px,1fr);gap:3rem}aside.side-t{position:sticky;top:calc(var(--hdr-h) + 1rem);align-self:start}}
+        @media(max-width:680px){
+            .status-in{flex-direction:column;align-items:flex-start;gap:.6rem}
+            .search-wrapper{width:100%}main{margin-top:1.5rem;gap:2rem}
+        }
+        .hero{border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:2rem}
+        .hero-link{text-decoration:none;color:inherit;display:block}
+        .hero-img{width:100%;aspect-ratio:16/9;max-height:380px;object-fit:cover;margin-bottom:1.1rem;background:#F3F4F6}
+        .kicker{color:var(--gold-d);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
+        .hero h2{font-size:2.05rem;font-weight:800;color:#000;margin:.5rem 0;line-height:1.18;letter-spacing:-.025em}
+        .hero p{font-size:1rem;color:#4B5563;line-height:1.6}
+        .hero-by{display:block;margin-top:.7rem;font-size:.75rem;color:var(--muted);font-weight:600}
+        .hero-link:hover h2{color:var(--gold-d)}
+        @media(max-width:680px){.hero h2{font-size:1.5rem}}
+        .sec-title{font-family:'Inter',system-ui,sans-serif;font-size:.85rem;letter-spacing:1px;border-bottom:2px solid #000;padding-bottom:.35rem;margin-bottom:1.2rem;text-transform:uppercase}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.75rem;align-items:stretch}
+        .card-wrap{min-width:0}.card-link{display:block;height:100%;text-decoration:none;color:inherit}
+        .card{background:#FFF;border:1px solid var(--border);border-top:3px solid #000;display:flex;flex-direction:column;overflow:hidden;height:100%;transition:transform .2s,box-shadow .2s}
+        .card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.07)}
+        .card-img{width:100%;aspect-ratio:16/9;background:#F3F4F6;object-fit:cover}
+        .card-body{padding:1rem;display:flex;flex-direction:column;flex-grow:1}
+        .card-meta{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}.card-meta b{color:var(--gold-d)}
+        .card-title{font-family:'Inter',system-ui,sans-serif;font-size:1.12rem;line-height:1.3;font-weight:700;margin:.4rem 0;color:#000}
+        .card-ex{font-size:.8rem;color:#4B5563;margin-bottom:.9rem;line-height:1.55}
+        .card-footer{font-size:.7rem;color:var(--muted);border-top:1px solid var(--border);padding-top:.6rem;margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+        .btn-share{display:inline-flex;align-items:center;gap:.35rem;background:transparent;border:none;color:var(--gold-d);font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;cursor:pointer}
+        .btn-share:hover{color:#000}.btn-share .ic{width:15px;height:15px}
+        .empty{color:var(--muted);font-size:.9rem;padding:1rem 0}
+
+        .side-t{background:var(--bg-s);border:1px solid var(--border);padding:1.2rem;height:fit-content}
+        .side-t h3{font-family:'Inter',system-ui,sans-serif;font-size:.8rem;font-weight:700;border-bottom:2px solid #000;padding-bottom:.4rem;margin-bottom:1rem}
+        .t-item{display:flex;gap:.7rem;text-decoration:none;color:inherit;font-size:.85rem;padding:.6rem 0;border-bottom:1px solid var(--border);font-weight:600;line-height:1.35}
+        .t-num{font-family:'Inter',system-ui,sans-serif;font-size:1.15rem;color:var(--gold-d);font-weight:900}
+        .side-news{background:#fff;border:1px solid var(--border);border-top:3px solid var(--gold);padding:1.1rem;margin-top:1.4rem;text-align:center}
+        .side-news h4{font-family:'Inter',system-ui,sans-serif;font-size:.8rem;letter-spacing:1px;margin-bottom:.4rem}
+        .side-news p{font-size:.72rem;color:var(--muted);margin-bottom:.8rem}
+        .side-news form{display:flex;flex-direction:column;gap:.5rem}
+        .side-news input{padding:.65rem;border:1px solid var(--border);background:#FFF}
+        .side-news button{background:#000;color:#FFF;border:none;padding:.65rem;font-size:.68rem;font-weight:700;text-transform:uppercase;cursor:pointer}
+
+        /* PAINEL EDITORIAL */
+        #panel{display:none;background:var(--bg-s);border:1px dashed var(--gold);padding:1.5rem;grid-column:1/-1}
+        @media(max-width:680px){#panel{padding:1rem}}
+        .panel-h{font-family:'Inter',system-ui,sans-serif;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+        .edit-banner{display:none;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:#FEF3C7;border:1px solid #F59E0B;padding:.6rem .9rem;font-size:.8rem;margin-bottom:1rem}
+        .f-g{display:flex;flex-direction:column;gap:1rem}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+        @media(max-width:680px){.form-row{grid-template-columns:1fr}}
+        .form-group{display:flex;flex-direction:column;gap:.3rem}
+        .form-group label{font-size:.7rem;font-weight:700;text-transform:uppercase;color:var(--muted)}
+        .f-g input,.f-g select{width:100%;padding:.7rem;background:#FFF;border:1px solid var(--border);color:#000}
+        .cover-prev{max-width:220px;max-height:120px;object-fit:cover;margin-top:.4rem;display:none}
+        /* BARRA DE ESTILO FIXA: acompanha a rolagem enquanto o editor estiver na tela */
+        .editor-toolbar{position:sticky;top:var(--hdr-h);z-index:60;display:flex;align-items:center;gap:.3rem;background:#1A1A1E;padding:.5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+        .editor-toolbar::-webkit-scrollbar{display:none}
+        .editor-btn{flex:0 0 auto;min-width:38px;height:36px;padding:0 .7rem;background:#333;color:#fff;border:none;font:600 .8rem 'Inter',sans-serif;cursor:pointer}
+        .editor-btn:hover{background:#555}.editor-btn.on{background:var(--gold);color:#000}
+        .tb-sep{flex:0 0 1px;align-self:stretch;background:#555;margin:0 .25rem}
+        .medium-textarea{width:100%;min-height:340px;background:#FFF;border:1px solid var(--border);border-top:none;padding:1.2rem;outline:none}
+        .medium-textarea:focus{border-color:var(--gold)}
+        .medium-textarea:empty:before{content:'Comece a escrever sua análise aqui…';color:#A1A1AA}
+        .ed-count{font-size:.72rem;color:var(--muted);text-align:right}
+        .btn-row{display:flex;gap:.6rem;flex-wrap:wrap}
+
+        .ed-foot{display:flex;justify-content:space-between;gap:1rem;font-size:.72rem;color:var(--muted)}
+        .draft-banner{display:none;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;background:#EFF6FF;border:1px solid #93C5FD;padding:.6rem .9rem;font-size:.8rem;margin-bottom:1rem}
+        .draft-banner button{border:none;padding:.4rem .8rem;font:700 .68rem 'Inter',sans-serif;text-transform:uppercase;cursor:pointer;background:#1A1A1E;color:#fff;margin-left:.3rem}
+        .draft-banner button.alt{background:transparent;color:#1A1A1E;border:1px solid #1A1A1E}
+        .mng-h{font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+        .manage-list{display:flex;flex-direction:column;gap:.6rem;max-height:460px;overflow-y:auto}
+        .mrow{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:.9rem;align-items:center;background:#fff;border:1px solid var(--border);padding:.6rem}
+        .mthumb{width:72px;height:46px;object-fit:cover;background:#F3F4F6;display:block}
+        .mtitle{display:block;font-size:.88rem;font-weight:700;color:#000;text-decoration:none;line-height:1.3;overflow-wrap:anywhere}.mtitle:hover{color:var(--gold-d)}
+        .mmeta{font-size:.68rem;color:var(--muted);margin-top:.2rem;font-weight:600}
+        .mact{display:flex;gap:.4rem}
+        .btn-sm{border:none;background:#1A1A1E;color:#fff;font:700 .66rem 'Inter',sans-serif;text-transform:uppercase;padding:.5rem .8rem;cursor:pointer;white-space:nowrap}
+        .btn-sm:hover{background:var(--gold-d)}.btn-sm.dl{background:#EF4444}
+        @media(max-width:680px){.mrow{grid-template-columns:56px minmax(0,1fr)}.mthumb{width:56px;height:40px}.mact{grid-column:1/-1;justify-content:flex-end}}
+        .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center;padding:1rem}
+        .m-content{background:#FFF;border:1px solid var(--border);padding:2rem;width:100%;max-width:360px;display:flex;flex-direction:column;gap:1.2rem}
+        .m-content input{width:100%;padding:.7rem;background:#FFF;border:1px solid var(--border);color:#000}
+        .m-content label{font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+    </style>
+</head>
+<body>
+    <div class="top-fixed">
+    <header class="site-header">
+        <div class="wrap nav-c stack">
+            <a class="logo" href="index.html">FUZION<span>INSIGHTS</span></a>
+            <nav class="nav-menu" aria-label="Seções">
+                <a href="#" class="active" onclick="st('Home',this);return false">Home</a>
+                <a href="#" onclick="st('Estratégia',this);return false">Estratégia</a>
+                <a href="#" onclick="st('Liderança',this);return false">Liderança</a>
+                <a href="#" onclick="st('Negócios',this);return false">Negócios</a>
+                <a href="#" onclick="st('Mercado',this);return false">Mercado</a>
+            </nav>
+            <button type="button" class="btn-sub" data-subscribe>Assine</button>
+        </div>
+    </header>
+    <div class="ticker-outer" style="display:none"><div class="ticker-wrap"><div class="ticker-inner" id="t1"></div><div class="ticker-inner" id="t2"></div></div></div>
+    </div>
+
+    <div class="status-bar"><div class="wrap status-in">
+        <div class="status-l">
+            <span id="dt">&nbsp;</span>
+            <span class="live-tag"><span class="live-dot"></span>Redação Aberta 24h</span>
+        </div>
+        <div class="search-wrapper">
+            <svg class="search-icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="search" class="search-box" id="sb" placeholder="Pesquisar análises..." aria-label="Pesquisar" oninput="sch()">
+        </div>
+    </div></div>
+
+    <div class="ad-band" data-ad="top"></div>
+
+    <main>
+        <section id="panel">
+            <h2 class="panel-h" id="panel-h">Nova Análise</h2>
+            <div class="edit-banner" id="edit-banner">
+                <span>✎ Editando: <strong id="edit-title"></strong></span>
+                <button type="button" class="btn ghost" style="padding:.4rem .9rem" onclick="cancelEdit()">Cancelar edição</button>
+            </div>
+            <div class="draft-banner" id="draft-banner">
+                <span>📝 Há um rascunho não publicado salvo em <strong id="draft-when"></strong>.</span>
+                <span><button type="button" onclick="restoreDraft()">Recuperar</button><button type="button" class="alt" onclick="discardDraft()">Descartar</button></span>
+            </div>
+            <form onsubmit="pub(event)" class="f-g" id="art-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pc">Seção do Portal</label>
+                        <select id="pc" required><option value="Estratégia">Estratégia</option><option value="Liderança">Liderança</option><option value="Negócios">Negócios</option><option value="Mercado">Mercado</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pa">Autor / Redator responsável</label>
+                        <input type="text" id="pa" placeholder="Ex: Nome do Autor" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pi" id="pi-label">Imagem de Capa</label>
+                    <input type="file" id="pi" accept="image/*" required>
+                    <img id="cover-prev" class="cover-prev" alt="Capa atual">
+                </div>
+                <div class="form-group">
+                    <label for="pt">Manchete de Capa (Título principal)</label>
+                    <input type="text" id="pt" placeholder="Insira o título da notícia" required>
+                </div>
+                <div class="form-group">
+                    <label>Corpo de Leitura do Artigo</label>
+                    <div>
+                        <div class="editor-toolbar" id="toolbar" role="toolbar" aria-label="Estilo do texto">
+                            <button type="button" class="editor-btn" data-cmd="bold" title="Negrito (Ctrl+B)"><b>B</b></button>
+                            <button type="button" class="editor-btn" data-cmd="italic" title="Itálico (Ctrl+I)"><i>I</i></button>
+                            <button type="button" class="editor-btn" data-cmd="underline" title="Sublinhado (Ctrl+U)"><u>U</u></button>
+                            <span class="tb-sep"></span>
+                            <button type="button" class="editor-btn" data-block="h2" title="Subtítulo">H2</button>
+                            <button type="button" class="editor-btn" data-block="h3" title="Subtítulo menor">H3</button>
+                            <button type="button" class="editor-btn" data-block="blockquote" title="Citação">❝</button>
+                            <span class="tb-sep"></span>
+                            <button type="button" class="editor-btn" data-cmd="insertUnorderedList" title="Marcadores">• Lista</button>
+                            <button type="button" class="editor-btn" data-cmd="insertOrderedList" title="Lista numerada">1. Lista</button>
+                            <span class="tb-sep"></span>
+                            <button type="button" class="editor-btn" data-cmd="createLink" title="Inserir link">🔗 Link</button>
+                            <button type="button" class="editor-btn" data-cmd="unlink" title="Remover link">Sem link</button>
+                            <button type="button" class="editor-btn" data-cmd="removeFormat" title="Limpar formatação">Limpar</button>
+                            <span class="tb-sep"></span>
+                            <button type="button" class="editor-btn" data-ins="img" title="Inserir imagem por link">🖼 Imagem</button>
+                            <button type="button" class="editor-btn" data-ins="video" title="Inserir vídeo do YouTube ou Vimeo">▶ Vídeo</button>
+                            <button type="button" class="editor-btn" data-ins="table" title="Inserir tabela">▦ Tabela</button>
+                            <span class="tb-sep"></span>
+                            <button type="button" class="editor-btn" data-cmd="undo" title="Desfazer">↶</button>
+                            <button type="button" class="editor-btn" data-cmd="redo" title="Refazer">↷</button>
+                        </div>
+                        <div class="medium-textarea art-content" id="pcn" contenteditable="true" role="textbox" aria-multiline="true"></div>
+                    </div>
+                    <div class="ed-foot"><span id="draft-note"></span><span id="ed-count">0 palavras</span></div>
+                </div>
+                <div class="btn-row">
+                    <button type="submit" class="btn" id="btn-pub">Publicar Análise Oficial</button>
+                    <button type="button" class="btn danger" onclick="out()">Sair do Painel</button>
+                </div>
+            </form>
+            <div style="margin-top:2.5rem;border-top:2px solid #000;padding-top:1.2rem">
+                <h3 class="mng-h">Artigos publicados (<span id="mng-count">0</span>)</h3>
+                <div id="manage-list" class="manage-list"></div>
+            </div>
+            <div style="margin-top:2.5rem;border-top:2px solid #000;padding-top:1.2rem">
+                <h3 style="font-family:'Inter',system-ui,sans-serif;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem">Assinantes da Newsletter (<span id="sub-count">0</span>)</h3>
+                <div id="sub-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:280px;overflow-y:auto"></div>
+            </div>
+        </section>
+
+        <div>
+            <section class="hero" id="hero" style="display:none"></section>
+            <h2 class="sec-title" id="ft">Últimas Análises</h2>
+            <div class="grid" id="feed"><p class="empty">Carregando análises…</p></div>
+        </div>
+
+        <aside class="side-t">
+            <div class="ad-box" data-ad="sidebar"></div>
+            <div id="trend-box">
+                <h3 id="tt">Mais Lidos</h3>
+                <div id="trend-list"></div>
+            </div>
+            <div class="side-news">
+                <h4>Fuzion Briefing</h4>
+                <p>Receba nossa inteligência macro semanal</p>
+                <form onsubmit="return subscribeNewsletter(event,this)">
+                    <input type="email" placeholder="Seu e-mail corporativo" required aria-label="E-mail">
+                    <button type="submit">Assinar</button>
+                </form>
+            </div>
+        </aside>
+    </main>
+
+    <div id="lm" class="modal">
+        <div class="m-content">
+            <h3 style="font-size:.95rem;text-align:center;font-family:'Inter',system-ui,sans-serif;letter-spacing:1px">Autenticação Editorial</h3>
+            <div style="display:flex;flex-direction:column;gap:.3rem"><label for="em">E-mail Administrativo</label><input type="email" id="em" placeholder="nome@exemplo.com"></div>
+            <div style="display:flex;flex-direction:column;gap:.3rem"><label for="pw">Senha de Segurança</label><input type="password" id="pw" placeholder="••••••••••••" onkeydown="if(event.key==='Enter')log()"></div>
+            <button class="btn" style="width:100%" onclick="log()">Entrar no Terminal</button>
+            <span onclick="$('lm').style.display='none'" style="text-align:center;font-size:.7rem;color:#71717A;cursor:pointer;text-transform:uppercase;font-weight:700">Cancelar</span>
+        </div>
+    </div>
+
+    <footer class="site-footer"><div class="wrap">
+        <div class="f-socials">
+            <a href="https://instagram.com/fuzioninsights" target="_blank" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+            <a href="https://x.com/fuzioninsights" target="_blank" title="X (Twitter)"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 7.778 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.335L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <a href="https://tiktok.com/@fuzion.insights" target="_blank" title="TikTok"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.62 4.17.94 1.09 2.29 1.8 3.74 1.96v3.91c-1.39-.02-2.78-.45-3.93-1.31-.22-.16-.42-.35-.61-.55-.07 1.63-.03 3.25-.04 4.88a6.19 6.19 0 01-1.57 4.11c-1.89 2.01-4.99 2.5-7.42 1.15-2.61-1.45-3.76-4.63-2.61-7.41 1.01-2.45 3.65-3.9 6.26-3.41v4c-1.14-.3-2.39.11-2.99 1.09-.67 1.09-.34 2.59.74 3.27 1.12.7 2.68.25 3.25-.99.23-.49.27-1.05.26-1.59-.02-3.1-.01-6.19-.01-9.29z"/></svg></a>
+            <a href="https://youtube.com/@fuzioninsights" target="_blank" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.016 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        </div>
+        <div class="f-status"><span class="live-dot"></span><span>Redação Aberta 24 Horas</span></div>
+        <p>© <span data-year>2026</span> Fuzion Insights. Todos os direitos reservados.</p>
+        <p class="f-disc">Conteúdo informativo e educacional. Não constitui recomendação de investimento, consultoria financeira ou jurídica.</p>
+        <nav class="f-links" aria-label="Institucional" style="margin:1.2rem 0 0">
+        <a href="sobre.html">Sobre</a><a href="correcoes.html">Política de Correções</a><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="#" data-cookie-prefs>Preferências de cookies</a>
+        </nav>
+    </div></footer>
+
+    <script src="site.js"></script>
+    <script>
+        let db = {}, sec = 'Home', editingKey = null, dirty = false;
+        let adminToken = Admin.token;
+        const isAdmin = () => !!Admin.token;
+        async function tok() { adminToken = await Admin.fresh(); return adminToken; }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            signInAnon();
+            $('dt').textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).replace(/^./, c => c.toUpperCase());
+            if (adminToken) showP();
+            load(); initEditor();
+        });
+        window.addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'e') $('lm').style.display = 'flex'; });
+        window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+        /* ---------- EDITOR ---------- */
+        function initEditor() {
+            const ed = $('pcn');
+            try { document.execCommand('defaultParagraphSeparator', false, 'p'); } catch (e) {}
+            // mousedown não pode tirar o foco/seleção do texto
+            $('toolbar').addEventListener('mousedown', e => e.preventDefault());
+            $('toolbar').addEventListener('click', e => {
+                const b = e.target.closest('button'); if (!b) return;
+                if (b.dataset.ins) insertMedia(b.dataset.ins);
+                else if (b.dataset.block) toggleBlock(b.dataset.block); else fmt(b.dataset.cmd);
+            });
+            ed.addEventListener('input', () => { updCount(); dirty = true; saveDraftSoon(); });
+            ['pt', 'pa', 'pc'].forEach(id => $(id).addEventListener('input', () => { dirty = true; saveDraftSoon(); }));
+            // COLAR: converte Markdown (##, **negrito**, tabelas, links, imagens, vídeos) em texto formatado
+            ed.addEventListener('paste', e => {
+                e.preventDefault();
+                const cd = e.clipboardData, plain = cd.getData('text/plain') || '', html = cd.getData('text/html') || '';
+                let out;
+                if (html && hasStructure(html)) out = sanitizeHTML(html);
+                else out = mdToHtml(plain);
+                document.execCommand('insertHTML', false, out);
+                updCount(); dirty = true; saveDraftSoon();
+            });
+            document.addEventListener('selectionchange', updToolbar);
+        }
+        function hasStructure(html) {
+            const d = new DOMParser().parseFromString(html, 'text/html');
+            return !!d.querySelector('h1,h2,h3,h4,h5,h6,strong,b,em,i,table,ul,ol,blockquote,a[href],img,iframe,span[style*="font-weight"]');
+        }
+        function inEditor() { const s = getSelection(); return s.rangeCount && $('pcn').contains(s.anchorNode); }
+        function saveRange() { const s = getSelection(); return s.rangeCount && $('pcn').contains(s.anchorNode) ? s.getRangeAt(0).cloneRange() : null; }
+        function restoreRange(r) {
+            const ed = $('pcn'); ed.focus(); const s = getSelection(); s.removeAllRanges();
+            if (r) s.addRange(r); else { const rg = document.createRange(); rg.selectNodeContents(ed); rg.collapse(false); s.addRange(rg); }
+        }
+        function fmt(cmd) {
+            const ed = $('pcn'); if (!inEditor()) ed.focus();
+            if (cmd === 'createLink') {
+                const sel = getSelection();
+                if (!sel.rangeCount || sel.isCollapsed) { alert('Selecione o texto que receberá o link.'); return; }
+                const r = sel.getRangeAt(0).cloneRange();
+                let u = prompt('Insira a URL (ex: https://exemplo.com):'); if (!u) return;
+                if (!/^(https?:\/\/|mailto:)/i.test(u)) u = 'https://' + u;
+                sel.removeAllRanges(); sel.addRange(r); document.execCommand('createLink', false, u);
+            } else document.execCommand(cmd, false, null);
+            updToolbar(); updCount(); dirty = true; saveDraftSoon();
+        }
+        function insertMedia(kind) {
+            const r = saveRange(); let html = '';
+            if (kind === 'img') {
+                const u = (prompt('Cole o endereço (URL) da imagem. Ex: https://site.com/foto.jpg') || '').trim(); if (!u) return;
+                if (!/^https:\/\//i.test(u)) { alert('Use um endereço que comece com https://'); return; }
+                html = `<p><img src="${esc(u)}" alt=""></p><p><br></p>`;
+            } else if (kind === 'video') {
+                const u = (prompt('Cole o link do vídeo (YouTube ou Vimeo):') || '').trim(); if (!u) return;
+                const e = embedSrc(u); if (!e) { alert('Link não reconhecido. Use um link do YouTube ou do Vimeo.'); return; }
+                html = videoHtml(e) + '<p><br></p>';
+            } else {
+                const v = (prompt('Tamanho da tabela: colunas x linhas (ex: 3x4)', '3x4') || '').trim(); if (!v) return;
+                const m = /^(\d+)\s*[x×]\s*(\d+)$/i.exec(v); if (!m) { alert('Digite no formato 3x4'); return; }
+                const c = Math.min(8, Math.max(1, +m[1])), l = Math.min(30, Math.max(1, +m[2]));
+                html = '<table><thead><tr>' + '<th>Título</th>'.repeat(c) + '</tr></thead><tbody>' + ('<tr>' + '<td><br></td>'.repeat(c) + '</tr>').repeat(l) + '</tbody></table><p><br></p>';
+            }
+            restoreRange(r); document.execCommand('insertHTML', false, html);
+            updCount(); dirty = true; saveDraftSoon();
+        }
+        function toggleBlock(tag) {
+            if (!inEditor()) $('pcn').focus();
+            const cur = (document.queryCommandValue('formatBlock') || '').toLowerCase().replace(/[<>]/g, '');
+            document.execCommand('formatBlock', false, cur === tag ? 'p' : tag);
+            updToolbar(); dirty = true; saveDraftSoon();
+        }
+        function updToolbar() {
+            if (!inEditor()) return;
+            document.querySelectorAll('#toolbar [data-cmd]').forEach(b => {
+                if (['bold', 'italic', 'underline', 'insertUnorderedList', 'insertOrderedList'].includes(b.dataset.cmd)) {
+                    let on = false; try { on = document.queryCommandState(b.dataset.cmd); } catch (e) {} b.classList.toggle('on', on);
+                }
+            });
+            const blk = (document.queryCommandValue('formatBlock') || '').toLowerCase().replace(/[<>]/g, '');
+            document.querySelectorAll('#toolbar [data-block]').forEach(b => b.classList.toggle('on', b.dataset.block === blk));
+        }
+        function updCount() {
+            const t = $('pcn').innerText.trim(); const n = t ? t.split(/\s+/).length : 0;
+            $('ed-count').textContent = n + (n === 1 ? ' palavra' : ' palavras');
+        }
+
+        /* ---------- RASCUNHO AUTOMÁTICO (nada se perde se a sessão cair) ---------- */
+        const draftKey = () => 'fz_draft_' + (editingKey || 'new');
+        let draftT;
+        function saveDraftSoon() { clearTimeout(draftT); draftT = setTimeout(saveDraft, 700); }
+        function saveDraft() {
+            if (!$('pcn').innerText.trim() && !$('pt').value.trim()) return;
+            try {
+                localStorage.setItem(draftKey(), JSON.stringify({ c: $('pc').value, a: $('pa').value, t: $('pt').value, h: $('pcn').innerHTML, at: Date.now() }));
+                $('draft-note').textContent = 'Rascunho salvo automaticamente às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            } catch (e) {}
+        }
+        function dropDraft(key) { try { localStorage.removeItem('fz_draft_' + (key || 'new')); } catch (e) {} }
+        function offerDraft() {
+            let d = null; try { d = JSON.parse(localStorage.getItem(draftKey()) || 'null'); } catch (e) {}
+            const bar = $('draft-banner');
+            if (!d || !d.h) { bar.style.display = 'none'; return; }
+            $('draft-when').textContent = new Date(d.at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+            bar.style.display = 'flex';
+        }
+        function restoreDraft() {
+            let d = null; try { d = JSON.parse(localStorage.getItem(draftKey()) || 'null'); } catch (e) {}
+            if (!d) return;
+            $('pc').value = d.c || $('pc').value; $('pa').value = d.a || ''; $('pt').value = d.t || '';
+            $('pcn').innerHTML = sanitizeHTML(d.h || ''); updCount(); dirty = true; $('draft-banner').style.display = 'none';
+        }
+        function discardDraft() { dropDraft(editingKey); $('draft-banner').style.display = 'none'; }
+
+        /* ---------- LOGIN / PAINEL ---------- */
+        function log() {
+            fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${SITE.firebaseKey}`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: $('em').value.trim(), password: $('pw').value, returnSecureToken: true })
+            }).then(r => r.json()).then(d => {
+                if (d.idToken) {
+                    adminToken = Admin.save(d);
+                    $('lm').style.display = 'none'; $('pw').value = ''; showP(); rnd(db);
+                } else alert('Acesso Negado.');
+            }).catch(() => alert('Erro ao autenticar. Verifique sua conexão.'));
+        }
+        function showP() { $('panel').style.display = 'block'; loadSubs(); renderManager(); if (!editingKey) offerDraft(); }
+        function out() { Admin.clear(); adminToken = null; cancelEdit(true); dirty = false; $('panel').style.display = 'none'; rnd(db); }
+        function sessionExpired() { alert('Sua sessão de edição expirou. O texto que você estava escrevendo foi salvo como rascunho: entre novamente (Ctrl+Shift+E) e clique em “Recuperar”.'); out(); }
+
+        /* ---------- NEWSLETTER (admin) ---------- */
+        async function loadSubs() {
+            const list = $('sub-list'); if (!list) return; const t = await tok(); if (!t) return;
+            fetch(`${SITE.db}/assinantes.json?auth=${t}`).then(r => r.json()).then(data => {
+                list.innerHTML = ''; let count = 0;
+                if (data && !data.error) Object.keys(data).reverse().forEach(key => {
+                    const s = data[key]; count++;
+                    const row = document.createElement('div');
+                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:.5rem;background:#fff;border:1px solid var(--border);padding:.5rem .7rem;font-size:.78rem;word-break:break-all';
+                    row.innerHTML = `<span>${esc(s.email)} <span style="color:var(--muted);font-size:.68rem">(${esc(s.plano || 'gratuito')} · ${esc(s.date || '')})</span></span><button onclick="delSub('${esc(key)}')" style="background:transparent;border:none;color:#EF4444;font-weight:700;cursor:pointer;font-size:.7rem;text-transform:uppercase">Excluir ×</button>`;
+                    list.appendChild(row);
+                });
+                $('sub-count').textContent = count;
+            }).catch(() => {});
+        }
+        async function delSub(key) {
+            if (!confirm('Remover este assinante?')) return; const t = await tok(); if (!t) return sessionExpired();
+            fetch(`${SITE.db}/assinantes/${key}.json?auth=${t}`, { method: 'DELETE' }).then(loadSubs);
+        }
+
+        /* ---------- PUBLICAR / EDITAR ---------- */
+        const loadImg = src => new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+        const fileToImg = f => new Promise((res, rej) => { const fr = new FileReader(); fr.onerror = rej; fr.onload = () => loadImg(fr.result).then(res, rej); fr.readAsDataURL(f); });
+        function resizeImage(img, max = 1400) {
+            const k = Math.min(1, max / Math.max(img.width, img.height));
+            const c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); return c.toDataURL('image/jpeg', 0.82);
+        }
+        // imagem 1200x630 (recorte central) leve, usada no card de compartilhamento (WhatsApp exige < 300 KB)
+        function makeOg(img) {
+            const W = 1200, H = 630, k = Math.max(W / img.width, H / img.height);
+            const c = document.createElement('canvas'); c.width = W; c.height = H;
+            c.getContext('2d').drawImage(img, (W - img.width * k) / 2, (H - img.height * k) / 2, img.width * k, img.height * k);
+            return c.toDataURL('image/jpeg', 0.72);
+        }
+        function makeExcerpt(t) {
+            t = t.replace(/\s+/g, ' ').trim(); if (t.length <= 150) return t;
+            return t.slice(0, 150).replace(/\s+\S*$/, '') + '…';
+        }
+        async function pub(e) {
+            e.preventDefault();
+            const t = await tok(); if (!t) { saveDraft(); return sessionExpired(); }
+            const file = $('pi').files[0];
+            if (!editingKey && !file) { alert('Selecione uma imagem de capa.'); return; }
+            const text = $('pcn').innerText.trim();
+            if (!text) { alert('Escreva o corpo do artigo.'); return; }
+            const btn = $('btn-pub'); btn.disabled = true; const label = btn.textContent; btn.textContent = 'Salvando…';
+            try {
+                const data = { category: $('pc').value, author: $('pa').value.trim(), title: $('pt').value.trim(), content: sanitizeHTML($('pcn').innerHTML), excerpt: makeExcerpt(text) };
+                if (file) { const im = await fileToImg(file); data.image = resizeImage(im); data.og = makeOg(im); }
+                else if (editingKey && db[editingKey] && db[editingKey].image && !db[editingKey].og) { try { data.og = makeOg(await loadImg(db[editingKey].image)); } catch (e) {} }
+                let res;
+                if (editingKey) {
+                    data.updatedAt = new Date().toISOString();
+                    res = await fetch(`${SITE.db}/artigos/${editingKey}.json?auth=${t}`, { method: 'PATCH', body: JSON.stringify(data) });
+                } else {
+                    data.id = 'art-' + Date.now(); data.date = new Date().toISOString(); data.views = 0;
+                    res = await fetch(`${SITE.db}/artigos.json?auth=${t}`, { method: 'POST', body: JSON.stringify(data) });
+                }
+                if (res.status === 401 || res.status === 403) { btn.disabled = false; btn.textContent = label; saveDraft(); return sessionExpired(); }
+                if (!res.ok) throw new Error('falha');
+                dropDraft(editingKey); dirty = false;
+                alert(editingKey ? 'Alterações salvas!' : 'Artigo publicado com sucesso!');
+                location.href = 'index.html';
+            } catch (err) {
+                saveDraft();
+                alert('Não foi possível salvar. Seu texto está guardado como rascunho. Verifique a conexão e tente de novo.');
+                btn.disabled = false; btn.textContent = label;
+            }
+        }
+        function startEdit(key) {
+            const a = db[key]; if (!a) return;
+            if (!Admin.token) { $('lm').style.display = 'flex'; return; }
+            editingKey = key; showP();
+            $('pc').value = a.category || 'Estratégia'; $('pa').value = a.author || ''; $('pt').value = a.title || '';
+            $('pcn').innerHTML = sanitizeHTML(a.content || ''); updCount(); dirty = false;
+            $('pi').required = false; $('pi').value = ''; $('pi-label').textContent = 'Imagem de Capa (deixe vazio para manter a atual)';
+            if (a.image) { $('cover-prev').src = a.image; $('cover-prev').style.display = 'block'; }
+            $('panel-h').textContent = 'Editar Análise'; $('btn-pub').textContent = 'Salvar Alterações';
+            $('edit-title').textContent = a.title; $('edit-banner').style.display = 'flex';
+            offerDraft();
+            $('panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        function cancelEdit(keepDraft) {
+            if (keepDraft !== true && editingKey) dropDraft(editingKey);
+            editingKey = null; $('art-form').reset(); $('pcn').innerHTML = ''; updCount(); dirty = false;
+            $('pi').required = true; $('pi-label').textContent = 'Imagem de Capa'; $('cover-prev').style.display = 'none';
+            $('panel-h').textContent = 'Nova Análise'; $('btn-pub').textContent = 'Publicar Análise Oficial'; $('edit-banner').style.display = 'none';
+            if ($('panel').style.display !== 'none') offerDraft();
+        }
+
+        /* ---------- GERENCIADOR DE ARTIGOS (painel) ---------- */
+        function renderManager() {
+            const box = $('manage-list'); if (!box) return;
+            const keys = Object.keys(db).sort((x, y) => (artDate(db[y])?.getTime() || 0) - (artDate(db[x])?.getTime() || 0));
+            $('mng-count').textContent = keys.length;
+            if (!keys.length) { box.innerHTML = '<p class="empty">Nenhum artigo publicado ainda.</p>'; return; }
+            box.innerHTML = keys.map(k => {
+                const a = db[k], d = artDate(a), v = a.views || 0;
+                return `<div class="mrow">${a.image ? `<img class="mthumb" src="${esc(a.image)}" alt="" loading="lazy">` : '<span class="mthumb"></span>'}
+                    <div class="minfo"><a class="mtitle" href="artigo.html?id=${encodeURIComponent(a.id)}" target="_blank" rel="noopener">${esc(a.title)}</a>
+                    <div class="mmeta">${esc(a.category)}${d ? ' · ' + fmtDateShort(d) : ''} · ${v} ${v === 1 ? 'visualização' : 'visualizações'}</div></div>
+                    <div class="mact"><button type="button" class="btn-sm" onclick="startEdit('${esc(k)}')">✎ Editar</button><button type="button" class="btn-sm dl" onclick="del('${esc(k)}')">Excluir</button></div></div>`;
+            }).join('');
+        }
+
+        /* ---------- FEED ---------- */
+        function st(s, el) {
+            sec = s; document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active')); el.classList.add('active');
+            $('ft').textContent = s === 'Home' ? 'Últimas Análises' : `Análises: ${s}`;
+            $('sb').value = ''; rnd(db); trending();
+        }
+        function sch() {
+            const q = $('sb').value.toLowerCase().trim(); if (!q) { rnd(db); return; }
+            const f = {}; Object.keys(db).forEach(k => { const a = db[k]; if ((a.title || '').toLowerCase().includes(q) || (a.content || '').toLowerCase().includes(q)) f[k] = a; }); rnd(f);
+        }
+        async function sh(e, id) {
+            e.preventDefault(); e.stopPropagation();
+            const url = await shareUrl(id), a = Object.values(db).find(x => x.id === id);
+            if (navigator.share) navigator.share({ title: a ? a.title : SITE.name, text: a ? a.excerpt : '', url }).catch(() => {});
+            else navigator.clipboard.writeText(url).then(() => alert('Link copiado!'));
+        }
+        // destaque = artigo mais lido (empate: o mais recente)
+        function pickHero() {
+            const arr = Object.keys(db).filter(k => sec === 'Home' || db[k].category === sec);
+            if (!arr.length) return null;
+            arr.sort((x, y) => (db[y].views || 0) - (db[x].views || 0) || (artDate(db[y])?.getTime() || 0) - (artDate(db[x])?.getTime() || 0));
+            return arr[0];
+        }
+        function renderHero(k) {
+            const h = $('hero');
+            if (!k) { h.style.display = 'none'; h.innerHTML = ''; return; }
+            const a = db[k], d = artDate(a);
+            h.style.display = 'block';
+            h.innerHTML = `<a class="hero-link" href="artigo.html?id=${encodeURIComponent(a.id)}">${a.image ? `<img class="hero-img" src="${esc(a.image)}" alt="">` : ''}
+                <span class="kicker">${(a.views || 0) > 0 ? 'Mais lido' : 'Destaque'} · ${esc(a.category)}${d ? ' · ' + fmtDateShort(d) : ''}</span>
+                <h2>${esc(a.title)}</h2><p>${esc(a.excerpt)}</p><span class="hero-by">Por ${esc(a.author)}</span></a>`;
+        }
+        function rnd(data) {
+            const f = $('feed'); f.innerHTML = ''; if (!data) return;
+            const searching = $('sb').value.trim() !== '';
+            const keys = Object.keys(data).filter(k => searching || sec === 'Home' || data[k].category === sec)
+                .sort((x, y) => (artDate(data[y])?.getTime() || 0) - (artDate(data[x])?.getTime() || 0));
+            const hk = searching ? null : pickHero();
+            renderHero(hk);
+            let n = 0;
+            keys.filter(k => k !== hk).forEach(k => {
+                const a = data[k]; n++;
+                const d = artDate(a);
+                const w = document.createElement('div'); w.className = 'card-wrap'; w.id = `l-${a.id}`;
+                w.innerHTML = `<a class="card-link" href="artigo.html?id=${encodeURIComponent(a.id)}"><article class="card">${a.image ? `<img src="${esc(a.image)}" class="card-img" alt="" loading="lazy">` : ''}<div class="card-body"><div class="card-meta"><b>${esc(a.category)}</b>${d ? ` · <time datetime="${isoDay(d)}">${fmtDateShort(d)}</time>` : ''}</div><h3 class="card-title">${esc(a.title)}</h3><p class="card-ex">${esc(a.excerpt)}</p><div class="card-footer"><span>Por ${esc(a.author)}</span><button class="btn-share" onclick="sh(event,'${esc(a.id)}')">${ICON.share}Compartilhar</button></div></div></article></a>`;
+                f.appendChild(w);
+                if (!searching && (n === 4 || n === 10)) f.appendChild(createAd('feed'));
+            });
+            initAds(f);
+            if (!n) f.innerHTML = `<p class="empty">${searching ? 'Nenhuma análise encontrada para esta busca.' : (hk ? 'Em breve, mais análises nesta seção.' : 'Ainda não há análises nesta seção.')}</p>`;
+        }
+        async function del(k) {
+            if (!confirm('Apagar este artigo definitivamente?')) return;
+            const t = await tok(); if (!t) return sessionExpired();
+            fetch(`${SITE.db}/artigos/${k}.json?auth=${t}`, { method: 'DELETE' }).then(r => {
+                if (r.status === 401 || r.status === 403) return sessionExpired();
+                delete db[k]; rnd(db); trending(); renderManager();
+            });
+        }
+        function trending() {
+            const items = Object.values(db).filter(a => sec === 'Home' || a.category === sec).sort((x, y) => (y.views || 0) - (x.views || 0)).slice(0, 5);
+            $('trend-box').style.display = items.length ? 'block' : 'none';
+            $('tt').textContent = sec === 'Home' ? 'Mais Lidos' : `Mais Lidos: ${sec}`;
+            $('trend-list').innerHTML = items.map((a, i) => `<a class="t-item" href="artigo.html?id=${encodeURIComponent(a.id)}"><span class="t-num">0${i + 1}</span><span>${esc(a.title)}</span></a>`).join('');
+        }
+        function load() {
+            fetch(`${SITE.db}/artigos.json`).then(r => r.json()).then(data => {
+                db = (data && !data.error) ? data : {}; rnd(db); trending(); if (isAdmin()) renderManager();
+                const ed = new URLSearchParams(location.search).get('editar');
+                if (ed && Admin.token) { const k = Object.keys(db).find(k => db[k].id === ed); if (k) startEdit(k); }
+            }).catch(() => { $('feed').innerHTML = '<p class="empty">Não foi possível carregar as análises agora. Tente novamente em instantes.</p>'; });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Editorial | Fuzion Insights</title>
+    <meta name="description" content="Análise editorial publicada pela Fuzion Insights.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>try{if(localStorage.getItem('fz_consent')==='essential'){(window.adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=1}}catch(e){}</script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6909799094388328" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .article-wrap{max-width:760px;margin:2.5rem auto 0;padding:0 var(--gutter)}
+        .art-cover{width:100%;aspect-ratio:16/9;max-height:440px;object-fit:cover;margin-bottom:1.8rem;display:none}
+        .article-header{border-bottom:1px solid var(--border);padding-bottom:1.3rem;margin-bottom:2rem}
+        .category{color:var(--gold-d);font-size:.72rem;text-transform:uppercase;font-weight:700;letter-spacing:1px;display:block;margin-bottom:.5rem}
+        h1{font-family:'Inter',system-ui,sans-serif;font-size:2.3rem;line-height:1.18;color:#000;margin-bottom:1rem;font-weight:800;letter-spacing:-.025em}
+        .meta-info{font-size:.8rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:.3rem .9rem;align-items:center}
+        .meta-info b{color:#000;font-weight:600}
+        .btn-edit{display:none;background:#1A1A1E;color:#fff;text-decoration:none;font-size:.68rem;font-weight:700;text-transform:uppercase;padding:.35rem .8rem;letter-spacing:.4px}
+        .btn-edit:hover{background:var(--gold-d)}
+        @media(max-width:680px){.article-wrap{margin-top:1.6rem}h1{font-size:1.75rem}.art-cover{margin-bottom:1.3rem}}
+        .art-content{margin-bottom:3rem}
+        .box{background:var(--bg-s);border:1px solid var(--border);border-top:3px solid var(--gold);padding:1.6rem;margin-top:2.5rem;text-align:center}
+        .box h4{font-family:'Inter',system-ui,sans-serif;font-size:.85rem;margin-bottom:.4rem;letter-spacing:1px}
+        .box p{font-size:.75rem;color:var(--muted);margin-bottom:1rem;text-transform:uppercase;font-weight:600}
+        .box form{display:flex;gap:.5rem;justify-content:center}
+        .box input{padding:.65rem;border:1px solid var(--border);flex:1;max-width:340px;min-width:0}
+        .box button{background:#000;color:#fff;border:none;padding:.65rem 1.1rem;font-size:.7rem;font-weight:700;text-transform:uppercase;cursor:pointer}
+        @media(max-width:480px){.box form{flex-direction:column}.box input{max-width:none}}
+        .related{margin-top:3rem;border-top:2px solid #000;padding-top:1.2rem}
+        .related h3,.comments-section h3{font-family:'Inter',system-ui,sans-serif;font-size:.85rem;letter-spacing:1px;margin-bottom:1rem;text-transform:uppercase}
+        .rel-item{display:block;text-decoration:none;padding:.8rem 0;border-bottom:1px solid var(--border)}
+        .rel-item:hover strong{color:var(--gold-d)}
+        .rel-item small{display:block;color:var(--muted);font-size:.68rem;text-transform:uppercase;font-weight:700;letter-spacing:.4px}
+        .rel-item strong{font-family:'Inter',system-ui,sans-serif;font-size:1.05rem;line-height:1.35}
+        .comments-section{border-top:2px solid #000;padding-top:1.5rem;margin-top:3rem}
+        .comment-form{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.5rem}
+        .comment-form input,.comment-form textarea{width:100%;padding:.7rem;border:1px solid var(--border)}
+        .comment-form button{background:#000;color:#fff;border:none;padding:.7rem 1.2rem;font-size:.72rem;font-weight:700;text-transform:uppercase;cursor:pointer;align-self:flex-start}
+        .comment-list{display:flex;flex-direction:column;gap:1rem}
+        .comment-card{background:#F9FAFB;border:1px solid var(--border);padding:.9rem;position:relative}
+        .comment-meta{font-size:.72rem;font-weight:700;color:var(--gold-d);margin-bottom:.3rem;display:flex;justify-content:space-between;gap:.5rem}
+        .comment-text{font-size:.85rem;color:#3F3F46;overflow-wrap:anywhere;white-space:pre-wrap}
+        .btn-del-comm{display:none;background:transparent;border:none;color:#EF4444;font-size:.65rem;font-weight:700;cursor:pointer;text-transform:uppercase;margin-top:.4rem}
+    </style>
+</head>
+<body>
+    <div class="top-fixed">
+    <header class="site-header">
+        <div class="wrap nav-c">
+            <a href="index.html" class="logo">FUZION<span>INSIGHTS</span></a>
+            <div class="hdr-right"><a href="index.html" class="btn-back">← Voltar</a><button type="button" class="btn-sub" data-subscribe>Assine</button></div>
+        </div>
+    </header>
+    <div class="ticker-outer" style="display:none"><div class="ticker-wrap"><div class="ticker-inner" id="t1"></div><div class="ticker-inner" id="t2"></div></div></div>
+    </div>
+
+    <div class="ad-band" data-ad="top"></div>
+
+    <main class="article-wrap">
+        <article>
+            <img id="art-cover" class="art-cover" alt="">
+            <header class="article-header">
+                <span class="category" id="art-category">&nbsp;</span>
+                <h1 id="art-title">Carregando…</h1>
+                <div class="meta-info">
+                    <b id="art-author"></b>
+                    <span id="art-date"></span>
+                    <span id="art-views"></span>
+                    <a id="btn-edit" class="btn-edit" href="#">✎ Editar artigo</a>
+                </div>
+                <div class="share-bar" id="share-top"></div>
+            </header>
+            <div class="art-content" id="art-body"></div>
+            <div class="share-bar" id="share-bottom" style="border-top:1px solid var(--border);padding-top:1.2rem"></div>
+        </article>
+
+        <div class="ad-box" data-ad="end"></div>
+
+        <section class="box">
+            <h4>Fuzion Briefing</h4>
+            <p>Receba nossa inteligência macro semanal</p>
+            <form onsubmit="return subscribeNewsletter(event,this)">
+                <input type="email" placeholder="Seu e-mail corporativo" required aria-label="E-mail">
+                <button type="submit">Assinar</button>
+            </form>
+        </section>
+
+        <section class="related" id="related" style="display:none"><h3>Leia também</h3><div id="related-list"></div></section>
+
+        <section class="comments-section">
+            <h3>Área de Feedback Executivo</h3>
+            <form class="comment-form" onsubmit="addComment(event)">
+                <input type="text" id="c-name" placeholder="Seu Nome / Cargo" required maxlength="80">
+                <textarea id="c-text" rows="3" placeholder="Deixe sua análise..." required maxlength="1500"></textarea>
+                <button type="submit">Enviar Comentário</button>
+            </form>
+            <div class="comment-list" id="comments-feed"></div>
+        </section>
+    </main>
+
+    <footer class="site-footer"><div class="wrap">
+        <div class="f-socials">
+            <a href="https://instagram.com/fuzioninsights" target="_blank" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+            <a href="https://x.com/fuzioninsights" target="_blank" title="X (Twitter)"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 7.778 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.335L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <a href="https://tiktok.com/@fuzion.insights" target="_blank" title="TikTok"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.62 4.17.94 1.09 2.29 1.8 3.74 1.96v3.91c-1.39-.02-2.78-.45-3.93-1.31-.22-.16-.42-.35-.61-.55-.07 1.63-.03 3.25-.04 4.88a6.19 6.19 0 01-1.57 4.11c-1.89 2.01-4.99 2.5-7.42 1.15-2.61-1.45-3.76-4.63-2.61-7.41 1.01-2.45 3.65-3.9 6.26-3.41v4c-1.14-.3-2.39.11-2.99 1.09-.67 1.09-.34 2.59.74 3.27 1.12.7 2.68.25 3.25-.99.23-.49.27-1.05.26-1.59-.02-3.1-.01-6.19-.01-9.29z"/></svg></a>
+            <a href="https://youtube.com/@fuzioninsights" target="_blank" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.016 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        </div>
+        <div class="f-status"><span class="live-dot"></span><span>Redação Aberta 24 Horas</span></div>
+        <p>© <span data-year>2026</span> Fuzion Insights. Todos os direitos reservados.</p>
+        <p class="f-disc">Conteúdo informativo e educacional. Não constitui recomendação de investimento, consultoria financeira ou jurídica.</p>
+        <nav class="f-links" aria-label="Institucional" style="margin:1.2rem 0 0">
+            <a href="sobre.html">Sobre</a><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="#" data-cookie-prefs>Preferências de cookies</a>
+        </nav>
+    </div></footer>
+
+    <script src="site.js"></script>
+    <script>
+        const artId = new URLSearchParams(location.search).get('id');
+        const adminToken = sessionStorage.getItem('adminToken') || null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!artId) { notFound(); return; }
+            signInAnon().then(loadArticle);
+            loadComments();
+        });
+
+        function notFound() {
+            document.title = 'Artigo não encontrado | Fuzion Insights';
+            $('art-title').textContent = 'Artigo não encontrado';
+            $('art-body').innerHTML = '<p>Este endereço não corresponde a nenhuma análise publicada. <a href="index.html">Voltar à página inicial</a>.</p>';
+            $('art-category').textContent = '';
+        }
+
+        function loadArticle() {
+            fetch(`${SITE.db}/artigos.json`).then(r => r.json()).then(data => {
+                if (!data || data.error) return notFound();
+                const key = Object.keys(data).find(k => data[k].id === artId);
+                if (!key) return notFound();
+                const a = data[key];
+                const pub = artDate(a), upd = a.updatedAt ? new Date(a.updatedAt) : null;
+
+                // visualização (1x por sessão)
+                let views = (a.views || 0);
+                if (!sessionStorage.getItem('v_' + artId)) {
+                    views++; sessionStorage.setItem('v_' + artId, '1');
+                    fetch(`${SITE.db}/artigos/${key}/views.json?auth=${idToken}`, { method: 'PUT', body: views }).catch(() => {});
+                }
+
+                document.title = a.title + ' | Fuzion Insights';
+                const cn = document.createElement('link'); cn.rel = 'canonical'; cn.href = 'https://fuzioninsights.netlify.app/artigo.html?id=' + encodeURIComponent(artId); document.head.appendChild(cn);
+                const desc = (a.excerpt || '').replace(/…$/, '');
+                if (desc) document.querySelector('meta[name="description"]').setAttribute('content', desc);
+                $('art-category').textContent = a.category || '';
+                $('art-title').textContent = a.title;
+                $('art-author').textContent = 'Por ' + a.author;
+                let dh = pub ? `Publicado em <time datetime="${isoDay(pub)}">${fmtDate(pub)}</time>` : '';
+                if (upd && !isNaN(upd) && (!pub || isoDay(upd) !== isoDay(pub))) dh += ` · Atualizado em <time datetime="${isoDay(upd)}">${fmtDate(upd)}</time>`;
+                $('art-date').innerHTML = dh;
+                $('art-views').textContent = `👁 ${views} ${views === 1 ? 'visualização' : 'visualizações'}`;
+                if (a.image) { const c = $('art-cover'); c.src = a.image; c.style.display = 'block'; }
+                $('art-body').innerHTML = sanitizeHTML(a.content);
+                // anúncio no meio do texto (depois do 3º parágrafo, só em artigos com 5+ parágrafos)
+                const ps = $('art-body').querySelectorAll(':scope > p');
+                if (ps.length >= 5) ps[2].after(createAd('inline'));
+                if (ps.length >= 12) ps[9].after(createAd('inline'));
+                initAds($('art-body'));
+
+                shareBars(a);
+                if (adminToken) { const b = $('btn-edit'); b.href = 'index.html?editar=' + encodeURIComponent(a.id); b.style.display = 'inline-block'; }
+
+                // dados estruturados (SEO / Google News)
+                const autorSlug = (a.author || 'redacao').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                const ld = {
+                  '@context': 'https://schema.org',
+                  '@type': 'NewsArticle',
+                  headline: a.title,
+                  description: (a.excerpt || '').replace(/…$/, ''),
+                  image: a.image ? [a.image] : undefined,
+                  datePublished: pub ? pub.toISOString() : undefined,
+                  dateModified: (upd && !isNaN(upd)) ? upd.toISOString() : (pub ? pub.toISOString() : undefined),
+                  author: {
+                    '@type': 'Person',
+                    name: a.author,
+                    url: `https://fuzioninsights.netlify.app/autor.html?slug=${encodeURIComponent(autorSlug)}`
+                  },
+                  publisher: {
+                    '@type': 'Organization',
+                    name: SITE.name,
+                    logo: {
+                      '@type': 'ImageObject',
+                      url: 'https://fuzioninsights.netlify.app/favicon.svg'
+                    }
+                  },
+                  mainEntityOfPage: { '@type': 'WebPage', '@id': location.href },
+                  articleSection: a.category,
+                  inLanguage: 'pt-BR'
+                };
+                const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(ld); document.head.appendChild(s);
+
+                // leia também
+                const rel = Object.values(data).filter(x => x.id !== artId).sort((x, y) => (artDate(y)?.getTime() || 0) - (artDate(x)?.getTime() || 0)).slice(0, 3);
+                if (rel.length) {
+                    $('related-list').innerHTML = rel.map(x => { const d = artDate(x); return `<a class="rel-item" href="artigo.html?id=${encodeURIComponent(x.id)}"><small>${esc(x.category)}${d ? ' · ' + fmtDateShort(d) : ''}</small><strong>${esc(x.title)}</strong></a>`; }).join('');
+                    $('related').style.display = 'block';
+                }
+            }).catch(() => { $('art-title').textContent = 'Não foi possível carregar o artigo'; });
+        }
+
+        async function shareBars(a) {
+            const url = await shareUrl(a.id), t = a.title, en = encodeURIComponent;
+            const nets = [['wa', 'WhatsApp', 'whatsapp', `https://wa.me/?text=${en(t + ' — ' + url)}`],
+                ['x', 'X', 'x', `https://twitter.com/intent/tweet?text=${en(t)}&url=${en(url)}`],
+                ['li', 'LinkedIn', 'linkedin', `https://www.linkedin.com/sharing/share-offsite/?url=${en(url)}`],
+                ['fb', 'Facebook', 'facebook', `https://www.facebook.com/sharer/sharer.php?u=${en(url)}`],
+                ['tg', 'Telegram', 'telegram', `https://t.me/share/url?url=${en(url)}&text=${en(t)}`]];
+            const html = '<span class="share-l">Compartilhar</span>' +
+                (navigator.share ? `<button type="button" class="sh-btn" data-native>${ICON.share}<span>Enviar</span></button>` : '') +
+                nets.map(n => `<a class="sh-btn ${n[0]}" href="${n[3]}" target="_blank" rel="noopener" aria-label="${n[1]}" title="${n[1]}">${ICON[n[2]]}<span>${n[1]}</span></a>`).join('') +
+                `<button type="button" class="sh-btn" data-copy aria-label="Copiar link" title="Copiar link">${ICON.link}<span>Copiar link</span></button>`;
+            ['share-top', 'share-bottom'].forEach(id => {
+                const el = $(id); el.innerHTML = html;
+                el.querySelector('[data-copy]').onclick = () => navigator.clipboard.writeText(url).then(() => alert('Link copiado!'));
+                const nb = el.querySelector('[data-native]'); if (nb) nb.onclick = () => navigator.share({ title: t, text: a.excerpt || '', url }).catch(() => {});
+            });
+        }
+
+        function addComment(e) {
+            e.preventDefault();
+            const c = { artId, name: $('c-name').value.trim(), text: $('c-text').value.trim(), date: new Date().toLocaleDateString('pt-BR') };
+            if (!c.name || !c.text) return;
+            ensureAuth().then(t => fetch(`${SITE.db}/comentarios.json?auth=${t}`, { method: 'POST', body: JSON.stringify(c) }))
+                .then(() => { $('c-text').value = ''; loadComments(); });
+        }
+        function loadComments() {
+            const feed = $('comments-feed'); feed.innerHTML = '';
+            fetch(`${SITE.db}/comentarios.json`).then(r => r.json()).then(data => {
+                if (!data || data.error) return;
+                Object.keys(data).reverse().forEach(key => {
+                    const c = data[key]; if (c.artId !== artId) return;
+                    const card = document.createElement('div'); card.className = 'comment-card';
+                    card.innerHTML = `<div class="comment-meta"><span>${esc(c.name)}</span><span>${esc(c.date)}</span></div><div class="comment-text">${esc(c.text)}</div><button class="btn-del-comm" onclick="delComm('${esc(key)}')" style="${adminToken ? 'display:block' : ''}">Excluir ×</button>`;
+                    feed.appendChild(card);
+                });
+            });
+        }
+        async function delComm(key) {
+            if (!confirm('Apagar feedback?')) return;
+            const t = await Admin.fresh(); if (!t) { alert('Sua sessão expirou. Entre novamente no painel (página inicial, Ctrl+Shift+E).'); return; }
+            fetch(`${SITE.db}/comentarios/${key}.json?auth=${t}`, { method: 'DELETE' }).then(loadComments);
+        }
+    </script>
+</body>
+</html>
