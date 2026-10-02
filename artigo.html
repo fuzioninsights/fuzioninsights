@@ -7,7 +7,7 @@
     <meta name="description" content="Análise editorial publicada pela Fuzion Insights.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>try{if(localStorage.getItem('fz_consent')==='essential'){(window.adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=1}}catch(e){}</script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6909799094388328" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
@@ -16,7 +16,7 @@
         .art-cover{width:100%;aspect-ratio:16/9;max-height:440px;object-fit:cover;margin-bottom:1.8rem;display:none}
         .article-header{border-bottom:1px solid var(--border);padding-bottom:1.3rem;margin-bottom:2rem}
         .category{color:var(--gold-d);font-size:.72rem;text-transform:uppercase;font-weight:700;letter-spacing:1px;display:block;margin-bottom:.5rem}
-        h1{font-family:'Playfair Display',Georgia,serif;font-size:2.4rem;line-height:1.2;color:#000;margin-bottom:1rem;font-weight:700}
+        h1{font-family:'Inter',system-ui,sans-serif;font-size:2.3rem;line-height:1.18;color:#000;margin-bottom:1rem;font-weight:800;letter-spacing:-.025em}
         .meta-info{font-size:.8rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:.3rem .9rem;align-items:center}
         .meta-info b{color:#000;font-weight:600}
         .btn-edit{display:none;background:#1A1A1E;color:#fff;text-decoration:none;font-size:.68rem;font-weight:700;text-transform:uppercase;padding:.35rem .8rem;letter-spacing:.4px}
@@ -24,18 +24,18 @@
         @media(max-width:680px){.article-wrap{margin-top:1.6rem}h1{font-size:1.75rem}.art-cover{margin-bottom:1.3rem}}
         .art-content{margin-bottom:3rem}
         .box{background:var(--bg-s);border:1px solid var(--border);border-top:3px solid var(--gold);padding:1.6rem;margin-top:2.5rem;text-align:center}
-        .box h4{font-family:'Cinzel',serif;font-size:.85rem;margin-bottom:.4rem;letter-spacing:1px}
+        .box h4{font-family:'Inter',system-ui,sans-serif;font-size:.85rem;margin-bottom:.4rem;letter-spacing:1px}
         .box p{font-size:.75rem;color:var(--muted);margin-bottom:1rem;text-transform:uppercase;font-weight:600}
         .box form{display:flex;gap:.5rem;justify-content:center}
         .box input{padding:.65rem;border:1px solid var(--border);flex:1;max-width:340px;min-width:0}
         .box button{background:#000;color:#fff;border:none;padding:.65rem 1.1rem;font-size:.7rem;font-weight:700;text-transform:uppercase;cursor:pointer}
         @media(max-width:480px){.box form{flex-direction:column}.box input{max-width:none}}
         .related{margin-top:3rem;border-top:2px solid #000;padding-top:1.2rem}
-        .related h3,.comments-section h3{font-family:'Cinzel',serif;font-size:.85rem;letter-spacing:1px;margin-bottom:1rem;text-transform:uppercase}
+        .related h3,.comments-section h3{font-family:'Inter',system-ui,sans-serif;font-size:.85rem;letter-spacing:1px;margin-bottom:1rem;text-transform:uppercase}
         .rel-item{display:block;text-decoration:none;padding:.8rem 0;border-bottom:1px solid var(--border)}
         .rel-item:hover strong{color:var(--gold-d)}
         .rel-item small{display:block;color:var(--muted);font-size:.68rem;text-transform:uppercase;font-weight:700;letter-spacing:.4px}
-        .rel-item strong{font-family:'Playfair Display',Georgia,serif;font-size:1.05rem;line-height:1.35}
+        .rel-item strong{font-family:'Inter',system-ui,sans-serif;font-size:1.05rem;line-height:1.35}
         .comments-section{border-top:2px solid #000;padding-top:1.5rem;margin-top:3rem}
         .comment-form{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.5rem}
         .comment-form input,.comment-form textarea{width:100%;padding:.7rem;border:1px solid var(--border)}
@@ -224,7 +224,11 @@
                 });
             });
         }
-        function delComm(key) { if (confirm('Apagar feedback?')) fetch(`${SITE.db}/comentarios/${key}.json?auth=${adminToken}`, { method: 'DELETE' }).then(loadComments); }
+        async function delComm(key) {
+            if (!confirm('Apagar feedback?')) return;
+            const t = await Admin.fresh(); if (!t) { alert('Sua sessão expirou. Entre novamente no painel (página inicial, Ctrl+Shift+E).'); return; }
+            fetch(`${SITE.db}/comentarios/${key}.json?auth=${t}`, { method: 'DELETE' }).then(loadComments);
+        }
     </script>
 </body>
 </html>

@@ -10,7 +10,7 @@
     <meta property="og:description" content="Análises independentes sobre estratégia, liderança, negócios e mercado.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>try{if(localStorage.getItem('fz_consent')==='essential'){(window.adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=1}}catch(e){}</script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6909799094388328" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
@@ -31,36 +31,36 @@
             .status-in{flex-direction:column;align-items:flex-start;gap:.6rem}
             .search-wrapper{width:100%}main{margin-top:1.5rem;gap:2rem}
         }
-        .hero{border-bottom:1px solid var(--border);padding-bottom:1.8rem;margin-bottom:1.8rem}
-        .hero a{text-decoration:none;color:inherit;display:block}
+        .hero{border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:2rem}
+        .hero-link{text-decoration:none;color:inherit;display:block}
+        .hero-img{width:100%;aspect-ratio:16/9;max-height:380px;object-fit:cover;margin-bottom:1.1rem;background:#F3F4F6}
         .kicker{color:var(--gold-d);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
-        .hero h2{font-family:'Playfair Display',Georgia,serif;font-size:2.1rem;font-weight:700;color:#000;margin:.5rem 0;line-height:1.22}
-        .hero p{font-size:.98rem;color:#4B5563;line-height:1.6}
-        .hero:hover h2{color:var(--gold-d)}
+        .hero h2{font-size:2.05rem;font-weight:800;color:#000;margin:.5rem 0;line-height:1.18;letter-spacing:-.025em}
+        .hero p{font-size:1rem;color:#4B5563;line-height:1.6}
+        .hero-by{display:block;margin-top:.7rem;font-size:.75rem;color:var(--muted);font-weight:600}
+        .hero-link:hover h2{color:var(--gold-d)}
         @media(max-width:680px){.hero h2{font-size:1.5rem}}
-        .sec-title{font-family:'Cinzel',serif;font-size:.85rem;letter-spacing:1px;border-bottom:2px solid #000;padding-bottom:.35rem;margin-bottom:1.2rem;text-transform:uppercase}
-        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.5rem}
+        .sec-title{font-family:'Inter',system-ui,sans-serif;font-size:.85rem;letter-spacing:1px;border-bottom:2px solid #000;padding-bottom:.35rem;margin-bottom:1.2rem;text-transform:uppercase}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.75rem;align-items:stretch}
+        .card-wrap{min-width:0}.card-link{display:block;height:100%;text-decoration:none;color:inherit}
         .card{background:#FFF;border:1px solid var(--border);border-top:3px solid #000;display:flex;flex-direction:column;overflow:hidden;height:100%;transition:transform .2s,box-shadow .2s}
         .card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.07)}
         .card-img{width:100%;aspect-ratio:16/9;background:#F3F4F6;object-fit:cover}
         .card-body{padding:1rem;display:flex;flex-direction:column;flex-grow:1}
         .card-meta{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}.card-meta b{color:var(--gold-d)}
-        .card-title{font-family:'Playfair Display',Georgia,serif;font-size:1.12rem;line-height:1.3;font-weight:700;margin:.4rem 0;color:#000}
+        .card-title{font-family:'Inter',system-ui,sans-serif;font-size:1.12rem;line-height:1.3;font-weight:700;margin:.4rem 0;color:#000}
         .card-ex{font-size:.8rem;color:#4B5563;margin-bottom:.9rem;line-height:1.55}
         .card-footer{font-size:.7rem;color:var(--muted);border-top:1px solid var(--border);padding-top:.6rem;margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:.5rem}
         .btn-share{display:inline-flex;align-items:center;gap:.35rem;background:transparent;border:none;color:var(--gold-d);font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;cursor:pointer}
         .btn-share:hover{color:#000}.btn-share .ic{width:15px;height:15px}
-        .adm{display:none;gap:.4rem;margin-top:.3rem}.adm.on{display:flex}
-        .adm button{flex:1;border:none;color:#fff;font-size:.68rem;padding:.4rem;cursor:pointer;font-weight:700;text-transform:uppercase}
-        .adm .ed{background:#1A1A1E}.adm .dl{background:#EF4444}
         .empty{color:var(--muted);font-size:.9rem;padding:1rem 0}
 
         .side-t{background:var(--bg-s);border:1px solid var(--border);padding:1.2rem;height:fit-content}
-        .side-t h3{font-family:'Cinzel',serif;font-size:.8rem;font-weight:700;border-bottom:2px solid #000;padding-bottom:.4rem;margin-bottom:1rem}
+        .side-t h3{font-family:'Inter',system-ui,sans-serif;font-size:.8rem;font-weight:700;border-bottom:2px solid #000;padding-bottom:.4rem;margin-bottom:1rem}
         .t-item{display:flex;gap:.7rem;text-decoration:none;color:inherit;font-size:.85rem;padding:.6rem 0;border-bottom:1px solid var(--border);font-weight:600;line-height:1.35}
-        .t-num{font-family:'Cinzel',serif;font-size:1.15rem;color:var(--gold-d);font-weight:900}
+        .t-num{font-family:'Inter',system-ui,sans-serif;font-size:1.15rem;color:var(--gold-d);font-weight:900}
         .side-news{background:#fff;border:1px solid var(--border);border-top:3px solid var(--gold);padding:1.1rem;margin-top:1.4rem;text-align:center}
-        .side-news h4{font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:1px;margin-bottom:.4rem}
+        .side-news h4{font-family:'Inter',system-ui,sans-serif;font-size:.8rem;letter-spacing:1px;margin-bottom:.4rem}
         .side-news p{font-size:.72rem;color:var(--muted);margin-bottom:.8rem}
         .side-news form{display:flex;flex-direction:column;gap:.5rem}
         .side-news input{padding:.65rem;border:1px solid var(--border);background:#FFF}
@@ -69,7 +69,7 @@
         /* PAINEL EDITORIAL */
         #panel{display:none;background:var(--bg-s);border:1px dashed var(--gold);padding:1.5rem;grid-column:1/-1}
         @media(max-width:680px){#panel{padding:1rem}}
-        .panel-h{font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+        .panel-h{font-family:'Inter',system-ui,sans-serif;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
         .edit-banner{display:none;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:#FEF3C7;border:1px solid #F59E0B;padding:.6rem .9rem;font-size:.8rem;margin-bottom:1rem}
         .f-g{display:flex;flex-direction:column;gap:1rem}
         .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
@@ -90,6 +90,20 @@
         .ed-count{font-size:.72rem;color:var(--muted);text-align:right}
         .btn-row{display:flex;gap:.6rem;flex-wrap:wrap}
 
+        .ed-foot{display:flex;justify-content:space-between;gap:1rem;font-size:.72rem;color:var(--muted)}
+        .draft-banner{display:none;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;background:#EFF6FF;border:1px solid #93C5FD;padding:.6rem .9rem;font-size:.8rem;margin-bottom:1rem}
+        .draft-banner button{border:none;padding:.4rem .8rem;font:700 .68rem 'Inter',sans-serif;text-transform:uppercase;cursor:pointer;background:#1A1A1E;color:#fff;margin-left:.3rem}
+        .draft-banner button.alt{background:transparent;color:#1A1A1E;border:1px solid #1A1A1E}
+        .mng-h{font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+        .manage-list{display:flex;flex-direction:column;gap:.6rem;max-height:460px;overflow-y:auto}
+        .mrow{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:.9rem;align-items:center;background:#fff;border:1px solid var(--border);padding:.6rem}
+        .mthumb{width:72px;height:46px;object-fit:cover;background:#F3F4F6;display:block}
+        .mtitle{display:block;font-size:.88rem;font-weight:700;color:#000;text-decoration:none;line-height:1.3;overflow-wrap:anywhere}.mtitle:hover{color:var(--gold-d)}
+        .mmeta{font-size:.68rem;color:var(--muted);margin-top:.2rem;font-weight:600}
+        .mact{display:flex;gap:.4rem}
+        .btn-sm{border:none;background:#1A1A1E;color:#fff;font:700 .66rem 'Inter',sans-serif;text-transform:uppercase;padding:.5rem .8rem;cursor:pointer;white-space:nowrap}
+        .btn-sm:hover{background:var(--gold-d)}.btn-sm.dl{background:#EF4444}
+        @media(max-width:680px){.mrow{grid-template-columns:56px minmax(0,1fr)}.mthumb{width:56px;height:40px}.mact{grid-column:1/-1;justify-content:flex-end}}
         .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center;padding:1rem}
         .m-content{background:#FFF;border:1px solid var(--border);padding:2rem;width:100%;max-width:360px;display:flex;flex-direction:column;gap:1.2rem}
         .m-content input{width:100%;padding:.7rem;background:#FFF;border:1px solid var(--border);color:#000}
@@ -134,6 +148,10 @@
                 <span>✎ Editando: <strong id="edit-title"></strong></span>
                 <button type="button" class="btn ghost" style="padding:.4rem .9rem" onclick="cancelEdit()">Cancelar edição</button>
             </div>
+            <div class="draft-banner" id="draft-banner">
+                <span>📝 Há um rascunho não publicado salvo em <strong id="draft-when"></strong>.</span>
+                <span><button type="button" onclick="restoreDraft()">Recuperar</button><button type="button" class="alt" onclick="discardDraft()">Descartar</button></span>
+            </div>
             <form onsubmit="pub(event)" class="f-g" id="art-form">
                 <div class="form-row">
                     <div class="form-group">
@@ -173,12 +191,16 @@
                             <button type="button" class="editor-btn" data-cmd="unlink" title="Remover link">Sem link</button>
                             <button type="button" class="editor-btn" data-cmd="removeFormat" title="Limpar formatação">Limpar</button>
                             <span class="tb-sep"></span>
+                            <button type="button" class="editor-btn" data-ins="img" title="Inserir imagem por link">🖼 Imagem</button>
+                            <button type="button" class="editor-btn" data-ins="video" title="Inserir vídeo do YouTube ou Vimeo">▶ Vídeo</button>
+                            <button type="button" class="editor-btn" data-ins="table" title="Inserir tabela">▦ Tabela</button>
+                            <span class="tb-sep"></span>
                             <button type="button" class="editor-btn" data-cmd="undo" title="Desfazer">↶</button>
                             <button type="button" class="editor-btn" data-cmd="redo" title="Refazer">↷</button>
                         </div>
                         <div class="medium-textarea art-content" id="pcn" contenteditable="true" role="textbox" aria-multiline="true"></div>
                     </div>
-                    <div class="ed-count" id="ed-count">0 palavras</div>
+                    <div class="ed-foot"><span id="draft-note"></span><span id="ed-count">0 palavras</span></div>
                 </div>
                 <div class="btn-row">
                     <button type="submit" class="btn" id="btn-pub">Publicar Análise Oficial</button>
@@ -186,19 +208,17 @@
                 </div>
             </form>
             <div style="margin-top:2.5rem;border-top:2px solid #000;padding-top:1.2rem">
-                <h3 style="font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem">Assinantes da Newsletter (<span id="sub-count">0</span>)</h3>
+                <h3 class="mng-h">Artigos publicados (<span id="mng-count">0</span>)</h3>
+                <div id="manage-list" class="manage-list"></div>
+            </div>
+            <div style="margin-top:2.5rem;border-top:2px solid #000;padding-top:1.2rem">
+                <h3 style="font-family:'Inter',system-ui,sans-serif;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem">Assinantes da Newsletter (<span id="sub-count">0</span>)</h3>
                 <div id="sub-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:280px;overflow-y:auto"></div>
             </div>
         </section>
 
         <div>
-            <section class="hero" id="hero">
-                <a href="artigo.html?id=burnout-zero">
-                    <span class="kicker">Estratégia &amp; Liderança <span id="hero-date"></span></span>
-                    <h2>Por que as intervenções tradicionais contra o Burnout falham nas corporações?</h2>
-                    <p>Reduzir jornadas de trabalho de equipes seniores é inútil se a gestão não focar no desenvolvimento estrutural da fortitude individual.</p>
-                </a>
-            </section>
+            <section class="hero" id="hero" style="display:none"></section>
             <h2 class="sec-title" id="ft">Últimas Análises</h2>
             <div class="grid" id="feed"><p class="empty">Carregando análises…</p></div>
         </div>
@@ -222,7 +242,7 @@
 
     <div id="lm" class="modal">
         <div class="m-content">
-            <h3 style="font-size:.95rem;text-align:center;font-family:'Cinzel',serif;letter-spacing:1px">Autenticação Editorial</h3>
+            <h3 style="font-size:.95rem;text-align:center;font-family:'Inter',system-ui,sans-serif;letter-spacing:1px">Autenticação Editorial</h3>
             <div style="display:flex;flex-direction:column;gap:.3rem"><label for="em">E-mail Administrativo</label><input type="email" id="em" placeholder="nome@exemplo.com"></div>
             <div style="display:flex;flex-direction:column;gap:.3rem"><label for="pw">Senha de Segurança</label><input type="password" id="pw" placeholder="••••••••••••" onkeydown="if(event.key==='Enter')log()"></div>
             <button class="btn" style="width:100%" onclick="log()">Entrar no Terminal</button>
@@ -247,9 +267,10 @@
 
     <script src="site.js"></script>
     <script>
-        let db = {}, sec = 'Home', editingKey = null;
-        let adminToken = sessionStorage.getItem('adminToken') || null;
-        const isAdmin = () => !!adminToken;
+        let db = {}, sec = 'Home', editingKey = null, dirty = false;
+        let adminToken = Admin.token;
+        const isAdmin = () => !!Admin.token;
+        async function tok() { adminToken = await Admin.fresh(); return adminToken; }
 
         window.addEventListener('DOMContentLoaded', () => {
             signInAnon();
@@ -258,6 +279,7 @@
             load(); initEditor();
         });
         window.addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'e') $('lm').style.display = 'flex'; });
+        window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 
         /* ---------- EDITOR ---------- */
         function initEditor() {
@@ -267,18 +289,33 @@
             $('toolbar').addEventListener('mousedown', e => e.preventDefault());
             $('toolbar').addEventListener('click', e => {
                 const b = e.target.closest('button'); if (!b) return;
-                if (b.dataset.block) toggleBlock(b.dataset.block); else fmt(b.dataset.cmd);
+                if (b.dataset.ins) insertMedia(b.dataset.ins);
+                else if (b.dataset.block) toggleBlock(b.dataset.block); else fmt(b.dataset.cmd);
             });
-            ed.addEventListener('input', () => { updCount(); });
+            ed.addEventListener('input', () => { updCount(); dirty = true; saveDraftSoon(); });
+            ['pt', 'pa', 'pc'].forEach(id => $(id).addEventListener('input', () => { dirty = true; saveDraftSoon(); }));
+            // COLAR: converte Markdown (##, **negrito**, tabelas, links, imagens, vídeos) em texto formatado
             ed.addEventListener('paste', e => {
                 e.preventDefault();
-                const cd = e.clipboardData, html = cd.getData('text/html');
-                if (html) document.execCommand('insertHTML', false, sanitizeHTML(html));
-                else document.execCommand('insertHTML', false, esc(cd.getData('text/plain')).split(/\n{2,}/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join(''));
+                const cd = e.clipboardData, plain = cd.getData('text/plain') || '', html = cd.getData('text/html') || '';
+                let out;
+                if (html && hasStructure(html)) out = sanitizeHTML(html);
+                else out = mdToHtml(plain);
+                document.execCommand('insertHTML', false, out);
+                updCount(); dirty = true; saveDraftSoon();
             });
             document.addEventListener('selectionchange', updToolbar);
         }
+        function hasStructure(html) {
+            const d = new DOMParser().parseFromString(html, 'text/html');
+            return !!d.querySelector('h1,h2,h3,h4,h5,h6,strong,b,em,i,table,ul,ol,blockquote,a[href],img,iframe,span[style*="font-weight"]');
+        }
         function inEditor() { const s = getSelection(); return s.rangeCount && $('pcn').contains(s.anchorNode); }
+        function saveRange() { const s = getSelection(); return s.rangeCount && $('pcn').contains(s.anchorNode) ? s.getRangeAt(0).cloneRange() : null; }
+        function restoreRange(r) {
+            const ed = $('pcn'); ed.focus(); const s = getSelection(); s.removeAllRanges();
+            if (r) s.addRange(r); else { const rg = document.createRange(); rg.selectNodeContents(ed); rg.collapse(false); s.addRange(rg); }
+        }
         function fmt(cmd) {
             const ed = $('pcn'); if (!inEditor()) ed.focus();
             if (cmd === 'createLink') {
@@ -289,13 +326,32 @@
                 if (!/^(https?:\/\/|mailto:)/i.test(u)) u = 'https://' + u;
                 sel.removeAllRanges(); sel.addRange(r); document.execCommand('createLink', false, u);
             } else document.execCommand(cmd, false, null);
-            updToolbar(); updCount();
+            updToolbar(); updCount(); dirty = true; saveDraftSoon();
+        }
+        function insertMedia(kind) {
+            const r = saveRange(); let html = '';
+            if (kind === 'img') {
+                const u = (prompt('Cole o endereço (URL) da imagem. Ex: https://site.com/foto.jpg') || '').trim(); if (!u) return;
+                if (!/^https:\/\//i.test(u)) { alert('Use um endereço que comece com https://'); return; }
+                html = `<p><img src="${esc(u)}" alt=""></p><p><br></p>`;
+            } else if (kind === 'video') {
+                const u = (prompt('Cole o link do vídeo (YouTube ou Vimeo):') || '').trim(); if (!u) return;
+                const e = embedSrc(u); if (!e) { alert('Link não reconhecido. Use um link do YouTube ou do Vimeo.'); return; }
+                html = videoHtml(e) + '<p><br></p>';
+            } else {
+                const v = (prompt('Tamanho da tabela: colunas x linhas (ex: 3x4)', '3x4') || '').trim(); if (!v) return;
+                const m = /^(\d+)\s*[x×]\s*(\d+)$/i.exec(v); if (!m) { alert('Digite no formato 3x4'); return; }
+                const c = Math.min(8, Math.max(1, +m[1])), l = Math.min(30, Math.max(1, +m[2]));
+                html = '<table><thead><tr>' + '<th>Título</th>'.repeat(c) + '</tr></thead><tbody>' + ('<tr>' + '<td><br></td>'.repeat(c) + '</tr>').repeat(l) + '</tbody></table><p><br></p>';
+            }
+            restoreRange(r); document.execCommand('insertHTML', false, html);
+            updCount(); dirty = true; saveDraftSoon();
         }
         function toggleBlock(tag) {
             if (!inEditor()) $('pcn').focus();
             const cur = (document.queryCommandValue('formatBlock') || '').toLowerCase().replace(/[<>]/g, '');
             document.execCommand('formatBlock', false, cur === tag ? 'p' : tag);
-            updToolbar();
+            updToolbar(); dirty = true; saveDraftSoon();
         }
         function updToolbar() {
             if (!inEditor()) return;
@@ -312,6 +368,33 @@
             $('ed-count').textContent = n + (n === 1 ? ' palavra' : ' palavras');
         }
 
+        /* ---------- RASCUNHO AUTOMÁTICO (nada se perde se a sessão cair) ---------- */
+        const draftKey = () => 'fz_draft_' + (editingKey || 'new');
+        let draftT;
+        function saveDraftSoon() { clearTimeout(draftT); draftT = setTimeout(saveDraft, 700); }
+        function saveDraft() {
+            if (!$('pcn').innerText.trim() && !$('pt').value.trim()) return;
+            try {
+                localStorage.setItem(draftKey(), JSON.stringify({ c: $('pc').value, a: $('pa').value, t: $('pt').value, h: $('pcn').innerHTML, at: Date.now() }));
+                $('draft-note').textContent = 'Rascunho salvo automaticamente às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            } catch (e) {}
+        }
+        function dropDraft(key) { try { localStorage.removeItem('fz_draft_' + (key || 'new')); } catch (e) {} }
+        function offerDraft() {
+            let d = null; try { d = JSON.parse(localStorage.getItem(draftKey()) || 'null'); } catch (e) {}
+            const bar = $('draft-banner');
+            if (!d || !d.h) { bar.style.display = 'none'; return; }
+            $('draft-when').textContent = new Date(d.at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+            bar.style.display = 'flex';
+        }
+        function restoreDraft() {
+            let d = null; try { d = JSON.parse(localStorage.getItem(draftKey()) || 'null'); } catch (e) {}
+            if (!d) return;
+            $('pc').value = d.c || $('pc').value; $('pa').value = d.a || ''; $('pt').value = d.t || '';
+            $('pcn').innerHTML = sanitizeHTML(d.h || ''); updCount(); dirty = true; $('draft-banner').style.display = 'none';
+        }
+        function discardDraft() { dropDraft(editingKey); $('draft-banner').style.display = 'none'; }
+
         /* ---------- LOGIN / PAINEL ---------- */
         function log() {
             fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${SITE.firebaseKey}`, {
@@ -319,19 +402,19 @@
                 body: JSON.stringify({ email: $('em').value.trim(), password: $('pw').value, returnSecureToken: true })
             }).then(r => r.json()).then(d => {
                 if (d.idToken) {
-                    adminToken = d.idToken; sessionStorage.setItem('auth', 'true'); sessionStorage.setItem('adminToken', adminToken);
+                    adminToken = Admin.save(d);
                     $('lm').style.display = 'none'; $('pw').value = ''; showP(); rnd(db);
                 } else alert('Acesso Negado.');
             }).catch(() => alert('Erro ao autenticar. Verifique sua conexão.'));
         }
-        function showP() { $('panel').style.display = 'block'; loadSubs(); }
-        function out() { sessionStorage.removeItem('auth'); sessionStorage.removeItem('adminToken'); adminToken = null; cancelEdit(); $('panel').style.display = 'none'; rnd(db); }
-        function sessionExpired() { alert('Sua sessão de edição expirou. Entre novamente (Ctrl+Shift+E) e tente de novo.'); out(); }
+        function showP() { $('panel').style.display = 'block'; loadSubs(); renderManager(); if (!editingKey) offerDraft(); }
+        function out() { Admin.clear(); adminToken = null; cancelEdit(true); dirty = false; $('panel').style.display = 'none'; rnd(db); }
+        function sessionExpired() { alert('Sua sessão de edição expirou. O texto que você estava escrevendo foi salvo como rascunho: entre novamente (Ctrl+Shift+E) e clique em “Recuperar”.'); out(); }
 
         /* ---------- NEWSLETTER (admin) ---------- */
-        function loadSubs() {
-            const list = $('sub-list'); if (!list || !adminToken) return;
-            fetch(`${SITE.db}/assinantes.json?auth=${adminToken}`).then(r => r.json()).then(data => {
+        async function loadSubs() {
+            const list = $('sub-list'); if (!list) return; const t = await tok(); if (!t) return;
+            fetch(`${SITE.db}/assinantes.json?auth=${t}`).then(r => r.json()).then(data => {
                 list.innerHTML = ''; let count = 0;
                 if (data && !data.error) Object.keys(data).reverse().forEach(key => {
                     const s = data[key]; count++;
@@ -343,7 +426,10 @@
                 $('sub-count').textContent = count;
             }).catch(() => {});
         }
-        function delSub(key) { if (confirm('Remover este assinante?')) fetch(`${SITE.db}/assinantes/${key}.json?auth=${adminToken}`, { method: 'DELETE' }).then(loadSubs); }
+        async function delSub(key) {
+            if (!confirm('Remover este assinante?')) return; const t = await tok(); if (!t) return sessionExpired();
+            fetch(`${SITE.db}/assinantes/${key}.json?auth=${t}`, { method: 'DELETE' }).then(loadSubs);
+        }
 
         /* ---------- PUBLICAR / EDITAR ---------- */
         const loadImg = src => new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
@@ -366,7 +452,7 @@
         }
         async function pub(e) {
             e.preventDefault();
-            if (!adminToken) return sessionExpired();
+            const t = await tok(); if (!t) { saveDraft(); return sessionExpired(); }
             const file = $('pi').files[0];
             if (!editingKey && !file) { alert('Selecione uma imagem de capa.'); return; }
             const text = $('pcn').innerText.trim();
@@ -379,43 +465,62 @@
                 let res;
                 if (editingKey) {
                     data.updatedAt = new Date().toISOString();
-                    res = await fetch(`${SITE.db}/artigos/${editingKey}.json?auth=${adminToken}`, { method: 'PATCH', body: JSON.stringify(data) });
+                    res = await fetch(`${SITE.db}/artigos/${editingKey}.json?auth=${t}`, { method: 'PATCH', body: JSON.stringify(data) });
                 } else {
                     data.id = 'art-' + Date.now(); data.date = new Date().toISOString(); data.views = 0;
-                    res = await fetch(`${SITE.db}/artigos.json?auth=${adminToken}`, { method: 'POST', body: JSON.stringify(data) });
+                    res = await fetch(`${SITE.db}/artigos.json?auth=${t}`, { method: 'POST', body: JSON.stringify(data) });
                 }
-                if (res.status === 401 || res.status === 403) { btn.disabled = false; btn.textContent = label; return sessionExpired(); }
+                if (res.status === 401 || res.status === 403) { btn.disabled = false; btn.textContent = label; saveDraft(); return sessionExpired(); }
                 if (!res.ok) throw new Error('falha');
+                dropDraft(editingKey); dirty = false;
                 alert(editingKey ? 'Alterações salvas!' : 'Artigo publicado com sucesso!');
                 location.href = 'index.html';
             } catch (err) {
-                alert('Não foi possível salvar. Verifique sua conexão e se ainda está logada.');
+                saveDraft();
+                alert('Não foi possível salvar. Seu texto está guardado como rascunho. Verifique a conexão e tente de novo.');
                 btn.disabled = false; btn.textContent = label;
             }
         }
         function startEdit(key) {
             const a = db[key]; if (!a) return;
-            if (!adminToken) { $('lm').style.display = 'flex'; return; }
+            if (!Admin.token) { $('lm').style.display = 'flex'; return; }
             editingKey = key; showP();
             $('pc').value = a.category || 'Estratégia'; $('pa').value = a.author || ''; $('pt').value = a.title || '';
-            $('pcn').innerHTML = sanitizeHTML(a.content || ''); updCount();
+            $('pcn').innerHTML = sanitizeHTML(a.content || ''); updCount(); dirty = false;
             $('pi').required = false; $('pi').value = ''; $('pi-label').textContent = 'Imagem de Capa (deixe vazio para manter a atual)';
             if (a.image) { $('cover-prev').src = a.image; $('cover-prev').style.display = 'block'; }
             $('panel-h').textContent = 'Editar Análise'; $('btn-pub').textContent = 'Salvar Alterações';
             $('edit-title').textContent = a.title; $('edit-banner').style.display = 'flex';
+            offerDraft();
             $('panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        function cancelEdit() {
-            editingKey = null; $('art-form').reset(); $('pcn').innerHTML = ''; updCount();
+        function cancelEdit(keepDraft) {
+            if (keepDraft !== true && editingKey) dropDraft(editingKey);
+            editingKey = null; $('art-form').reset(); $('pcn').innerHTML = ''; updCount(); dirty = false;
             $('pi').required = true; $('pi-label').textContent = 'Imagem de Capa'; $('cover-prev').style.display = 'none';
             $('panel-h').textContent = 'Nova Análise'; $('btn-pub').textContent = 'Publicar Análise Oficial'; $('edit-banner').style.display = 'none';
+            if ($('panel').style.display !== 'none') offerDraft();
+        }
+
+        /* ---------- GERENCIADOR DE ARTIGOS (painel) ---------- */
+        function renderManager() {
+            const box = $('manage-list'); if (!box) return;
+            const keys = Object.keys(db).sort((x, y) => (artDate(db[y])?.getTime() || 0) - (artDate(db[x])?.getTime() || 0));
+            $('mng-count').textContent = keys.length;
+            if (!keys.length) { box.innerHTML = '<p class="empty">Nenhum artigo publicado ainda.</p>'; return; }
+            box.innerHTML = keys.map(k => {
+                const a = db[k], d = artDate(a), v = a.views || 0;
+                return `<div class="mrow">${a.image ? `<img class="mthumb" src="${esc(a.image)}" alt="" loading="lazy">` : '<span class="mthumb"></span>'}
+                    <div class="minfo"><a class="mtitle" href="artigo.html?id=${encodeURIComponent(a.id)}" target="_blank" rel="noopener">${esc(a.title)}</a>
+                    <div class="mmeta">${esc(a.category)}${d ? ' · ' + fmtDateShort(d) : ''} · ${v} ${v === 1 ? 'visualização' : 'visualizações'}</div></div>
+                    <div class="mact"><button type="button" class="btn-sm" onclick="startEdit('${esc(k)}')">✎ Editar</button><button type="button" class="btn-sm dl" onclick="del('${esc(k)}')">Excluir</button></div></div>`;
+            }).join('');
         }
 
         /* ---------- FEED ---------- */
         function st(s, el) {
             sec = s; document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active')); el.classList.add('active');
             $('ft').textContent = s === 'Home' ? 'Últimas Análises' : `Análises: ${s}`;
-            $('hero').style.display = s === 'Home' ? 'block' : 'none';
             $('sb').value = ''; rnd(db); trending();
         }
         function sch() {
@@ -428,27 +533,47 @@
             if (navigator.share) navigator.share({ title: a ? a.title : SITE.name, text: a ? a.excerpt : '', url }).catch(() => {});
             else navigator.clipboard.writeText(url).then(() => alert('Link copiado!'));
         }
+        // destaque = artigo mais lido (empate: o mais recente)
+        function pickHero() {
+            const arr = Object.keys(db).filter(k => sec === 'Home' || db[k].category === sec);
+            if (!arr.length) return null;
+            arr.sort((x, y) => (db[y].views || 0) - (db[x].views || 0) || (artDate(db[y])?.getTime() || 0) - (artDate(db[x])?.getTime() || 0));
+            return arr[0];
+        }
+        function renderHero(k) {
+            const h = $('hero');
+            if (!k) { h.style.display = 'none'; h.innerHTML = ''; return; }
+            const a = db[k], d = artDate(a);
+            h.style.display = 'block';
+            h.innerHTML = `<a class="hero-link" href="artigo.html?id=${encodeURIComponent(a.id)}">${a.image ? `<img class="hero-img" src="${esc(a.image)}" alt="">` : ''}
+                <span class="kicker">${(a.views || 0) > 0 ? 'Mais lido' : 'Destaque'} · ${esc(a.category)}${d ? ' · ' + fmtDateShort(d) : ''}</span>
+                <h2>${esc(a.title)}</h2><p>${esc(a.excerpt)}</p><span class="hero-by">Por ${esc(a.author)}</span></a>`;
+        }
         function rnd(data) {
             const f = $('feed'); f.innerHTML = ''; if (!data) return;
             const searching = $('sb').value.trim() !== '';
+            const keys = Object.keys(data).filter(k => searching || sec === 'Home' || data[k].category === sec)
+                .sort((x, y) => (artDate(data[y])?.getTime() || 0) - (artDate(data[x])?.getTime() || 0));
+            const hk = searching ? null : pickHero();
+            renderHero(hk);
             let n = 0;
-            Object.keys(data).sort((x, y) => (artDate(data[y])?.getTime() || 0) - (artDate(data[x])?.getTime() || 0)).forEach(k => {
-                const a = data[k]; if (!searching && sec !== 'Home' && a.category !== sec) return;
-                n++;
+            keys.filter(k => k !== hk).forEach(k => {
+                const a = data[k]; n++;
                 const d = artDate(a);
-                const w = document.createElement('div'); w.id = `l-${a.id}`;
-                w.innerHTML = `<a href="artigo.html?id=${encodeURIComponent(a.id)}" style="text-decoration:none;color:inherit"><article class="card">${a.image ? `<img src="${esc(a.image)}" class="card-img" alt="" loading="lazy">` : ''}<div class="card-body"><div class="card-meta"><b>${esc(a.category)}</b>${d ? ` · <time datetime="${isoDay(d)}">${fmtDateShort(d)}</time>` : ''}</div><h3 class="card-title">${esc(a.title)}</h3><p class="card-ex">${esc(a.excerpt)}</p><div class="card-footer"><span>Por ${esc(a.author)}</span><button class="btn-share" onclick="sh(event,'${esc(a.id)}')">${ICON.share}Compartilhar</button></div></div></article></a><div class="adm ${isAdmin() ? 'on' : ''}"><button class="ed" onclick="startEdit('${esc(k)}')">✎ Editar</button><button class="dl" onclick="del('${esc(k)}','${esc(a.id)}')">Excluir ×</button></div>`;
+                const w = document.createElement('div'); w.className = 'card-wrap'; w.id = `l-${a.id}`;
+                w.innerHTML = `<a class="card-link" href="artigo.html?id=${encodeURIComponent(a.id)}"><article class="card">${a.image ? `<img src="${esc(a.image)}" class="card-img" alt="" loading="lazy">` : ''}<div class="card-body"><div class="card-meta"><b>${esc(a.category)}</b>${d ? ` · <time datetime="${isoDay(d)}">${fmtDateShort(d)}</time>` : ''}</div><h3 class="card-title">${esc(a.title)}</h3><p class="card-ex">${esc(a.excerpt)}</p><div class="card-footer"><span>Por ${esc(a.author)}</span><button class="btn-share" onclick="sh(event,'${esc(a.id)}')">${ICON.share}Compartilhar</button></div></div></article></a>`;
                 f.appendChild(w);
                 if (!searching && (n === 4 || n === 10)) f.appendChild(createAd('feed'));
             });
             initAds(f);
-            if (!n) f.innerHTML = `<p class="empty">${searching ? 'Nenhuma análise encontrada para esta busca.' : 'Ainda não há análises nesta seção.'}</p>`;
+            if (!n) f.innerHTML = `<p class="empty">${searching ? 'Nenhuma análise encontrada para esta busca.' : (hk ? 'Em breve, mais análises nesta seção.' : 'Ainda não há análises nesta seção.')}</p>`;
         }
-        function del(k, id) {
+        async function del(k) {
             if (!confirm('Apagar este artigo definitivamente?')) return;
-            fetch(`${SITE.db}/artigos/${k}.json?auth=${adminToken}`, { method: 'DELETE' }).then(r => {
+            const t = await tok(); if (!t) return sessionExpired();
+            fetch(`${SITE.db}/artigos/${k}.json?auth=${t}`, { method: 'DELETE' }).then(r => {
                 if (r.status === 401 || r.status === 403) return sessionExpired();
-                delete db[k]; rnd(db); trending();
+                delete db[k]; rnd(db); trending(); renderManager();
             });
         }
         function trending() {
@@ -459,10 +584,9 @@
         }
         function load() {
             fetch(`${SITE.db}/artigos.json`).then(r => r.json()).then(data => {
-                db = (data && !data.error) ? data : {}; rnd(db); trending();
-                const h = Object.values(db).find(a => a.id === 'burnout-zero'); if (h) { const d = artDate(h); if (d) $('hero-date').textContent = '· ' + fmtDateShort(d); }
+                db = (data && !data.error) ? data : {}; rnd(db); trending(); if (isAdmin()) renderManager();
                 const ed = new URLSearchParams(location.search).get('editar');
-                if (ed && adminToken) { const k = Object.keys(db).find(k => db[k].id === ed); if (k) startEdit(k); }
+                if (ed && Admin.token) { const k = Object.keys(db).find(k => db[k].id === ed); if (k) startEdit(k); }
             }).catch(() => { $('feed').innerHTML = '<p class="empty">Não foi possível carregar as análises agora. Tente novamente em instantes.</p>'; });
         }
     </script>

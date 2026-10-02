@@ -40,18 +40,47 @@ async function shareUrl(id) {
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-/* Sanitiza HTML de artigos: só tags de texto simples, links http(s)/mailto */
+/* Vídeos: aceita só YouTube e Vimeo e devolve o endereço de incorporação seguro */
+function embedSrc(u) {
+  u = (u || '').trim(); let m;
+  if ((m = /^https?:\/\/(?:www\.|m\.)?youtube(?:-nocookie)?\.com\/(?:watch\?(?:[^#\s]*&)?v=|embed\/|shorts\/|live\/)([\w-]{11})/i.exec(u)) || (m = /^https?:\/\/youtu\.be\/([\w-]{11})/i.exec(u))) return 'https://www.youtube-nocookie.com/embed/' + m[1];
+  if ((m = /^https?:\/\/(?:www\.)?vimeo\.com\/(?:video\/)?(\d+)/i.exec(u)) || (m = /^https?:\/\/player\.vimeo\.com\/video\/(\d+)/i.exec(u))) return 'https://player.vimeo.com/video/' + m[1];
+  return null;
+}
+const videoHtml = src => `<div class="video"><iframe src="${src}" title="Vídeo" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
+
+/* Sanitiza HTML de artigos: texto, tabelas, imagens https, vídeos YouTube/Vimeo e links http(s)/mailto */
 function sanitizeHTML(html) {
   const doc = new DOMParser().parseFromString('<body>' + (html || ''), 'text/html');
   const out = document.createElement('div');
-  const KEEP = {P:1,BR:1,STRONG:1,EM:1,U:1,H2:1,H3:1,UL:1,OL:1,LI:1,BLOCKQUOTE:1,A:1};
-  const MAP = {B:'STRONG',I:'EM',DIV:'P',H1:'H2',H4:'H3',H5:'H3',H6:'H3'};
-  const DROP = {SCRIPT:1,STYLE:1,IFRAME:1,OBJECT:1,EMBED:1,NOSCRIPT:1,TEMPLATE:1,LINK:1,META:1,SVG:1,MATH:1,FORM:1,INPUT:1,BUTTON:1};
+  const KEEP = {P:1,BR:1,STRONG:1,EM:1,U:1,H2:1,H3:1,UL:1,OL:1,LI:1,BLOCKQUOTE:1,A:1,TABLE:1,THEAD:1,TBODY:1,TR:1,TH:1,TD:1,HR:1};
+  const MAP = {B:'STRONG',I:'EM',DIV:'P',H1:'H2',H4:'H3',H5:'H3',H6:'H3',TFOOT:'TBODY'};
+  const DROP = {SCRIPT:1,STYLE:1,IFRAME:1,OBJECT:1,EMBED:1,NOSCRIPT:1,TEMPLATE:1,LINK:1,META:1,SVG:1,MATH:1,FORM:1,INPUT:1,BUTTON:1,TEXTAREA:1,SELECT:1};
   (function walk(src, dst) {
     src.childNodes.forEach(n => {
       if (n.nodeType === 3) { dst.appendChild(document.createTextNode(n.nodeValue)); return; }
       if (n.nodeType !== 1) return;
-      let t = n.tagName; if (DROP[t]) return; t = MAP[t] || t;
+      let t = n.tagName; const st = n.getAttribute('style') || '';
+      if (t === 'IMG') {
+        const s = (n.getAttribute('src') || '').trim();
+        if (/^https:\/\//i.test(s)) { const el = document.createElement('img'); el.setAttribute('src', s); el.setAttribute('alt', (n.getAttribute('alt') || '').slice(0, 200)); el.setAttribute('loading', 'lazy'); el.setAttribute('referrerpolicy', 'no-referrer'); dst.appendChild(el); }
+        return;
+      }
+      if (t === 'IFRAME') {
+        const s = embedSrc(n.getAttribute('src') || '');
+        if (s) { const tmp = document.createElement('div'); tmp.innerHTML = videoHtml(s); dst.appendChild(tmp.firstChild); }
+        return;
+      }
+      if (DROP[t]) return;
+      if (t === 'DIV' && n.classList.contains('video')) { walk(n, dst); return; }
+      if ((t === 'B' || t === 'STRONG') && /font-weight\s*:\s*(normal|400)/i.test(st)) { walk(n, dst); return; } // Google Docs embrulha tudo em <b>
+      if (t === 'SPAN') { // negrito/itálico vindos de Word e Google Docs
+        let w = dst;
+        if (/font-weight\s*:\s*(bold|[6-9]00)/i.test(st)) { const e = document.createElement('strong'); w.appendChild(e); w = e; }
+        if (/font-style\s*:\s*italic/i.test(st)) { const e = document.createElement('em'); w.appendChild(e); w = e; }
+        walk(n, w); return;
+      }
+      t = MAP[t] || t;
       if (KEEP[t]) {
         const el = document.createElement(t);
         if (t === 'A') {
@@ -64,6 +93,93 @@ function sanitizeHTML(html) {
   })(doc.body, out);
   return out.innerHTML;
 }
+
+/* Markdown -> HTML (para colar textos do ChatGPT/Claude/Word já formatados) */
+function mdInline(text) {
+  const stash = []; const keep = h => { stash.push(h); return '\u0001' + (stash.length - 1) + '\u0002'; };
+  let t = String(text);
+  t = t.replace(/!\[([^\]]*)\]\(\s*(https:\/\/[^\s)]+)[^)]*\)/g, (m, a, u) => keep(`<img src="${esc(u)}" alt="${esc(a)}">`));
+  t = t.replace(/\[([^\]]+)\]\(\s*((?:https?:\/\/|mailto:)[^\s)]+)[^)]*\)/g, (m, a, u) => keep(`<a href="${esc(u)}">${mdInline(a)}</a>`));
+  t = t.replace(/(^|[\s(])(https?:\/\/[^\s<>"')]+[^\s<>"').,;:!?])/g, (m, p, u) => p + keep(`<a href="${esc(u)}">${esc(u)}</a>`));
+  t = esc(t);
+  t = t.replace(/\*\*\*([^*\n]+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+       .replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>')
+       .replace(/__([^_\n]+?)__/g, '<strong>$1</strong>')
+       .replace(/(^|[^*\w])\*([^*\s][^*\n]*?)\*(?!\*)/g, '$1<em>$2</em>')
+       .replace(/(^|[^_\w])_([^_\s][^_\n]*?)_(?![_\w])/g, '$1<em>$2</em>')
+       .replace(/~~([^~\n]+)~~/g, '$1').replace(/`([^`\n]+)`/g, '$1');
+  return t.replace(/\u0001(\d+)\u0002/g, (m, i) => stash[+i]);
+}
+function mdToHtml(src) {
+  const L = String(src).replace(/\r/g, '').split('\n'); const out = []; let i = 0;
+  const HEAD = /^\s{0,3}(#{1,6})\s+(.+?)\s*#*\s*$/, HR = /^\s{0,3}([-*_])(\s*\1){2,}\s*$/, LI = /^\s*(?:[-*+•]|\d+[.)])\s+/, QUOTE = /^\s{0,3}>\s?/;
+  const isSep = l => !!l && l.includes('|') && l.includes('-') && /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/.test(l);
+  const cells = l => { let s = l.trim(); if (s.startsWith('|')) s = s.slice(1); if (s.endsWith('|')) s = s.slice(0, -1); return s.split('|').map(c => c.trim()); };
+  const media = l => {
+    const u = l.trim(); let m;
+    if ((m = /^\[[^\]]*\]\(\s*(https?:\/\/[^\s)]+)[^)]*\)$/.exec(u)) && embedSrc(m[1])) return videoHtml(embedSrc(m[1]));
+    if ((m = /^!\[([^\]]*)\]\(\s*(https:\/\/[^\s)]+)[^)]*\)$/.exec(u))) return `<p><img src="${esc(m[2])}" alt="${esc(m[1])}"></p>`;
+    if (!/^https?:\/\/\S+$/i.test(u)) return null;
+    const e = embedSrc(u); if (e) return videoHtml(e);
+    if (/^https:\/\/\S+\.(jpe?g|png|gif|webp|avif)(\?\S*)?$/i.test(u)) return `<p><img src="${esc(u)}" alt=""></p>`;
+    return `<p><a href="${esc(u)}">${esc(u)}</a></p>`;
+  };
+  const startsBlock = k => { const l = L[k]; return HEAD.test(l) || HR.test(l) || LI.test(l) || QUOTE.test(l) || (l.includes('|') && isSep(L[k + 1])) || !!media(l); };
+  while (i < L.length) {
+    const line = L[i]; let m;
+    if (!line.trim()) { i++; continue; }
+    if ((m = HEAD.exec(line))) { const h = m[1].length <= 2 ? 'h2' : 'h3'; out.push(`<${h}>${mdInline(m[2])}</${h}>`); i++; continue; }
+    if (HR.test(line)) { out.push('<hr>'); i++; continue; }
+    if (line.includes('|') && isSep(L[i + 1])) {
+      const head = cells(line); i += 2; const rows = [];
+      while (i < L.length && L[i].trim() && L[i].includes('|')) { rows.push(cells(L[i])); i++; }
+      out.push('<table><thead><tr>' + head.map(c => `<th>${mdInline(c)}</th>`).join('') + '</tr></thead><tbody>' + rows.map(r => '<tr>' + head.map((_, k) => `<td>${mdInline(r[k] || '')}</td>`).join('') + '</tr>').join('') + '</tbody></table>');
+      continue;
+    }
+    if (QUOTE.test(line)) { const q = []; while (i < L.length && QUOTE.test(L[i])) { q.push(L[i].replace(QUOTE, '')); i++; } out.push('<blockquote>' + mdInline(q.join(' ').trim()) + '</blockquote>'); continue; }
+    if (LI.test(line)) {
+      const ord = /^\s*\d+[.)]\s+/.test(line), items = [];
+      while (i < L.length) {
+        if (LI.test(L[i])) { items.push(L[i].replace(LI, '')); i++; }
+        else if (!L[i].trim() && i + 1 < L.length && LI.test(L[i + 1])) i++;
+        else break;
+      }
+      const tag = ord ? 'ol' : 'ul'; out.push(`<${tag}>` + items.map(x => `<li>${mdInline(x)}</li>`).join('') + `</${tag}>`); continue;
+    }
+    const md = media(line); if (md) { out.push(md); i++; continue; }
+    const p = [line.trim()]; i++;
+    while (i < L.length && L[i].trim() && !startsBlock(i)) { p.push(L[i].trim()); i++; }
+    out.push('<p>' + mdInline(p.join(' ')) + '</p>');
+  }
+  return out.join('');
+}
+
+/* Sessão do administrador: renova o acesso sozinha (o Firebase vence em 1h, aqui é renovado a cada ~55 min) */
+const Admin = {
+  get token() { return sessionStorage.getItem('adminToken'); },
+  save(d) {
+    const id = d.idToken || d.id_token, rt = d.refreshToken || d.refresh_token, exp = +(d.expiresIn || d.expires_in || 3600);
+    sessionStorage.setItem('auth', 'true'); sessionStorage.setItem('adminToken', id);
+    if (rt) sessionStorage.setItem('adminRefresh', rt);
+    sessionStorage.setItem('adminExp', String(Date.now() + exp * 1000));
+    return id;
+  },
+  clear() { ['auth', 'adminToken', 'adminRefresh', 'adminExp'].forEach(k => sessionStorage.removeItem(k)); },
+  async refresh() {
+    const rt = sessionStorage.getItem('adminRefresh'); if (!rt) return null;
+    try {
+      const r = await fetch(`https://securetoken.googleapis.com/v1/token?key=${SITE.firebaseKey}`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'grant_type=refresh_token&refresh_token=' + encodeURIComponent(rt) });
+      const d = await r.json(); return d.id_token ? this.save(d) : null;
+    } catch (e) { return null; }
+  },
+  async fresh() {
+    const t = this.token; if (!t) return null;
+    const exp = +sessionStorage.getItem('adminExp') || 0;
+    if (!exp && !sessionStorage.getItem('adminRefresh')) return t;       // sessão antiga, sem dados de renovação
+    if (exp && Date.now() < exp - 5 * 60 * 1000) return t;                 // ainda válido por mais de 5 min
+    return (await this.refresh()) || (Date.now() < exp ? t : null);
+  }
+};
 
 /* Datas: usa a.date; artigos antigos derivam a data do id ("art-<timestamp>") */
 function artDate(a) {
@@ -200,5 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
   document.querySelectorAll('[data-cookie-prefs]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); cookieBanner(true); }));
   document.querySelectorAll('[data-subscribe]').forEach(b => b.addEventListener('click', openSubscribe));
+  if (Admin.token) setInterval(() => Admin.fresh(), 5 * 60 * 1000);
   cookieBanner(); trackHeader(); initAds(); fMkt(); setInterval(fMkt, 60000);
 });
