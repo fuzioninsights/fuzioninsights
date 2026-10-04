@@ -6,7 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Análise Editorial | Fuzion Insights</title>
     <meta name="description" content="Análise editorial publicada pela Fuzion Insights.">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png?v=3">
+    <link rel="alternate" type="application/rss+xml" title="Fuzion Insights" href="/feed.xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>try{if(localStorage.getItem('fz_consent')==='essential'){(window.adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=1}}catch(e){}</script>
@@ -154,7 +159,7 @@
                 if (!data || data.error) return notFound();
                 const keys = Object.keys(data);
                 const key = (artId && keys.find(k => data[k].id === artId)) ||
-                    (pathSlug && (keys.find(k => data[k].slug === pathSlug) || keys.find(k => artSlug(data[k]) === pathSlug)));
+                    (pathSlug && (keys.find(k => data[k].slug === pathSlug) || keys.find(k => artSlug(data[k]) === pathSlug) || keys.find(k => data[k].id === pathSlug)));
                 if (!key) return notFound();
                 const a = data[key]; curArt = a; artId = a.id;
                 const pub = artDate(a), upd = a.updatedAt ? new Date(a.updatedAt) : null;
@@ -257,6 +262,21 @@
             if (l) { e.preventDefault(); openSubscribe(); }
         });
 
+        const fileList = a => (Array.isArray(a.files) ? a.files : Object.values(a.files || {})).filter(f => f && f.id && f.nome);
+        const fmtSize = n => n >= 1048576 ? (n / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round((n || 0) / 1024)) + ' KB';
+        async function baixar(id, fid, m, btn) {
+            const sm = btn.querySelector('small'), old = sm.textContent; sm.textContent = 'baixando…'; btn.disabled = true;
+            try {
+                const r = await fetch('/.netlify/functions/premium', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: m.email, codigo: m.codigo, id, arquivo: fid }) });
+                const d = await r.json().catch(() => ({}));
+                if (!d.ok || !d.arquivo) throw 0;
+                const bin = atob(d.arquivo.data), u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+                const url = URL.createObjectURL(new Blob([u8], { type: d.arquivo.tipo }));
+                const l = document.createElement('a'); l.href = url; l.download = d.arquivo.nome; document.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000);
+            } catch (e) { toast('Não foi possível baixar agora. Tente de novo.'); }
+            sm.textContent = old; btn.disabled = false;
+        }
+
         /* Conteúdo exclusivo: assinante com acesso ativo recebe o restante do texto; os demais veem a prévia e o convite */
         async function applyPremium(a) {
             const body = $('art-body'), m = Member.get();
@@ -267,6 +287,13 @@
                     const wrap = document.createElement('div'); wrap.id = 'art-locked'; wrap.innerHTML = sanitizeHTML(d.html || '');
                     wrap.querySelectorAll('figure').forEach(f => { const im = f.querySelector('img'), fc = f.querySelector('figcaption'); if (im && fc && !im.alt) im.alt = fc.textContent.trim(); });
                     body.appendChild(wrap);
+                    const fl = fileList(a);
+                    if (fl.length) {
+                        const bx = document.createElement('div'); bx.className = 'files-box';
+                        bx.innerHTML = '<h3>Arquivos para assinantes</h3>' + fl.map(f => `<button type="button" class="file-btn" data-f="${esc(f.id)}"><span>📎 ${esc(f.nome)}</span><small>${fmtSize(f.tam)} · baixar</small></button>`).join('');
+                        bx.querySelectorAll('.file-btn').forEach(b => b.onclick = () => baixar(a.id, b.dataset.f, m, b));
+                        wrap.appendChild(bx);
+                    }
                     body.insertAdjacentHTML('beforebegin', `<p class="member-note">Você está lendo como assinante (acesso até ${esc(d.ate.split('-').reverse().join('/'))}).</p>`);
                     $('cta-assine').style.display = 'none';
                     return;
@@ -279,6 +306,8 @@
                 <p>Assine para ler o texto completo e as demais análises exclusivas da Fuzion Insights.</p>
                 <div class="acts"><button type="button" class="btn-sub">${esc(SITE.botao)}</button><a class="lk" href="/acesso.html?voltar=${encodeURIComponent(location.pathname)}">Já sou assinante: entrar</a></div></div>`;
             pw.querySelector('button').onclick = openSubscribe;
+            const fl2 = fileList(a);
+            if (fl2.length) pw.querySelector('.paywall-box').insertAdjacentHTML('beforeend', '<p class="files-lock">🔒 Inclui ' + fl2.length + (fl2.length === 1 ? ' arquivo exclusivo: ' : ' arquivos exclusivos: ') + fl2.map(f => esc(f.nome)).join(', ') + '</p>');
             body.after(pw);
         }
 

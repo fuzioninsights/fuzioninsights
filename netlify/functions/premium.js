@@ -50,6 +50,13 @@ exports.handler = async (event) => {
       const c = await (await fetch(`${DB}/premium/${encodeURIComponent(id)}.json?auth=${t}`)).json();
       res.html = typeof c === 'string' ? c : '';
     }
+    // download de arquivo anexado ao artigo (só quem tem acesso ativo chega aqui)
+    const arq = String(b.arquivo || '').trim();
+    if (id && arq) {
+      const f = await (await fetch(`${DB}/arquivos/${encodeURIComponent(id)}/${encodeURIComponent(arq)}.json?auth=${t}`)).json();
+      if (!f || f.error || !f.data) return out(404, { ok: false, erro: 'arquivo' });
+      res.arquivo = { nome: f.nome, tipo: f.tipo || 'application/octet-stream', data: f.data };
+    }
     return out(200, res);
   } catch (e) {
     cache = { t: '', exp: 0 };

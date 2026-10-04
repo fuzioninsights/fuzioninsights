@@ -8,7 +8,7 @@ const SITE = {
   // Enquanto estiver vazio, o espaço NÃO aparece no site (caixas vazias prejudicam a aprovação).
     // top = faixa abaixo do cabeçalho · feed = entre os cards da home · sidebar = coluna lateral da home
   // inline = no meio do artigo · end = no fim do artigo
-  adSlots: { top: '', feed: '', sidebar: '', inline: '', end: '' },
+  adSlots: { top: '7762672961', feed: '3532793076', sidebar: '1384218444', inline: '4749496810', end: '5823914492' },
   // E-mail que recebe TODAS as mensagens do site (comentários, contato, newsletter, pedidos de assinatura)
   // e que também é a chave Pix para receber os pagamentos.
   // Texto do botão do topo: 'Assine' ou 'Apoie' (troque aqui; vale para o site inteiro)
@@ -289,6 +289,7 @@ function subscribeNewsletter(e, formEl) {
   e.preventDefault();
   const email = formEl.querySelector('input[type="email"]').value.trim();
   if (!email) return false;
+  fetch('/.netlify/functions/newsletter', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, site_url: (formEl.querySelector('[name="site_url"]') || {}).value || '' }) }).catch(() => {});
   saveSubscriber(email, 'gratuito').then(() => { toast('E-mail cadastrado na Fuzion Insights!'); formEl.reset(); })
     .catch(() => toast('Não foi possível cadastrar agora. Tente novamente.'));
   return false;

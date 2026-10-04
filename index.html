@@ -9,7 +9,12 @@
     <meta name="description" content="Fuzion Insights publica análises independentes sobre estratégia, liderança, negócios e mercado para executivos e profissionais.">
     <meta property="og:url" content="https://fuzioninsights.netlify.app/"><meta property="og:title" content="Fuzion Insights"><meta property="og:type" content="website">
     <meta property="og:description" content="Análises independentes sobre estratégia, liderança, negócios e mercado.">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png?v=3">
+    <link rel="alternate" type="application/rss+xml" title="Fuzion Insights" href="/feed.xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>try{if(localStorage.getItem('fz_consent')==='essential'){(window.adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=1}}catch(e){}</script>
@@ -124,6 +129,7 @@
                 <a href="#" onclick="st('Liderança',this);return false">Liderança</a>
                 <a href="#" onclick="st('Negócios',this);return false">Negócios</a>
                 <a href="#" onclick="st('Mercado',this);return false">Mercado</a>
+                <a href="#" onclick="st('Exclusivos',this);return false" id="nav-exc">🔒 Exclusivos</a>
             </nav>
             <button type="button" class="btn-sub" data-subscribe>Assine</button>
         </div>
@@ -191,6 +197,11 @@
                 <div class="form-group">
                     <label style="display:flex;gap:.6rem;align-items:flex-start;text-transform:none;font-size:.85rem;color:#000;font-weight:600"><input type="checkbox" id="pp" style="width:auto;margin-top:.2rem"><span>Conteúdo exclusivo para assinantes <span class="hint">Só a prévia fica pública. No texto, use o botão “🔒 Prévia” para marcar onde ela termina (sem marcar, os 3 primeiros parágrafos são a prévia).</span></span></label>
                 </div>
+                <div class="form-group" id="pf-group">
+                    <label for="pf">Arquivos para assinantes <span class="hint">(PDF, planilha, modelo… até 3 MB cada, no máximo 5 por artigo; só funcionam em artigo marcado como exclusivo)</span></label>
+                    <input type="file" id="pf" multiple onchange="pfAdd(this)">
+                    <div id="pf-list" style="display:flex;flex-direction:column;gap:.35rem;margin-top:.5rem"></div>
+                </div>
                 <div class="form-group">
                     <label>Corpo de Leitura do Artigo</label>
                     <div>
@@ -234,7 +245,8 @@
                 <div id="manage-list" class="manage-list"></div>
             </div>
             <div style="margin-top:2.5rem;border-top:2px solid #000;padding-top:1.2rem">
-                <h3 style="font-family:'Inter',system-ui,sans-serif;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem">Assinantes da Newsletter (<span id="sub-count">0</span>)</h3>
+                <h3 style="font-family:'Inter',system-ui,sans-serif;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem">Assinantes e Newsletter (<span id="sub-count">0</span>)</h3>
+                <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.9rem"><button type="button" class="editor-btn" onclick="copyEmails('newsletter')" title="E-mails da newsletter gratuita">Copiar e-mails da newsletter</button><button type="button" class="editor-btn" onclick="copyEmails('ativos')" title="Assinantes pagos com acesso ativo">Copiar e-mails dos assinantes ativos</button><button type="button" class="editor-btn" onclick="copyEmails('todos')" title="Todos, exceto cancelados">Copiar todos</button></div>
                 <div id="sub-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:280px;overflow-y:auto"></div>
             </div>
         </section>
@@ -492,6 +504,17 @@
             toast('Acesso ativado. Código: ' + fmtCode(codigo));
             location.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent('Seu acesso à Fuzion Insights')}&body=${encodeURIComponent(corpo)}`;
         }
+        /* Copia e-mails para colar no campo CCO/BCC do seu e-mail ou importar numa ferramenta de newsletter */
+        function copyEmails(tipo) {
+            const hoje = isoDay(new Date());
+            const ok = s => { const pago = (s.plano || 'gratuito') !== 'gratuito';
+                if (tipo === 'ativos') return pago && s.status === 'ativo' && s.ate && s.ate >= hoje;
+                if (tipo === 'newsletter') return !pago;
+                return s.status !== 'cancelado'; };
+            const lista = [...new Set(Object.values(subsDb).filter(ok).map(s => String(s.email || '').trim().toLowerCase()).filter(Boolean))];
+            if (!lista.length) { toast('Nenhum e-mail nessa lista.'); return; }
+            copyText(lista.join(', '), lista.length + ' e-mail(s) copiado(s)!');
+        }
         async function revokeSub(key) {
             const s = subsDb[key]; if (!s || !confirm('Revogar o acesso de ' + s.email + '?')) return;
             const t = await tok(); if (!t) return sessionExpired();
@@ -554,6 +577,28 @@
                 return { error: 'Não há conteúdo depois da prévia. Escreva a parte exclusiva (ou desmarque “Conteúdo exclusivo para assinantes”).' };
             return { free: freeN.map(n => n.outerHTML).join(''), freeText: txt(freeN), locked: lockedN.map(n => n.outerHTML).join('') };
         }
+        /* ---------- ARQUIVOS PROTEGIDOS (só assinantes ativos baixam; ficam em /arquivos, leitura só do administrador) ---------- */
+        let pfOld = [], pfNew = [], pfGone = [];
+        const PF_MAX = 3 * 1024 * 1024, PF_N = 5;
+        const fmtSize = n => n >= 1048576 ? (n / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
+        function pfDraw() {
+            const el = $('pf-list'); if (!el) return;
+            const row = (nome, tam, fn, i) => `<div style="display:flex;justify-content:space-between;gap:.6rem;background:#fff;border:1px solid var(--border);padding:.4rem .6rem;font-size:.78rem"><span>📎 ${esc(nome)} <span style="color:var(--muted)">(${fmtSize(tam)})</span></span><button type="button" onclick="${fn}(${i})" style="background:none;border:none;color:#EF4444;font-weight:700;cursor:pointer">Remover ×</button></div>`;
+            el.innerHTML = pfOld.map((f, i) => row(f.nome, f.tam, 'pfDelOld', i)).join('') + pfNew.map((f, i) => row(f.name + ' (novo)', f.size, 'pfDelNew', i)).join('');
+        }
+        function pfAdd(inp) {
+            Array.from(inp.files).forEach(f => {
+                if (f.size > PF_MAX) { alert('“' + f.name + '” passa de 3 MB e não foi adicionado.'); return; }
+                if (pfOld.length + pfNew.length >= PF_N) { alert('O limite é de ' + PF_N + ' arquivos por artigo.'); return; }
+                pfNew.push(f);
+            });
+            inp.value = ''; pfDraw();
+        }
+        function pfDelOld(i) { pfGone.push(pfOld[i]); pfOld.splice(i, 1); pfDraw(); }
+        function pfDelNew(i) { pfNew.splice(i, 1); pfDraw(); }
+        function pfReset() { pfOld = []; pfNew = []; pfGone = []; pfDraw(); }
+        const fileB64 = f => new Promise((res, rej) => { const r = new FileReader(); r.onerror = rej; r.onload = () => res(String(r.result).split(',')[1] || ''); r.readAsDataURL(f); });
+
         async function pub(e) {
             e.preventDefault();
             const t = await tok(); if (!t) { saveDraft(); return sessionExpired(); }
@@ -564,6 +609,7 @@
             if (editingKey && db[editingKey] && db[editingKey].premium && !premiumLoaded) { alert('Aguarde: ainda carregando a parte exclusiva deste artigo. Tente de novo em instantes.'); return; }
             const split = splitPremium(sanitizeHTML($('pcn').innerHTML), $('pp').checked);
             if (split.error) { alert(split.error); return; }
+            if ((pfOld.length + pfNew.length) && split.locked === null) { alert('Arquivos só podem ser anexados em artigo exclusivo. Marque “Conteúdo exclusivo para assinantes” e use 🔒 Prévia, ou remova os arquivos.'); return; }
             const btn = $('btn-pub'); btn.disabled = true; const label = btn.textContent; btn.textContent = 'Salvando…';
             try {
                 const desc = $('pd').value.trim();
@@ -582,6 +628,21 @@
                 } else if (editingKey && db[editingKey] && db[editingKey].premium) {
                     await fetch(`${SITE.db}/premium/${encodeURIComponent(aid)}.json?auth=${t}`, { method: 'DELETE' });
                 }
+                // arquivos: dados em /arquivos/<id-do-artigo>/<id-do-arquivo>; só nome e tamanho ficam no artigo (público)
+                const keep = split.locked !== null ? pfOld.slice() : [];
+                if (split.locked !== null) {
+                    for (const f of pfNew) {
+                        const fid = 'f' + Date.now() + Math.floor(Math.random() * 1000);
+                        const rf = await fetch(`${SITE.db}/arquivos/${encodeURIComponent(aid)}/${fid}.json?auth=${t}`, { method: 'PUT', body: JSON.stringify({ nome: f.name, tipo: f.type || 'application/octet-stream', tam: f.size, data: await fileB64(f) }) });
+                        if (rf.status === 401 || rf.status === 403) { btn.disabled = false; btn.textContent = label; alert('O Firebase recusou gravar o arquivo. Falta liberar o caminho “arquivos” nas regras (veja as instruções). Nada foi publicado.'); return; }
+                        if (!rf.ok) throw new Error('arquivo');
+                        keep.push({ id: fid, nome: f.name, tam: f.size });
+                    }
+                    for (const g of pfGone) await fetch(`${SITE.db}/arquivos/${encodeURIComponent(aid)}/${g.id}.json?auth=${t}`, { method: 'DELETE' });
+                } else if (editingKey && db[editingKey] && db[editingKey].premium) {
+                    await fetch(`${SITE.db}/arquivos/${encodeURIComponent(aid)}.json?auth=${t}`, { method: 'DELETE' });
+                }
+                data.files = keep.length ? keep : null;
                 let res;
                 if (editingKey) {
                     data.updatedAt = new Date().toISOString();
@@ -613,6 +674,7 @@
             $('panel-h').textContent = 'Editar Análise'; $('btn-pub').textContent = 'Salvar Alterações';
             $('edit-title').textContent = a.title; $('edit-banner').style.display = 'flex';
             $('pp').checked = !!a.premium; premiumLoaded = !a.premium;
+            pfReset(); pfOld = (Array.isArray(a.files) ? a.files : Object.values(a.files || {})).filter(Boolean); pfDraw();
             if (a.premium) tok().then(tk => fetch(`${SITE.db}/premium/${encodeURIComponent(a.id)}.json?auth=${tk}`)).then(r => r.json()).then(c => {
                 if (typeof c === 'string' && editingKey === key) { $('pcn').innerHTML = sanitizeHTML((a.content || '') + '<p>[[assinantes]]</p>' + c); updCount(); premiumLoaded = true; }
                 else if (editingKey === key) alert('Não foi possível carregar a parte exclusiva. Confira as regras do Firebase antes de editar este artigo.');
@@ -622,7 +684,7 @@
         }
         function cancelEdit(keepDraft) {
             if (keepDraft !== true && editingKey) dropDraft(editingKey);
-            editingKey = null; premiumLoaded = true; $('art-form').reset(); $('pcn').innerHTML = ''; $('slug-prev').textContent = ''; updCount(); dirty = false;
+            editingKey = null; premiumLoaded = true; pfReset(); $('art-form').reset(); $('pcn').innerHTML = ''; $('slug-prev').textContent = ''; updCount(); dirty = false;
             $('pi').required = true; $('pi-label').textContent = 'Imagem de Capa'; $('cover-prev').style.display = 'none';
             $('panel-h').textContent = 'Nova Análise'; $('btn-pub').textContent = 'Publicar Análise Oficial'; $('edit-banner').style.display = 'none';
             if ($('panel').style.display !== 'none') offerDraft();
@@ -657,9 +719,10 @@
         }
 
         /* ---------- FEED ---------- */
+        const inSec = a => sec === 'Home' || (sec === 'Exclusivos' ? !!a.premium : a.category === sec);
         function st(s, el) {
             sec = s; clearTag(true); document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active')); el.classList.add('active');
-            $('ft').textContent = s === 'Home' ? 'Últimas Análises' : `Análises: ${s}`;
+            $('ft').textContent = s === 'Home' ? 'Últimas Análises' : (s === 'Exclusivos' ? 'Análises exclusivas para assinantes' : `Análises: ${s}`);
             $('sb').value = ''; rnd(db); trending();
         }
         function sch() {
@@ -675,7 +738,7 @@
         }
         // destaque = artigo mais lido (empate: o mais recente)
         function pickHero() {
-            const arr = Object.keys(db).filter(k => (sec === 'Home' || db[k].category === sec) && tagOk(db[k]));
+            const arr = Object.keys(db).filter(k => inSec(db[k]) && tagOk(db[k]));
             if (!arr.length) return null;
             arr.sort((x, y) => (db[y].views || 0) - (db[x].views || 0) || (artDate(db[y])?.getTime() || 0) - (artDate(db[x])?.getTime() || 0));
             return arr[0];
@@ -692,7 +755,7 @@
         function rnd(data) {
             const f = $('feed'); f.innerHTML = ''; if (!data) return;
             const searching = $('sb').value.trim() !== '';
-            const keys = Object.keys(data).filter(k => (searching || sec === 'Home' || data[k].category === sec) && tagOk(data[k]))
+            const keys = Object.keys(data).filter(k => (searching || inSec(data[k])) && tagOk(data[k]))
                 .sort((x, y) => (artDate(data[y])?.getTime() || 0) - (artDate(data[x])?.getTime() || 0));
             const hk = searching ? null : pickHero();
             renderHero(hk);
@@ -712,13 +775,15 @@
         async function del(k) {
             if (!confirm('Apagar este artigo definitivamente?')) return;
             const t = await tok(); if (!t) return sessionExpired();
+            const aid = db[k] && db[k].id;
+            if (aid) { fetch(`${SITE.db}/premium/${encodeURIComponent(aid)}.json?auth=${t}`, { method: 'DELETE' }).catch(() => {}); fetch(`${SITE.db}/arquivos/${encodeURIComponent(aid)}.json?auth=${t}`, { method: 'DELETE' }).catch(() => {}); }
             fetch(`${SITE.db}/artigos/${k}.json?auth=${t}`, { method: 'DELETE' }).then(r => {
                 if (r.status === 401 || r.status === 403) return sessionExpired();
                 delete db[k]; rnd(db); trending(); renderManager();
             });
         }
         function trending() {
-            const items = Object.values(db).filter(a => (sec === 'Home' || a.category === sec) && tagOk(a)).sort((x, y) => (y.views || 0) - (x.views || 0)).slice(0, 5);
+            const items = Object.values(db).filter(a => inSec(a) && tagOk(a)).sort((x, y) => (y.views || 0) - (x.views || 0)).slice(0, 5);
             $('trend-box').style.display = items.length ? 'block' : 'none';
             $('tt').textContent = sec === 'Home' ? 'Mais Lidos' : `Mais Lidos: ${sec}`;
             $('trend-list').innerHTML = items.map((a, i) => `<a class="t-item" href="${artUrl(a)}"><span class="t-num">0${i + 1}</span><span>${esc(a.title)}</span></a>`).join('');
@@ -728,6 +793,7 @@
                 db = (data && !data.error) ? data : {};
                 tagFilter = slugify(new URLSearchParams(location.search).get('tag') || ''); renderTagBar();
                 rnd(db); trending(); if (isAdmin()) renderManager();
+                if (new URLSearchParams(location.search).get('secao') === 'exclusivos' && $('nav-exc')) st('Exclusivos', $('nav-exc'));
                 const ed = new URLSearchParams(location.search).get('editar');
                 if (ed && Admin.token) { const k = Object.keys(db).find(k => db[k].id === ed); if (k) startEdit(k); }
             }).catch(() => { $('feed').innerHTML = '<p class="empty">Não foi possível carregar as análises agora. Tente novamente em instantes.</p>'; });

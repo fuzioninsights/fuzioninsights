@@ -20,3 +20,31 @@
   from = "/img/:id"
   to = "/.netlify/functions/og-image?id=:id"
   status = 200
+
+# LINKS ANTIGOS já divulgados nas redes: artigo.html?id=art-123... -> 301 para /artigo/nome-da-materia
+[[redirects]]
+  from = "/artigo.html"
+  query = {id = ":id"}
+  to = "/.netlify/functions/legacy?id=:id"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/artigo"
+  query = {id = ":id"}
+  to = "/.netlify/functions/legacy?id=:id"
+  status = 200
+  force = true
+
+# Endereço novo: qualquer /artigo/nome-da-materia abre a página do artigo
+[[redirects]]
+  from = "/artigo/*"
+  to = "/artigo.html"
+  status = 200
+
+# Feed RSS dos artigos (fonte da newsletter automática)
+[[redirects]]
+  from = "/feed.xml"
+  to = "/.netlify/functions/feed"
+  status = 200
+  force = true
