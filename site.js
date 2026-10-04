@@ -9,32 +9,89 @@ const SITE = {
     // top = faixa abaixo do cabeçalho · feed = entre os cards da home · sidebar = coluna lateral da home
   // inline = no meio do artigo · end = no fim do artigo
   adSlots: { top: '', feed: '', sidebar: '', inline: '', end: '' },
-  // Assinatura paga. Cole em "checkout" o link de pagamento (Mercado Pago, Stripe Payment Link, Kiwify etc.).
-  // Enquanto estiver vazio, o pedido é salvo como "interesse" e você envia o link por e-mail.
+  // E-mail que recebe TODAS as mensagens do site (comentários, contato, newsletter, pedidos de assinatura)
+  // e que também é a chave Pix para receber os pagamentos.
+  // Texto do botão do topo: 'Assine' ou 'Apoie' (troque aqui; vale para o site inteiro)
+  botao: 'Assine',
+  email: 'fuzioninsights@gmail.com',
+  pix: { chave: 'fuzioninsights@gmail.com', nome: 'FUZION INSIGHTS', cidade: 'BRASIL' },
+  // Cartão/PayPal: só ligue (true) se o e-mail acima tiver conta PayPal. Para cartão direto, cole um link em "checkout" dos planos.
+  paypal: false,
   plans: {
     mensal: { nome: 'Mensal', preco: 11,  checkout: '' },
     anual:  { nome: 'Anual',  preco: 114, checkout: '' }
   }
 };
 
-/* Ícones (traço fino, estilo atual) */
+/* Sessão do assinante (fica só neste navegador). O texto exclusivo nunca vem do banco público: a função /premium confere o código a cada leitura. */
+const todayISO = () => new Date().toISOString().slice(0, 10);
+const Member = {
+  get() {
+    try { const m = JSON.parse(localStorage.getItem('fz_member') || 'null'); if (m && m.email && m.codigo && (!m.ate || m.ate >= todayISO())) return m; localStorage.removeItem('fz_member'); } catch (e) {}
+    return null;
+  },
+  set(m) { try { localStorage.setItem('fz_member', JSON.stringify(m)); } catch (e) {} },
+  clear() { try { localStorage.removeItem('fz_member'); } catch (e) {} },
+  /* confere acesso (e, se vier "id", traz o texto exclusivo do artigo). Devolve {ok, ...} */
+  async check(email, codigo, id) {
+    try {
+      const r = await fetch('/.netlify/functions/premium', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, codigo, id: id || '' }) });
+      const d = await r.json().catch(() => ({})); d.status = r.status; return d;
+    } catch (e) { return { ok: false, erro: 'rede', status: 0 }; }
+  }
+};
+const makeCode = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), b => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 32]).join('');
+const fmtCode = c => String(c || '').replace(/(.{4})(?=.)/g, '$1-');
+/* chave da ficha do assinante ativo (igual à da função /premium) */
+const emailKey = e => String(e).trim().toLowerCase().replace(/[.#$\[\]\/]/g, ',');
+
+/* Ícones: glifos oficiais das marcas (preenchidos) + ícones de ação em traço */
 const ICON = {
   share: '<svg class="ic" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M8 7l4-4 4 4"/><path d="M5 12v6a3 3 0 003 3h8a3 3 0 003-3v-6"/></svg>',
   link: '<svg class="ic" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>',
-  whatsapp: '<svg class="ic" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>',
+  check: '<svg class="ic" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>',
+  whatsapp: '<svg class="ic f" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>',
   x: '<svg class="ic f" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 7.778 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.335L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
-  linkedin: '<svg class="ic" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>',
-  facebook: '<svg class="ic" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>',
-  telegram: '<svg class="ic" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>'
+  linkedin: '<svg class="ic f" viewBox="0 0 448 512"><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"/></svg>',
+  facebook: '<svg class="ic f" viewBox="0 0 320 512"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/></svg>',
+  telegram: '<svg class="ic f" viewBox="0 0 448 512"><path d="M446.7 98.6l-67.6 318.8c-5.1 22.5-18.4 28.1-37.3 17.5l-103-75.9-49.7 47.8c-5.5 5.5-10.1 10.1-20.7 10.1l7.4-104.9 190.9-172.5c8.3-7.4-1.8-11.5-12.9-4.1L117.8 284 16.2 252.2c-22.1-6.9-22.5-22.1 4.6-32.7L418.2 66.4c18.4-6.9 34.5 4.1 28.5 32.2z"/></svg>'
 };
+
+/* Aviso rápido (substitui alert) e cópia para a área de transferência */
+function toast(msg) {
+  document.querySelector('.fz-toast')?.remove();
+  const t = document.createElement('div'); t.className = 'fz-toast'; t.setAttribute('role', 'status');
+  t.innerHTML = ICON.check + '<span></span>'; t.querySelector('span').textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.classList.add('out'), 2300); setTimeout(() => t.remove(), 2700);
+}
+function copyText(txt, okMsg) {
+  const done = () => toast(okMsg || 'Copiado!');
+  if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(done, () => fallbackCopy(txt, done)); }
+  else fallbackCopy(txt, done);
+}
+function fallbackCopy(txt, done) {
+  const ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta);
+  ta.select(); try { document.execCommand('copy'); done(); } catch (e) { prompt('Copie manualmente:', txt); } ta.remove();
+}
+
+/* Endereço amigável: /artigo/nome-da-materia (parte do título). Artigos antigos, sem "slug", derivam do título. */
+const slugify = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+function slugFromTitle(t) {
+  let s = slugify(t); if (s.length > 60) { s = s.slice(0, 60); const k = s.lastIndexOf('-'); if (k > 25) s = s.slice(0, k); }
+  return s.replace(/-+$/, '') || 'artigo';
+}
+const artSlug = a => a.slug || slugFromTitle(a.title);
+const artUrl = a => '/artigo/' + encodeURIComponent(artSlug(a));
+const tagList = a => Array.isArray(a.tags) ? a.tags : (a.tags ? Object.values(a.tags) : []);
 
 /* Link de compartilhamento: usa /s/<id> (card com imagem) quando a função do Netlify estiver publicada; senão o link normal */
 let _shareOk = null;
-async function shareUrl(id) {
+async function shareUrl(a) {
   if (_shareOk === null) {
     try { const r = await fetch('/s/_ping', { cache: 'no-store' }); _shareOk = r.headers.get('x-fz-share') === '1'; } catch (e) { _shareOk = false; }
   }
-  return _shareOk ? `${location.origin}/s/${encodeURIComponent(id)}` : `${location.origin}/artigo.html?id=${encodeURIComponent(id)}`;
+  return _shareOk ? `${location.origin}/s/${encodeURIComponent(a.id)}` : location.origin + artUrl(a);
 }
 
 const $ = id => document.getElementById(id);
@@ -53,7 +110,7 @@ const videoHtml = src => `<div class="video"><iframe src="${src}" title="Vídeo"
 function sanitizeHTML(html) {
   const doc = new DOMParser().parseFromString('<body>' + (html || ''), 'text/html');
   const out = document.createElement('div');
-  const KEEP = {P:1,BR:1,STRONG:1,EM:1,U:1,H2:1,H3:1,UL:1,OL:1,LI:1,BLOCKQUOTE:1,A:1,TABLE:1,THEAD:1,TBODY:1,TR:1,TH:1,TD:1,HR:1};
+  const KEEP = {P:1,BR:1,STRONG:1,EM:1,U:1,H2:1,H3:1,UL:1,OL:1,LI:1,BLOCKQUOTE:1,A:1,TABLE:1,THEAD:1,TBODY:1,TR:1,TH:1,TD:1,HR:1,FIGURE:1,FIGCAPTION:1};
   const MAP = {B:'STRONG',I:'EM',DIV:'P',H1:'H2',H4:'H3',H5:'H3',H6:'H3',TFOOT:'TBODY'};
   const DROP = {SCRIPT:1,STYLE:1,IFRAME:1,OBJECT:1,EMBED:1,NOSCRIPT:1,TEMPLATE:1,LINK:1,META:1,SVG:1,MATH:1,FORM:1,INPUT:1,BUTTON:1,TEXTAREA:1,SELECT:1};
   (function walk(src, dst) {
@@ -63,7 +120,14 @@ function sanitizeHTML(html) {
       let t = n.tagName; const st = n.getAttribute('style') || '';
       if (t === 'IMG') {
         const s = (n.getAttribute('src') || '').trim();
-        if (/^https:\/\//i.test(s)) { const el = document.createElement('img'); el.setAttribute('src', s); el.setAttribute('alt', (n.getAttribute('alt') || '').slice(0, 200)); el.setAttribute('loading', 'lazy'); el.setAttribute('referrerpolicy', 'no-referrer'); dst.appendChild(el); }
+        if (/^https:\/\//i.test(s)) {
+          const el = document.createElement('img'); const alt = (n.getAttribute('alt') || '').trim().slice(0, 200);
+          el.setAttribute('src', s); el.setAttribute('alt', alt); el.setAttribute('loading', 'lazy'); el.setAttribute('referrerpolicy', 'no-referrer');
+          // imagem solta com descrição vira figura com legenda; dentro de <figure> a legenda já existe
+          if (alt && !(dst.tagName === 'FIGURE' || (n.parentNode && n.parentNode.tagName === 'FIGURE'))) {
+            const fg = document.createElement('figure'); const fc = document.createElement('figcaption'); fc.textContent = alt; fg.appendChild(el); fg.appendChild(fc); dst.appendChild(fg);
+          } else dst.appendChild(el);
+        }
         return;
       }
       if (t === 'IFRAME') {
@@ -86,6 +150,7 @@ function sanitizeHTML(html) {
         if (t === 'A') {
           const h = (n.getAttribute('href') || '').trim();
           if (/^(https?:\/\/|mailto:)/i.test(h)) { el.setAttribute('href', h); el.setAttribute('target', '_blank'); el.setAttribute('rel', 'noopener noreferrer nofollow'); }
+          else if (h === '#assine') el.setAttribute('href', '#assine');   // link interno: abre a tela de assinatura
         }
         dst.appendChild(el); walk(n, el);
       } else walk(n, dst);
@@ -118,7 +183,7 @@ function mdToHtml(src) {
   const media = l => {
     const u = l.trim(); let m;
     if ((m = /^\[[^\]]*\]\(\s*(https?:\/\/[^\s)]+)[^)]*\)$/.exec(u)) && embedSrc(m[1])) return videoHtml(embedSrc(m[1]));
-    if ((m = /^!\[([^\]]*)\]\(\s*(https:\/\/[^\s)]+)[^)]*\)$/.exec(u))) return `<p><img src="${esc(m[2])}" alt="${esc(m[1])}"></p>`;
+    if ((m = /^!\[([^\]]*)\]\(\s*(https:\/\/[^\s)]+)[^)]*\)$/.exec(u))) return m[1].trim() ? `<figure><img src="${esc(m[2])}" alt="${esc(m[1])}"><figcaption>${esc(m[1])}</figcaption></figure>` : `<p><img src="${esc(m[2])}" alt=""></p>`;
     if (!/^https?:\/\/\S+$/i.test(u)) return null;
     const e = embedSrc(u); if (e) return videoHtml(e);
     if (/^https:\/\/\S+\.(jpe?g|png|gif|webp|avif)(\?\S*)?$/i.test(u)) return `<p><img src="${esc(u)}" alt=""></p>`;
@@ -200,17 +265,32 @@ function signInAnon() {
 }
 const ensureAuth = () => idToken ? Promise.resolve(idToken) : signInAnon().then(() => idToken);
 
-function saveSubscriber(email, plano) {
-  const sub = { email, plano: plano || 'gratuito', date: new Date().toLocaleDateString('pt-BR') };
-  return ensureAuth().then(t => fetch(`${SITE.db}/assinantes.json?auth=${t}`, { method: 'POST', body: JSON.stringify(sub) }))
+/* Envia uma cópia de cada mensagem do site para o e-mail da redação (serviço FormSubmit).
+   Nunca bloqueia o leitor: se falhar, o dado continua salvo no Firebase. Devolve true/false. */
+function notifyEmail(assunto, campos) {
+  const body = Object.assign({ _subject: '[Fuzion Insights] ' + assunto, _template: 'table', _captcha: 'false', _honey: '' }, campos || {}, { pagina: location.href });
+  return fetch('https://formsubmit.co/ajax/' + SITE.email, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(body) })
+    .then(r => r.json()).then(d => d.success === true || d.success === 'true').catch(() => false);
+}
+const makeRef = () => 'FZ' + Array.from(crypto.getRandomValues(new Uint8Array(8)), b => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 32]).join('');
+const brl = v => 'R$ ' + Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+function saveSubscriber(email, plano, extra) {
+  const sub = Object.assign({ email, plano: plano || 'gratuito', date: new Date().toLocaleDateString('pt-BR') }, extra || {});
+  const pago = sub.plano !== 'gratuito' && SITE.plans[sub.plano];
+  const fb = ensureAuth().then(t => fetch(`${SITE.db}/assinantes.json?auth=${t}`, { method: 'POST', body: JSON.stringify(sub) }))
     .then(r => { if (!r.ok) throw 0; if (window.loadSubs) loadSubs(); });
+  const mail = notifyEmail(pago ? `Novo pedido de assinatura (${pago.nome})` : 'Nova inscrição na newsletter',
+    { email, plano: sub.plano, valor: pago ? brl(pago.preco) : 'gratuito', referencia: sub.ref || '', status: sub.status || 'newsletter' });
+  // sucesso se ao menos um dos dois registrou o pedido
+  return Promise.allSettled([fb, mail]).then(([x, y]) => { if (x.status !== 'fulfilled' && !(y.status === 'fulfilled' && y.value)) throw 0; });
 }
 function subscribeNewsletter(e, formEl) {
   e.preventDefault();
   const email = formEl.querySelector('input[type="email"]').value.trim();
   if (!email) return false;
-  saveSubscriber(email, 'gratuito').then(() => { alert('E-mail cadastrado na Fuzion Insights!'); formEl.reset(); })
-    .catch(() => alert('Não foi possível cadastrar agora. Tente novamente.'));
+  saveSubscriber(email, 'gratuito').then(() => { toast('E-mail cadastrado na Fuzion Insights!'); formEl.reset(); })
+    .catch(() => toast('Não foi possível cadastrar agora. Tente novamente.'));
   return false;
 }
 
@@ -268,40 +348,109 @@ function cookieBanner(force) {
   document.body.appendChild(bar);
 }
 
-/* Botão "Assine": planos + cadastro */
-function openSubscribe() {
+/* Pix copia-e-cola (BR Code estático, chave = e-mail) */
+function crc16(str) {
+  let c = 0xFFFF;
+  for (let i = 0; i < str.length; i++) { c ^= str.charCodeAt(i) << 8; for (let j = 0; j < 8; j++) c = (c & 0x8000) ? ((c << 1) ^ 0x1021) : (c << 1); c &= 0xFFFF; }
+  return c.toString(16).toUpperCase().padStart(4, '0');
+}
+function pixPayload(o) {
+  const f = (id, v) => id + String(v.length).padStart(2, '0') + v;
+  const norm = (t, n) => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9 ]/g, '').toUpperCase().slice(0, n);
+  const p = f('00', '01') + f('01', '11') + f('26', f('00', 'br.gov.bcb.pix') + f('01', o.chave)) + f('52', '0000') + f('53', '986') +
+    f('54', Number(o.valor).toFixed(2)) + f('58', 'BR') + f('59', norm(o.nome, 25)) + f('60', norm(o.cidade, 15)) +
+    f('62', f('05', String(o.txid || '***').replace(/[^A-Za-z0-9]/g, '').slice(0, 25) || '***')) + '6304';
+  return p + crc16(p);
+}
+/* QR Code: biblioteca carregada só quando o leitor chega ao pagamento; se não carregar, o código copia-e-cola continua valendo */
+function drawQR(text, box, onFail) {
+  const fail = () => { box.remove(); if (onFail) onFail(); };
+  const go = () => {
+    try {
+      const qr = qrcode(0, 'M'); qr.addData(text); qr.make();
+      const n = qr.getModuleCount(), q = 3; let d = '';
+      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) d += `M${c + q},${r + q}h1v1h-1z`;
+      box.innerHTML = `<svg viewBox="0 0 ${n + q * 2} ${n + q * 2}" shape-rendering="crispEdges" role="img" aria-label="QR Code Pix"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#000"/></svg>`;
+    } catch (e) { fail(); }
+  };
+  if (window.qrcode) return go();
+  const srcs = ['https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js', 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js'];
+  const load = i => {
+    if (i >= srcs.length) return fail();
+    const sc = document.createElement('script'); sc.src = srcs[i]; sc.onload = () => window.qrcode ? go() : load(i + 1); sc.onerror = () => load(i + 1); document.head.appendChild(sc);
+  };
+  load(0);
+}
+
+/* Botão "Assine": escolha do plano -> pagamento por Pix */
+function openSubscribe(plano) {
   if (document.querySelector('.sub-modal')) return;
   const P = SITE.plans, eco = P.mensal.preco * 12 - P.anual.preco, mes = (P.anual.preco / 12).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
   const m = document.createElement('div'); m.className = 'sub-modal';
-  m.innerHTML = `<div class="sub-card" role="dialog" aria-label="Assinar a Fuzion Insights"><button class="sub-x" aria-label="Fechar">×</button>
-    <h3>Assine a Fuzion Insights</h3><p>Apoie a redação independente e receba o Fuzion Briefing semanal.</p>
+  const card = html => { m.innerHTML = `<div class="sub-card" role="dialog" aria-modal="true" aria-label="Assinar a Fuzion Insights"><button class="sub-x" aria-label="Fechar">×</button>${html}</div>`; m.querySelector('.sub-x').onclick = close; };
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  const close = () => { m.remove(); document.removeEventListener('keydown', onKey); };
+  m.addEventListener('click', e => { if (e.target === m) close(); });
+  document.addEventListener('keydown', onKey);
+
+  /* Passo 1 — plano e e-mail */
+  const step1 = () => {
+    card(`<h3>Assine a Fuzion Insights</h3><p>Apoie a redação independente e receba o Fuzion Briefing semanal.</p>
     <form>
       <div class="plans">
         <label class="plan"><input type="radio" name="plano" value="mensal"><span class="pn">Mensal</span><span class="pp">R$ ${P.mensal.preco}<small>/mês</small></span><span class="ps">Cancele quando quiser</span></label>
         <label class="plan sel"><input type="radio" name="plano" value="anual" checked><span class="tag">Melhor valor</span><span class="pn">Anual</span><span class="pp">R$ ${P.anual.preco}<small>/ano</small></span><span class="ps">R$ ${mes}/mês · economize R$ ${eco}</span></label>
       </div>
       <input type="email" placeholder="Seu melhor e-mail" required aria-label="E-mail">
-      <button class="btn" type="submit">Continuar</button>
+      <button class="btn" type="submit">Continuar para o pagamento</button>
     </form>
-    <a class="sub-free">Prefiro apenas a newsletter gratuita</a></div>`;
-  const close = () => m.remove();
-  const form = m.querySelector('form');
-  m.addEventListener('click', e => { if (e.target === m) close(); });
-  m.querySelector('.sub-x').onclick = close;
-  form.addEventListener('change', () => m.querySelectorAll('.plan').forEach(p => p.classList.toggle('sel', p.querySelector('input').checked)));
-  const send = (plano) => {
-    const email = form.querySelector('input[type="email"]').value.trim();
-    if (!email) { form.querySelector('input[type="email"]').reportValidity(); return; }
-    saveSubscriber(email, plano).then(() => {
-      const link = plano !== 'gratuito' && SITE.plans[plano].checkout;
-      if (link) { location.href = link; return; }
-      alert(plano === 'gratuito' ? 'E-mail cadastrado na Fuzion Insights!' : `Recebemos seu interesse no plano ${SITE.plans[plano].nome}! Enviaremos o link de pagamento para ${email}.`);
-      close();
-    }).catch(() => alert('Não foi possível concluir agora. Tente novamente.'));
+    <a class="sub-free" tabindex="0" role="button">Prefiro apenas a newsletter gratuita</a>
+    <a class="sub-login" href="/acesso.html">Já sou assinante: entrar</a>`);
+    const form = m.querySelector('form'), mail = () => form.querySelector('input[type="email"]');
+    form.addEventListener('change', () => m.querySelectorAll('.plan').forEach(p => p.classList.toggle('sel', p.querySelector('input').checked)));
+    form.onsubmit = e => {
+      e.preventDefault();
+      const plano = form.plano.value, email = mail().value.trim(), ref = makeRef(), btn = form.querySelector('button'); btn.disabled = true;
+      saveSubscriber(email, plano, { ref, status: 'aguardando pagamento' }).then(() => step2(plano, email, ref))
+        .catch(() => { btn.disabled = false; toast('Não foi possível concluir agora. Tente novamente.'); });
+    };
+    m.querySelector('.sub-free').onclick = () => {
+      if (!mail().reportValidity()) return;
+      saveSubscriber(mail().value.trim(), 'gratuito').then(() => { toast('E-mail cadastrado na Fuzion Insights!'); close(); }).catch(() => toast('Não foi possível cadastrar agora.'));
+    };
+    if (plano === 'mensal' || plano === 'anual') { form.querySelector(`input[value=${plano}]`).checked = true; form.dispatchEvent(new Event('change')); }
+    mail().focus();
   };
-  form.onsubmit = e => { e.preventDefault(); send(form.plano.value); };
-  m.querySelector('.sub-free').onclick = () => send('gratuito');
-  document.body.appendChild(m); form.querySelector('input[type="email"]').focus();
+
+  /* Passo 2 — pagamento */
+  const step2 = (plano, email, ref) => {
+    const pl = P[plano], payload = pixPayload({ chave: SITE.pix.chave, nome: SITE.pix.nome, cidade: SITE.pix.cidade, valor: pl.preco, txid: ref });
+    const ppUrl = SITE.paypal ? `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(SITE.email)}&item_name=${encodeURIComponent('Fuzion Insights - plano ' + pl.nome)}&item_number=${ref}&amount=${pl.preco.toFixed(2)}&currency_code=BRL&no_shipping=1` : '';
+    const alt = [pl.checkout && `<a class="btn ghost" href="${esc(pl.checkout)}" target="_blank" rel="noopener">Pagar com cartão</a>`, ppUrl && `<a class="btn ghost" href="${esc(ppUrl)}" target="_blank" rel="noopener">Pagar com PayPal</a>`].filter(Boolean).join('');
+    card(`<h3>Pague com Pix</h3>
+      <p class="pay-sum"><strong>Plano ${esc(pl.nome)}</strong> · ${brl(pl.preco)}</p>
+      <div class="pix-qr" id="pix-qr" aria-live="polite"></div>
+      <p class="pix-help">Abra o app do seu banco, escolha Pix e leia o QR Code, ou use o código copia e cola.</p>
+      <button type="button" class="btn" id="pix-copy">Copiar código Pix</button>
+      <div class="pix-key"><span>Chave Pix (e-mail)</span><b>${esc(SITE.pix.chave)}</b><button type="button" id="pix-key-copy">Copiar</button></div>
+      <p class="pix-ref">Código do pedido: <b>${ref}</b></p>
+      ${alt ? `<div class="pay-alt">${alt}</div>` : ''}
+      <button type="button" class="btn ghost" id="pix-paid">Já fiz o pagamento</button>
+      <p class="pix-note">Depois de pagar, clique no botão acima. Confirmamos por e-mail em até 1 dia útil.</p>`);
+    drawQR(payload, m.querySelector('#pix-qr'), () => { const h = m.querySelector('.pix-help'); if (h) h.textContent = 'Abra o app do seu banco, escolha Pix e use o código copia e cola (ou a chave abaixo).'; });
+    m.querySelector('#pix-copy').onclick = () => copyText(payload, 'Código Pix copiado!');
+    m.querySelector('#pix-key-copy').onclick = () => copyText(SITE.pix.chave, 'Chave Pix copiada!');
+    m.querySelector('#pix-paid').onclick = e => {
+      e.target.disabled = true;
+      notifyEmail(`Pagamento informado (${pl.nome} · ${brl(pl.preco)})`, { email, plano, valor: brl(pl.preco), referencia: ref, status: 'cliente informou que pagou via Pix' });
+      card(`<h3>Obrigado!</h3><p>Recebemos o aviso do seu pagamento. Assim que o Pix for confirmado, enviamos o <strong>código de acesso</strong> para <strong>${esc(email)}</strong>. Com ele você entra na <a href="/acesso.html">área do assinante</a>.</p>
+        <p class="pix-note">Se quiser agilizar, envie o comprovante para <a href="mailto:${SITE.email}?subject=${encodeURIComponent('Comprovante Pix ' + ref)}">${SITE.email}</a> citando o código <b>${ref}</b>.</p>
+        <button type="button" class="btn" id="pix-close">Fechar</button>`);
+      m.querySelector('#pix-close').onclick = close;
+    };
+  };
+
+  step1(); document.body.appendChild(m);
 }
 
 /* Altura do header fixo -> usada pela barra de estilo do editor */
@@ -315,7 +464,12 @@ function trackHeader() {
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
   document.querySelectorAll('[data-cookie-prefs]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); cookieBanner(true); }));
-  document.querySelectorAll('[data-subscribe]').forEach(b => b.addEventListener('click', openSubscribe));
+  const membro = Member.get();
+  document.querySelectorAll('[data-subscribe]').forEach(b => {
+    if (b.classList.contains('btn-sub')) b.textContent = membro ? 'Minha área' : SITE.botao;
+    b.addEventListener('click', () => membro && b.classList.contains('btn-sub') ? (location.href = '/acesso.html') : openSubscribe());
+  });
+  document.querySelectorAll('.f-links').forEach(n => { if (!n.querySelector('[href$="acesso.html"]')) n.insertAdjacentHTML('beforeend', '<a href="/assine.html">Assinar</a><a href="/acesso.html">Área do assinante</a>'); });
   if (Admin.token) setInterval(() => Admin.fresh(), 5 * 60 * 1000);
   cookieBanner(); trackHeader(); initAds(); fMkt(); setInterval(fMkt, 60000);
 });

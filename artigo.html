@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Análise Editorial | Fuzion Insights</title>
     <meta name="description" content="Análise editorial publicada pela Fuzion Insights.">
@@ -13,7 +14,7 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .article-wrap{max-width:760px;margin:2.5rem auto 0;padding:0 var(--gutter)}
-        .art-cover{width:100%;aspect-ratio:16/9;max-height:440px;object-fit:cover;margin-bottom:1.8rem;display:none}
+        .art-fig{margin:0 0 1.8rem}.art-cover{display:block;width:100%;aspect-ratio:16/9;max-height:440px;object-fit:cover;background:#F3F4F6}
         .article-header{border-bottom:1px solid var(--border);padding-bottom:1.3rem;margin-bottom:2rem}
         .category{color:var(--gold-d);font-size:.72rem;text-transform:uppercase;font-weight:700;letter-spacing:1px;display:block;margin-bottom:.5rem}
         h1{font-family:'Inter',system-ui,sans-serif;font-size:2.3rem;line-height:1.18;color:#000;margin-bottom:1rem;font-weight:800;letter-spacing:-.025em}
@@ -21,7 +22,7 @@
         .meta-info b{color:#000;font-weight:600}
         .btn-edit{display:none;background:#1A1A1E;color:#fff;text-decoration:none;font-size:.68rem;font-weight:700;text-transform:uppercase;padding:.35rem .8rem;letter-spacing:.4px}
         .btn-edit:hover{background:var(--gold-d)}
-        @media(max-width:680px){.article-wrap{margin-top:1.6rem}h1{font-size:1.75rem}.art-cover{margin-bottom:1.3rem}}
+        @media(max-width:680px){.article-wrap{margin-top:1.6rem}h1{font-size:1.75rem}.art-fig{margin-bottom:1.3rem}}
         .art-content{margin-bottom:3rem}
         .box{background:var(--bg-s);border:1px solid var(--border);border-top:3px solid var(--gold);padding:1.6rem;margin-top:2.5rem;text-align:center}
         .box h4{font-family:'Inter',system-ui,sans-serif;font-size:.85rem;margin-bottom:.4rem;letter-spacing:1px}
@@ -62,21 +63,28 @@
 
     <main class="article-wrap">
         <article>
-            <img id="art-cover" class="art-cover" alt="">
+            <figure class="art-fig" id="art-fig" style="display:none"><img id="art-cover" class="art-cover" alt=""><figcaption id="art-cap"></figcaption></figure>
             <header class="article-header">
                 <span class="category" id="art-category">&nbsp;</span>
                 <h1 id="art-title">Carregando…</h1>
+                <p class="lede" id="art-desc" style="display:none"></p>
                 <div class="meta-info">
                     <b id="art-author"></b>
                     <span id="art-date"></span>
                     <span id="art-views"></span>
                     <a id="btn-edit" class="btn-edit" href="#">✎ Editar artigo</a>
                 </div>
+                <div class="chips" id="art-tags"></div>
                 <div class="share-bar" id="share-top"></div>
             </header>
             <div class="art-content" id="art-body"></div>
             <div class="share-bar" id="share-bottom" style="border-top:1px solid var(--border);padding-top:1.2rem"></div>
         </article>
+
+        <section class="cta-assine" id="cta-assine">
+            <div><h4>Gostou da leitura? Apoie a redação independente.</h4><p>Assine para ler as análises exclusivas e manter a Fuzion Insights publicando.</p></div>
+            <div class="acts"><button type="button" class="btn-sub" data-subscribe>Assine</button><a class="lk" href="/assine.html">Conheça os planos</a></div>
+        </section>
 
         <div class="ad-box" data-ad="end"></div>
 
@@ -89,7 +97,7 @@
             </form>
         </section>
 
-        <section class="related" id="related" style="display:none"><h3>Leia também</h3><div id="related-list"></div></section>
+        <section class="related" id="related" style="display:none"><h3>Leia também</h3><div class="rel-grid" id="related-list"></div></section>
 
         <section class="comments-section">
             <h3>Área de Feedback Executivo</h3>
@@ -113,19 +121,20 @@
         <p>© <span data-year>2026</span> Fuzion Insights. Todos os direitos reservados.</p>
         <p class="f-disc">Conteúdo informativo e educacional. Não constitui recomendação de investimento, consultoria financeira ou jurídica.</p>
         <nav class="f-links" aria-label="Institucional" style="margin:1.2rem 0 0">
-            <a href="sobre.html">Sobre</a><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="#" data-cookie-prefs>Preferências de cookies</a>
+            <a href="sobre.html">Sobre</a><a href="correcoes.html">Política de Correções</a><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="#" data-cookie-prefs>Preferências de cookies</a>
         </nav>
     </div></footer>
 
     <script src="site.js"></script>
     <script>
-        const artId = new URLSearchParams(location.search).get('id');
+        const params = new URLSearchParams(location.search);
+        const pathSlug = (() => { const m = /^\/artigo\/([^\/?#]+)/.exec(location.pathname); if (!m) return ''; try { return decodeURIComponent(m[1]); } catch (e) { return m[1]; } })();
+        let artId = params.get('id') || '', curArt = null;
         const adminToken = sessionStorage.getItem('adminToken') || null;
 
         window.addEventListener('DOMContentLoaded', () => {
-            if (!artId) { notFound(); return; }
+            if (!artId && !pathSlug) { notFound(); return; }
             signInAnon().then(loadArticle);
-            loadComments();
         });
 
         function notFound() {
@@ -134,14 +143,23 @@
             $('art-body').innerHTML = '<p>Este endereço não corresponde a nenhuma análise publicada. <a href="index.html">Voltar à página inicial</a>.</p>';
             $('art-category').textContent = '';
         }
+        function setMeta(attr, key, val) {
+            let m = document.querySelector(`meta[${attr}="${key}"]`);
+            if (!m) { m = document.createElement('meta'); m.setAttribute(attr, key); document.head.appendChild(m); }
+            m.setAttribute('content', val);
+        }
 
         function loadArticle() {
             fetch(`${SITE.db}/artigos.json`).then(r => r.json()).then(data => {
                 if (!data || data.error) return notFound();
-                const key = Object.keys(data).find(k => data[k].id === artId);
+                const keys = Object.keys(data);
+                const key = (artId && keys.find(k => data[k].id === artId)) ||
+                    (pathSlug && (keys.find(k => data[k].slug === pathSlug) || keys.find(k => artSlug(data[k]) === pathSlug)));
                 if (!key) return notFound();
-                const a = data[key];
+                const a = data[key]; curArt = a; artId = a.id;
                 const pub = artDate(a), upd = a.updatedAt ? new Date(a.updatedAt) : null;
+                const pretty = artUrl(a), fullUrl = location.origin + pretty;
+                if (location.pathname !== pretty) { try { history.replaceState(null, '', pretty); } catch (e) {} }   // link antigo (?id=) vira /artigo/nome-da-materia
 
                 // visualização (1x por sessão)
                 let views = (a.views || 0);
@@ -150,36 +168,51 @@
                     fetch(`${SITE.db}/artigos/${key}/views.json?auth=${idToken}`, { method: 'PUT', body: views }).catch(() => {});
                 }
 
+                const desc = (a.description || a.excerpt || '').replace(/…$/, '');
+                const tags = tagList(a);
                 document.title = a.title + ' | Fuzion Insights';
-                const cn = document.createElement('link'); cn.rel = 'canonical'; cn.href = 'https://fuzioninsights.netlify.app/artigo.html?id=' + encodeURIComponent(artId); document.head.appendChild(cn);
-                const desc = (a.excerpt || '').replace(/…$/, '');
+                const cn = document.createElement('link'); cn.rel = 'canonical'; cn.href = 'https://fuzioninsights.netlify.app' + pretty; document.head.appendChild(cn);
                 if (desc) document.querySelector('meta[name="description"]').setAttribute('content', desc);
-                $('art-category').textContent = a.category || '';
+                if (tags.length) setMeta('name', 'keywords', tags.join(', '));
+                setMeta('property', 'og:type', 'article'); setMeta('property', 'og:title', a.title); setMeta('property', 'og:description', desc); setMeta('property', 'og:url', fullUrl);
+                $('art-category').innerHTML = esc(a.category || '') + (a.premium ? ' <span class="badge-premium">Assinantes</span>' : '');
                 $('art-title').textContent = a.title;
+                if (a.description) { const d = $('art-desc'); d.textContent = a.description; d.style.display = 'block'; }
                 $('art-author').textContent = 'Por ' + a.author;
                 let dh = pub ? `Publicado em <time datetime="${isoDay(pub)}">${fmtDate(pub)}</time>` : '';
                 if (upd && !isNaN(upd) && (!pub || isoDay(upd) !== isoDay(pub))) dh += ` · Atualizado em <time datetime="${isoDay(upd)}">${fmtDate(upd)}</time>`;
                 $('art-date').innerHTML = dh;
                 $('art-views').textContent = `👁 ${views} ${views === 1 ? 'visualização' : 'visualizações'}`;
-                if (a.image) { const c = $('art-cover'); c.src = a.image; c.style.display = 'block'; }
+                if (a.image) {
+                    const c = $('art-cover'); c.src = a.image; c.alt = a.imageCaption || a.title;
+                    $('art-cap').textContent = a.imageCaption || ''; $('art-cap').style.display = a.imageCaption ? '' : 'none';
+                    $('art-fig').style.display = 'block';
+                }
+                $('art-tags').innerHTML = tags.map(t => `<a class="chip" href="/?tag=${encodeURIComponent(slugify(t))}" rel="tag">#${esc(t)}</a>`).join('');
                 $('art-body').innerHTML = sanitizeHTML(a.content);
+                // imagens do texto: a legenda vira o texto alternativo (alt) quando faltar
+                $('art-body').querySelectorAll('figure').forEach(f => { const im = f.querySelector('img'), fc = f.querySelector('figcaption'); if (im && fc && !im.alt) im.alt = fc.textContent.trim(); });
                 // anúncio no meio do texto (depois do 3º parágrafo, só em artigos com 5+ parágrafos)
                 const ps = $('art-body').querySelectorAll(':scope > p');
                 if (ps.length >= 5) ps[2].after(createAd('inline'));
                 if (ps.length >= 12) ps[9].after(createAd('inline'));
                 initAds($('art-body'));
+                if (Member.get()) $('cta-assine').style.display = 'none';   // quem já assina não vê o convite
+                if (a.premium) applyPremium(a);
 
                 shareBars(a);
+                loadComments();
                 if (adminToken) { const b = $('btn-edit'); b.href = 'index.html?editar=' + encodeURIComponent(a.id); b.style.display = 'inline-block'; }
 
                 // dados estruturados (SEO / Google News)
-                const autorSlug = (a.author || 'redacao').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                const autorSlug = slugify(a.author || 'redacao');
                 const ld = {
                   '@context': 'https://schema.org',
                   '@type': 'NewsArticle',
                   headline: a.title,
-                  description: (a.excerpt || '').replace(/…$/, ''),
+                  description: desc,
                   image: a.image ? [a.image] : undefined,
+                  keywords: tags.length ? tags.join(', ') : undefined,
                   datePublished: pub ? pub.toISOString() : undefined,
                   dateModified: (upd && !isNaN(upd)) ? upd.toISOString() : (pub ? pub.toISOString() : undefined),
                   author: {
@@ -195,45 +228,90 @@
                       url: 'https://fuzioninsights.netlify.app/favicon.svg'
                     }
                   },
-                  mainEntityOfPage: { '@type': 'WebPage', '@id': location.href },
+                  mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://fuzioninsights.netlify.app' + pretty },
                   articleSection: a.category,
                   inLanguage: 'pt-BR'
                 };
+                if (a.premium) { ld.isAccessibleForFree = false; ld.hasPart = { '@type': 'WebPageElement', isAccessibleForFree: false, cssSelector: '#art-locked' }; }
                 const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(ld); document.head.appendChild(s);
 
-                // leia também
-                const rel = Object.values(data).filter(x => x.id !== artId).sort((x, y) => (artDate(y)?.getTime() || 0) - (artDate(x)?.getTime() || 0)).slice(0, 3);
+                // leia também: prioriza mesmas tags e mesma seção; empate = mais recente
+                const mine = new Set(tags.map(slugify));
+                const score = x => (x.category === a.category ? 2 : 0) + tagList(x).filter(t => mine.has(slugify(t))).length * 3;
+                const rel = Object.values(data).filter(x => x.id !== a.id)
+                    .sort((x, y) => score(y) - score(x) || (artDate(y)?.getTime() || 0) - (artDate(x)?.getTime() || 0)).slice(0, 3);
                 if (rel.length) {
-                    $('related-list').innerHTML = rel.map(x => { const d = artDate(x); return `<a class="rel-item" href="artigo.html?id=${encodeURIComponent(x.id)}"><small>${esc(x.category)}${d ? ' · ' + fmtDateShort(d) : ''}</small><strong>${esc(x.title)}</strong></a>`; }).join('');
+                    $('related-list').innerHTML = rel.map(x => {
+                        const d = artDate(x);
+                        return `<a class="rel-card" href="${artUrl(x)}">${x.image ? `<img class="ri" src="${esc(x.image)}" alt="${esc(x.imageCaption || x.title)}" loading="lazy">` : ''}
+                            <div class="rb"><small><b>${esc(x.category)}</b>${d ? ' · ' + fmtDateShort(d) : ''}${x.premium ? ' <span class="badge-premium">Assinantes</span>' : ''}</small><strong>${esc(x.title)}</strong><p>${esc(x.description || x.excerpt)}</p><span class="rmore">Ler análise</span></div></a>`;
+                    }).join('');
                     $('related').style.display = 'block';
                 }
             }).catch(() => { $('art-title').textContent = 'Não foi possível carregar o artigo'; });
         }
 
+        /* Link "#assine" dentro do texto abre a tela de assinatura */
+        document.addEventListener('click', e => {
+            const l = e.target.closest && e.target.closest('#art-body a[href="#assine"]');
+            if (l) { e.preventDefault(); openSubscribe(); }
+        });
+
+        /* Conteúdo exclusivo: assinante com acesso ativo recebe o restante do texto; os demais veem a prévia e o convite */
+        async function applyPremium(a) {
+            const body = $('art-body'), m = Member.get();
+            if (m) {
+                const d = await Member.check(m.email, m.codigo, a.id);
+                if (d.ok) {
+                    Member.set({ email: m.email, codigo: m.codigo, ate: d.ate, plano: d.plano });
+                    const wrap = document.createElement('div'); wrap.id = 'art-locked'; wrap.innerHTML = sanitizeHTML(d.html || '');
+                    wrap.querySelectorAll('figure').forEach(f => { const im = f.querySelector('img'), fc = f.querySelector('figcaption'); if (im && fc && !im.alt) im.alt = fc.textContent.trim(); });
+                    body.appendChild(wrap);
+                    body.insertAdjacentHTML('beforebegin', `<p class="member-note">Você está lendo como assinante (acesso até ${esc(d.ate.split('-').reverse().join('/'))}).</p>`);
+                    $('cta-assine').style.display = 'none';
+                    return;
+                }
+                if (d.status === 401) Member.clear();   // código errado ou vencido: pede para entrar de novo
+            }
+            $('cta-assine').style.display = 'none';
+            const pw = document.createElement('div'); pw.className = 'paywall';
+            pw.innerHTML = `<div class="paywall-box" id="paywall"><h3>O restante desta análise é exclusivo para assinantes</h3>
+                <p>Assine para ler o texto completo e as demais análises exclusivas da Fuzion Insights.</p>
+                <div class="acts"><button type="button" class="btn-sub">${esc(SITE.botao)}</button><a class="lk" href="/acesso.html?voltar=${encodeURIComponent(location.pathname)}">Já sou assinante: entrar</a></div></div>`;
+            pw.querySelector('button').onclick = openSubscribe;
+            body.after(pw);
+        }
+
         async function shareBars(a) {
-            const url = await shareUrl(a.id), t = a.title, en = encodeURIComponent;
+            const url = await shareUrl(a), t = a.title, en = encodeURIComponent;
             const nets = [['wa', 'WhatsApp', 'whatsapp', `https://wa.me/?text=${en(t + ' — ' + url)}`],
                 ['x', 'X', 'x', `https://twitter.com/intent/tweet?text=${en(t)}&url=${en(url)}`],
                 ['li', 'LinkedIn', 'linkedin', `https://www.linkedin.com/sharing/share-offsite/?url=${en(url)}`],
                 ['fb', 'Facebook', 'facebook', `https://www.facebook.com/sharer/sharer.php?u=${en(url)}`],
                 ['tg', 'Telegram', 'telegram', `https://t.me/share/url?url=${en(url)}&text=${en(t)}`]];
             const html = '<span class="share-l">Compartilhar</span>' +
-                (navigator.share ? `<button type="button" class="sh-btn" data-native>${ICON.share}<span>Enviar</span></button>` : '') +
-                nets.map(n => `<a class="sh-btn ${n[0]}" href="${n[3]}" target="_blank" rel="noopener" aria-label="${n[1]}" title="${n[1]}">${ICON[n[2]]}<span>${n[1]}</span></a>`).join('') +
-                `<button type="button" class="sh-btn" data-copy aria-label="Copiar link" title="Copiar link">${ICON.link}<span>Copiar link</span></button>`;
+                (navigator.share ? `<button type="button" class="sh-btn pill main" data-native>${ICON.share}<span>Enviar</span></button>` : '') +
+                nets.map(n => `<a class="sh-btn ${n[0]}" href="${n[3]}" target="_blank" rel="noopener" aria-label="Compartilhar no ${n[1]}" title="${n[1]}">${ICON[n[2]]}<span>${n[1]}</span></a>`).join('') +
+                `<button type="button" class="sh-btn pill" data-copy aria-label="Copiar link" title="Copiar link">${ICON.link}<span>Copiar link</span></button>`;
             ['share-top', 'share-bottom'].forEach(id => {
                 const el = $(id); el.innerHTML = html;
-                el.querySelector('[data-copy]').onclick = () => navigator.clipboard.writeText(url).then(() => alert('Link copiado!'));
-                const nb = el.querySelector('[data-native]'); if (nb) nb.onclick = () => navigator.share({ title: t, text: a.excerpt || '', url }).catch(() => {});
+                el.querySelector('[data-copy]').onclick = () => copyText(url, 'Link copiado!');
+                const nb = el.querySelector('[data-native]'); if (nb) nb.onclick = () => navigator.share({ title: t, text: a.description || a.excerpt || '', url }).catch(() => {});
             });
         }
 
         function addComment(e) {
             e.preventDefault();
             const c = { artId, name: $('c-name').value.trim(), text: $('c-text').value.trim(), date: new Date().toLocaleDateString('pt-BR') };
-            if (!c.name || !c.text) return;
-            ensureAuth().then(t => fetch(`${SITE.db}/comentarios.json?auth=${t}`, { method: 'POST', body: JSON.stringify(c) }))
-                .then(() => { $('c-text').value = ''; loadComments(); });
+            if (!c.name || !c.text || !artId) return;
+            const btn = e.target.querySelector('button'); btn.disabled = true;
+            const mail = notifyEmail('Novo comentário no site', { nome: c.name, comentario: c.text, artigo: curArt ? curArt.title : artId, link: curArt ? location.origin + artUrl(curArt) : location.href });
+            const fb = ensureAuth().then(t => fetch(`${SITE.db}/comentarios.json?auth=${t}`, { method: 'POST', body: JSON.stringify(c) })).then(r => { if (!r.ok) throw 0; });
+            Promise.allSettled([fb, mail]).then(([x, y]) => {
+                btn.disabled = false;
+                if (x.status !== 'fulfilled' && !(y.status === 'fulfilled' && y.value)) return toast('Não foi possível enviar agora. Tente novamente.');
+                $('c-text').value = ''; toast('Comentário enviado. Obrigado!'); if (x.status === 'fulfilled') loadComments();
+            });
         }
         function loadComments() {
             const feed = $('comments-feed'); feed.innerHTML = '';

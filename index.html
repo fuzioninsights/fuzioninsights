@@ -77,7 +77,9 @@
         @media(max-width:680px){.form-row{grid-template-columns:1fr}}
         .form-group{display:flex;flex-direction:column;gap:.3rem}
         .form-group label{font-size:.7rem;font-weight:700;text-transform:uppercase;color:var(--muted)}
-        .f-g input,.f-g select{width:100%;padding:.7rem;background:#FFF;border:1px solid var(--border);color:#000}
+        .f-g input,.f-g select,.f-g textarea{width:100%;padding:.7rem;background:#FFF;border:1px solid var(--border);color:#000}
+        .f-g textarea{resize:vertical;min-height:70px}
+        .hint{font-size:.7rem;color:var(--muted);font-weight:500;text-transform:none}
         .cover-prev{max-width:220px;max-height:120px;object-fit:cover;margin-top:.4rem;display:none}
         /* BARRA DE ESTILO FIXA: acompanha a rolagem enquanto o editor estiver na tela */
         .editor-toolbar{position:sticky;top:var(--hdr-h);z-index:60;display:flex;align-items:center;gap:.3rem;background:#1A1A1E;padding:.5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 3px 10px rgba(0,0,0,.25)}
@@ -170,8 +172,24 @@
                     <img id="cover-prev" class="cover-prev" alt="Capa atual">
                 </div>
                 <div class="form-group">
+                    <label for="pic">Descrição da imagem de capa <span class="hint">(aparece abaixo da imagem e vira o texto alternativo)</span></label>
+                    <input type="text" id="pic" maxlength="200" placeholder="Ex: Executivos analisam o cenário em sala de reunião">
+                </div>
+                <div class="form-group">
                     <label for="pt">Manchete de Capa (Título principal)</label>
                     <input type="text" id="pt" placeholder="Insira o título da notícia" required>
+                    <span class="hint" id="slug-prev"></span>
+                </div>
+                <div class="form-group">
+                    <label for="pd">Descrição do artigo <span class="hint">(resumo exibido nos cards, no Google e ao compartilhar)</span></label>
+                    <textarea id="pd" maxlength="200" rows="2" placeholder="Se deixar em branco, usamos o começo do texto."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="pg">Tags <span class="hint">(separadas por vírgula, até 8)</span></label>
+                    <input type="text" id="pg" placeholder="Ex: liderança, gestão de crise, CEOs">
+                </div>
+                <div class="form-group">
+                    <label style="display:flex;gap:.6rem;align-items:flex-start;text-transform:none;font-size:.85rem;color:#000;font-weight:600"><input type="checkbox" id="pp" style="width:auto;margin-top:.2rem"><span>Conteúdo exclusivo para assinantes <span class="hint">Só a prévia fica pública. No texto, use o botão “🔒 Prévia” para marcar onde ela termina (sem marcar, os 3 primeiros parágrafos são a prévia).</span></span></label>
                 </div>
                 <div class="form-group">
                     <label>Corpo de Leitura do Artigo</label>
@@ -195,6 +213,9 @@
                             <button type="button" class="editor-btn" data-ins="img" title="Inserir imagem por link">🖼 Imagem</button>
                             <button type="button" class="editor-btn" data-ins="video" title="Inserir vídeo do YouTube ou Vimeo">▶ Vídeo</button>
                             <button type="button" class="editor-btn" data-ins="table" title="Inserir tabela">▦ Tabela</button>
+                            <span class="tb-sep"></span>
+                            <button type="button" class="editor-btn" data-ins="assine" title="Link que abre a tela de assinatura (selecione um texto ou clique sem selecionar)">★ Assine</button>
+                            <button type="button" class="editor-btn" data-ins="paywall" title="Marca o fim da parte pública (para artigos exclusivos)">🔒 Prévia</button>
                             <span class="tb-sep"></span>
                             <button type="button" class="editor-btn" data-cmd="undo" title="Desfazer">↶</button>
                             <button type="button" class="editor-btn" data-cmd="redo" title="Refazer">↷</button>
@@ -221,6 +242,7 @@
         <div>
             <section class="hero" id="hero" style="display:none"></section>
             <h2 class="sec-title" id="ft">Últimas Análises</h2>
+            <div class="tag-filter" id="tag-bar" style="display:none"></div>
             <div class="grid" id="feed"><p class="empty">Carregando análises…</p></div>
         </div>
 
@@ -268,7 +290,7 @@
 
     <script src="site.js"></script>
     <script>
-        let db = {}, sec = 'Home', editingKey = null, dirty = false;
+        let db = {}, sec = 'Home', editingKey = null, dirty = false, tagFilter = '', premiumLoaded = true;
         let adminToken = Admin.token;
         const isAdmin = () => !!Admin.token;
         async function tok() { adminToken = await Admin.fresh(); return adminToken; }
@@ -294,7 +316,8 @@
                 else if (b.dataset.block) toggleBlock(b.dataset.block); else fmt(b.dataset.cmd);
             });
             ed.addEventListener('input', () => { updCount(); dirty = true; saveDraftSoon(); });
-            ['pt', 'pa', 'pc'].forEach(id => $(id).addEventListener('input', () => { dirty = true; saveDraftSoon(); }));
+            ['pt', 'pa', 'pc', 'pd', 'pg', 'pic', 'pp'].forEach(id => $(id).addEventListener('input', () => { dirty = true; saveDraftSoon(); }));
+            $('pt').addEventListener('input', showSlugPrev);
             // COLAR: converte Markdown (##, **negrito**, tabelas, links, imagens, vídeos) em texto formatado
             ed.addEventListener('paste', e => {
                 e.preventDefault();
@@ -330,11 +353,20 @@
             updToolbar(); updCount(); dirty = true; saveDraftSoon();
         }
         function insertMedia(kind) {
+            if (kind === 'assine') {
+                const sel = getSelection();
+                if (inEditor() && !sel.isCollapsed) document.execCommand('createLink', false, '#assine');
+                else { restoreRange(saveRange()); document.execCommand('insertHTML', false, '<a href="#assine">Assine a Fuzion Insights</a>&nbsp;'); }
+                updCount(); dirty = true; saveDraftSoon(); return;
+            }
             const r = saveRange(); let html = '';
-            if (kind === 'img') {
+            if (kind === 'paywall') {
+                html = '<p>[[assinantes]]</p><p><br></p>';
+            } else if (kind === 'img') {
                 const u = (prompt('Cole o endereço (URL) da imagem. Ex: https://site.com/foto.jpg') || '').trim(); if (!u) return;
                 if (!/^https:\/\//i.test(u)) { alert('Use um endereço que comece com https://'); return; }
-                html = `<p><img src="${esc(u)}" alt=""></p><p><br></p>`;
+                const alt = (prompt('Descreva a imagem (aparece como legenda abaixo dela e vira o texto alternativo para o Google). Deixe vazio para não ter legenda:') || '').trim().slice(0, 200);
+                html = alt ? `<figure><img src="${esc(u)}" alt="${esc(alt)}"><figcaption>${esc(alt)}</figcaption></figure><p><br></p>` : `<p><img src="${esc(u)}" alt=""></p><p><br></p>`;
             } else if (kind === 'video') {
                 const u = (prompt('Cole o link do vídeo (YouTube ou Vimeo):') || '').trim(); if (!u) return;
                 const e = embedSrc(u); if (!e) { alert('Link não reconhecido. Use um link do YouTube ou do Vimeo.'); return; }
@@ -376,7 +408,7 @@
         function saveDraft() {
             if (!$('pcn').innerText.trim() && !$('pt').value.trim()) return;
             try {
-                localStorage.setItem(draftKey(), JSON.stringify({ c: $('pc').value, a: $('pa').value, t: $('pt').value, h: $('pcn').innerHTML, at: Date.now() }));
+                localStorage.setItem(draftKey(), JSON.stringify({ c: $('pc').value, a: $('pa').value, t: $('pt').value, d: $('pd').value, g: $('pg').value, ic: $('pic').value, p: $('pp').checked, h: $('pcn').innerHTML, at: Date.now() }));
                 $('draft-note').textContent = 'Rascunho salvo automaticamente às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             } catch (e) {}
         }
@@ -391,7 +423,7 @@
         function restoreDraft() {
             let d = null; try { d = JSON.parse(localStorage.getItem(draftKey()) || 'null'); } catch (e) {}
             if (!d) return;
-            $('pc').value = d.c || $('pc').value; $('pa').value = d.a || ''; $('pt').value = d.t || '';
+            $('pc').value = d.c || $('pc').value; $('pa').value = d.a || ''; $('pt').value = d.t || ''; $('pd').value = d.d || ''; $('pg').value = d.g || ''; $('pic').value = d.ic || ''; $('pp').checked = !!d.p; showSlugPrev();
             $('pcn').innerHTML = sanitizeHTML(d.h || ''); updCount(); dirty = true; $('draft-banner').style.display = 'none';
         }
         function discardDraft() { dropDraft(editingKey); $('draft-banner').style.display = 'none'; }
@@ -418,14 +450,54 @@
             fetch(`${SITE.db}/assinantes.json?auth=${t}`).then(r => r.json()).then(data => {
                 list.innerHTML = ''; let count = 0;
                 if (data && !data.error) Object.keys(data).reverse().forEach(key => {
-                    const s = data[key]; count++;
+                    const s = data[key]; count++; subsDb[key] = s;
                     const row = document.createElement('div');
-                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:.5rem;background:#fff;border:1px solid var(--border);padding:.5rem .7rem;font-size:.78rem;word-break:break-all';
-                    row.innerHTML = `<span>${esc(s.email)} <span style="color:var(--muted);font-size:.68rem">(${esc(s.plano || 'gratuito')} · ${esc(s.date || '')})</span></span><button onclick="delSub('${esc(key)}')" style="background:transparent;border:none;color:#EF4444;font-weight:700;cursor:pointer;font-size:.7rem;text-transform:uppercase">Excluir ×</button>`;
+                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:.5rem .8rem;flex-wrap:wrap;background:#fff;border:1px solid var(--border);padding:.5rem .7rem;font-size:.78rem;word-break:break-all';
+                    const pago = (s.plano || 'gratuito') !== 'gratuito', on = s.status === 'ativo';
+                    const st = pago ? (on ? ` · <b style="color:#166534">ativo até ${esc(String(s.ate || '').split('-').reverse().join('/'))}</b>` : ` · <b style="color:#B45309">${esc(s.status || 'aguardando pagamento')}</b>`) : '';
+                    const bt = (fn, txt, c) => `<button onclick="${fn}('${esc(key)}')" style="background:transparent;border:none;color:${c};font-weight:700;cursor:pointer;font-size:.7rem;text-transform:uppercase">${txt}</button>`;
+                    row.innerHTML = `<span>${esc(s.email)} <span style="color:var(--muted);font-size:.68rem">(${esc(s.plano || 'gratuito')} · ${esc(s.date || '')}${s.ref ? ' · ' + esc(s.ref) : ''})${st}</span></span>
+                        <span>${pago ? bt('activateSub', on ? 'Renovar' : 'Ativar acesso', '#166534') + (on ? bt('sendCode', 'Enviar código', '#1D4ED8') + bt('revokeSub', 'Revogar', '#B45309') : '') : ''}${bt('delSub', 'Excluir ×', '#EF4444')}</span>`;
                     list.appendChild(row);
                 });
                 $('sub-count').textContent = count;
             }).catch(() => {});
+        }
+        const subsDb = {};
+        const dmy = iso => String(iso || '').split('-').reverse().join('/');
+        /* Ativa (ou renova) o acesso de quem pagou: cria a ficha em /ativos com o código e a validade */
+        async function activateSub(key) {
+            const s = subsDb[key]; if (!s) return;
+            const t = await tok(); if (!t) return sessionExpired();
+            const hoje = isoDay(new Date()), renova = s.status === 'ativo' && s.ate && s.ate > hoje;
+            const base = renova ? new Date(s.ate + 'T12:00:00') : new Date(); base.setDate(base.getDate() + (s.plano === 'anual' ? 366 : 31));
+            const ate = isoDay(base), id = encodeURIComponent(emailKey(s.email)), url = `${SITE.db}/ativos/${id}.json?auth=${t}`;
+            let codigo; try { const old = await (await fetch(url)).json(); codigo = old && old.codigo; } catch (e) {}
+            codigo = codigo || makeCode();
+            const r = await fetch(url, { method: 'PUT', body: JSON.stringify({ email: s.email.trim().toLowerCase(), plano: s.plano, codigo, ate, ativadoEm: new Date().toISOString() }) });
+            if (r.status === 401 || r.status === 403) { alert('O Firebase recusou gravar em “ativos”. Falta liberar esse caminho nas regras (veja as instruções de configuração).'); return; }
+            if (!r.ok) { alert('Não foi possível ativar agora. Tente de novo.'); return; }
+            await fetch(`${SITE.db}/assinantes/${key}.json?auth=${t}`, { method: 'PATCH', body: JSON.stringify({ status: 'ativo', ate }) });
+            subsDb[key] = Object.assign(s, { status: 'ativo', ate }); loadSubs();
+            mailCode(s.email, codigo, ate);
+        }
+        async function sendCode(key) {
+            const s = subsDb[key]; if (!s) return; const t = await tok(); if (!t) return sessionExpired();
+            const f = await (await fetch(`${SITE.db}/ativos/${encodeURIComponent(emailKey(s.email))}.json?auth=${t}`)).json();
+            if (!f || !f.codigo) { alert('Ficha de acesso não encontrada. Use “Ativar acesso”.'); return; }
+            mailCode(s.email, f.codigo, f.ate);
+        }
+        function mailCode(email, codigo, ate) {
+            const corpo = `Olá!\n\nSeu pagamento foi confirmado. Bem-vindo(a) à Fuzion Insights.\n\nÁrea do assinante: ${location.origin}/acesso.html\nE-mail: ${email}\nCódigo de acesso: ${fmtCode(codigo)}\nAcesso válido até: ${dmy(ate)}\n\nQualquer dúvida, é só responder este e-mail.\n\nFuzion Insights`;
+            toast('Acesso ativado. Código: ' + fmtCode(codigo));
+            location.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent('Seu acesso à Fuzion Insights')}&body=${encodeURIComponent(corpo)}`;
+        }
+        async function revokeSub(key) {
+            const s = subsDb[key]; if (!s || !confirm('Revogar o acesso de ' + s.email + '?')) return;
+            const t = await tok(); if (!t) return sessionExpired();
+            await fetch(`${SITE.db}/ativos/${encodeURIComponent(emailKey(s.email))}.json?auth=${t}`, { method: 'DELETE' });
+            await fetch(`${SITE.db}/assinantes/${key}.json?auth=${t}`, { method: 'PATCH', body: JSON.stringify({ status: 'cancelado' }) });
+            toast('Acesso revogado.'); loadSubs();
         }
         async function delSub(key) {
             if (!confirm('Remover este assinante?')) return; const t = await tok(); if (!t) return sessionExpired();
@@ -451,6 +523,37 @@
             t = t.replace(/\s+/g, ' ').trim(); if (t.length <= 150) return t;
             return t.slice(0, 150).replace(/\s+\S*$/, '') + '…';
         }
+        function parseTags(v) {
+            const seen = new Set(), out = [];
+            String(v || '').split(/[,;\n]+/).map(x => x.trim().replace(/^#+/, '').replace(/\s+/g, ' ').trim().slice(0, 30)).forEach(x => { const k = slugify(x); if (x && k && !seen.has(k)) { seen.add(k); out.push(x); } });
+            return out.slice(0, 8);
+        }
+        // endereço /artigo/nome-da-materia: único entre os artigos (se repetir, ganha -2, -3…)
+        function uniqueSlug(title, exceptKey) {
+            const base = slugFromTitle(title); let cand = base, n = 2;
+            const taken = c => Object.keys(db).some(k => k !== exceptKey && artSlug(db[k]) === c);
+            while (taken(cand)) cand = base + '-' + n++;
+            return cand;
+        }
+        function showSlugPrev() {
+            const el = $('slug-prev'); if (!el) return;
+            const t = $('pt').value.trim();
+            el.textContent = t ? 'Endereço do artigo: ' + location.host + '/artigo/' + (editingKey && db[editingKey] && db[editingKey].slug ? db[editingKey].slug : uniqueSlug(t, editingKey)) : '';
+        }
+        /* Separa prévia pública e parte exclusiva. Também garante que todo texto solto vire parágrafo. */
+        function splitPremium(html, on) {
+            const box = document.createElement('div'); box.innerHTML = html;
+            [...box.childNodes].forEach(n => { if (n.nodeType === 3 && n.textContent.trim()) { const p = document.createElement('p'); p.textContent = n.textContent; n.replaceWith(p); } else if (n.nodeType === 3) n.remove(); });
+            const kids = [...box.children];
+            const isMark = n => /^\s*\[\[\s*assinantes\s*\]\]\s*$/i.test(n.textContent);
+            const mi = kids.findIndex(isMark), txt = ns => ns.map(n => n.textContent).join(' ');
+            if (!on) { kids.filter(isMark).forEach(n => n.remove()); return { free: box.innerHTML, freeText: box.textContent, locked: null }; }
+            const freeN = mi > -1 ? kids.slice(0, mi) : kids.slice(0, 3), lockedN = (mi > -1 ? kids.slice(mi + 1) : kids.slice(3)).filter(n => !isMark(n));
+            if (!freeN.length) return { error: 'Escreva ao menos um parágrafo antes do “🔒 Prévia”: ele será a parte pública do artigo.' };
+            if (!txt(lockedN).trim() && !lockedN.some(n => n.querySelector && n.querySelector('img,table,iframe')))
+                return { error: 'Não há conteúdo depois da prévia. Escreva a parte exclusiva (ou desmarque “Conteúdo exclusivo para assinantes”).' };
+            return { free: freeN.map(n => n.outerHTML).join(''), freeText: txt(freeN), locked: lockedN.map(n => n.outerHTML).join('') };
+        }
         async function pub(e) {
             e.preventDefault();
             const t = await tok(); if (!t) { saveDraft(); return sessionExpired(); }
@@ -458,17 +561,33 @@
             if (!editingKey && !file) { alert('Selecione uma imagem de capa.'); return; }
             const text = $('pcn').innerText.trim();
             if (!text) { alert('Escreva o corpo do artigo.'); return; }
+            if (editingKey && db[editingKey] && db[editingKey].premium && !premiumLoaded) { alert('Aguarde: ainda carregando a parte exclusiva deste artigo. Tente de novo em instantes.'); return; }
+            const split = splitPremium(sanitizeHTML($('pcn').innerHTML), $('pp').checked);
+            if (split.error) { alert(split.error); return; }
             const btn = $('btn-pub'); btn.disabled = true; const label = btn.textContent; btn.textContent = 'Salvando…';
             try {
-                const data = { category: $('pc').value, author: $('pa').value.trim(), title: $('pt').value.trim(), content: sanitizeHTML($('pcn').innerHTML), excerpt: makeExcerpt(text) };
+                const desc = $('pd').value.trim();
+                const data = { category: $('pc').value, author: $('pa').value.trim(), title: $('pt').value.trim(), content: split.free, premium: split.locked !== null,
+                    description: desc, excerpt: desc || makeExcerpt(split.freeText), imageCaption: $('pic').value.trim(), tags: parseTags($('pg').value) };
+                // o endereço nunca muda depois de publicado (links já compartilhados continuam valendo)
+                data.slug = (editingKey && db[editingKey] && db[editingKey].slug) || uniqueSlug(data.title, editingKey);
                 if (file) { const im = await fileToImg(file); data.image = resizeImage(im); data.og = makeOg(im); }
                 else if (editingKey && db[editingKey] && db[editingKey].image && !db[editingKey].og) { try { data.og = makeOg(await loadImg(db[editingKey].image)); } catch (e) {} }
+                const aid = editingKey && db[editingKey] ? db[editingKey].id : 'art-' + Date.now();
+                // parte exclusiva: gravada em /premium (só o administrador lê; assinantes recebem pela função do Netlify)
+                if (split.locked !== null) {
+                    const rp = await fetch(`${SITE.db}/premium/${encodeURIComponent(aid)}.json?auth=${t}`, { method: 'PUT', body: JSON.stringify(split.locked) });
+                    if (rp.status === 401 || rp.status === 403) { btn.disabled = false; btn.textContent = label; alert('O Firebase recusou gravar a parte exclusiva. Falta liberar o caminho “premium” nas regras (veja as instruções de configuração). Nada foi publicado.'); return; }
+                    if (!rp.ok) throw new Error('premium');
+                } else if (editingKey && db[editingKey] && db[editingKey].premium) {
+                    await fetch(`${SITE.db}/premium/${encodeURIComponent(aid)}.json?auth=${t}`, { method: 'DELETE' });
+                }
                 let res;
                 if (editingKey) {
                     data.updatedAt = new Date().toISOString();
                     res = await fetch(`${SITE.db}/artigos/${editingKey}.json?auth=${t}`, { method: 'PATCH', body: JSON.stringify(data) });
                 } else {
-                    data.id = 'art-' + Date.now(); data.date = new Date().toISOString(); data.views = 0;
+                    data.id = aid; data.date = new Date().toISOString(); data.views = 0;
                     res = await fetch(`${SITE.db}/artigos.json?auth=${t}`, { method: 'POST', body: JSON.stringify(data) });
                 }
                 if (res.status === 401 || res.status === 403) { btn.disabled = false; btn.textContent = label; saveDraft(); return sessionExpired(); }
@@ -487,17 +606,23 @@
             if (!Admin.token) { $('lm').style.display = 'flex'; return; }
             editingKey = key; showP();
             $('pc').value = a.category || 'Estratégia'; $('pa').value = a.author || ''; $('pt').value = a.title || '';
+            $('pd').value = a.description || ''; $('pg').value = tagList(a).join(', '); $('pic').value = a.imageCaption || ''; showSlugPrev();
             $('pcn').innerHTML = sanitizeHTML(a.content || ''); updCount(); dirty = false;
             $('pi').required = false; $('pi').value = ''; $('pi-label').textContent = 'Imagem de Capa (deixe vazio para manter a atual)';
             if (a.image) { $('cover-prev').src = a.image; $('cover-prev').style.display = 'block'; }
             $('panel-h').textContent = 'Editar Análise'; $('btn-pub').textContent = 'Salvar Alterações';
             $('edit-title').textContent = a.title; $('edit-banner').style.display = 'flex';
+            $('pp').checked = !!a.premium; premiumLoaded = !a.premium;
+            if (a.premium) tok().then(tk => fetch(`${SITE.db}/premium/${encodeURIComponent(a.id)}.json?auth=${tk}`)).then(r => r.json()).then(c => {
+                if (typeof c === 'string' && editingKey === key) { $('pcn').innerHTML = sanitizeHTML((a.content || '') + '<p>[[assinantes]]</p>' + c); updCount(); premiumLoaded = true; }
+                else if (editingKey === key) alert('Não foi possível carregar a parte exclusiva. Confira as regras do Firebase antes de editar este artigo.');
+            }).catch(() => { if (editingKey === key) alert('Não foi possível carregar a parte exclusiva agora.'); });
             offerDraft();
             $('panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         function cancelEdit(keepDraft) {
             if (keepDraft !== true && editingKey) dropDraft(editingKey);
-            editingKey = null; $('art-form').reset(); $('pcn').innerHTML = ''; updCount(); dirty = false;
+            editingKey = null; premiumLoaded = true; $('art-form').reset(); $('pcn').innerHTML = ''; $('slug-prev').textContent = ''; updCount(); dirty = false;
             $('pi').required = true; $('pi-label').textContent = 'Imagem de Capa'; $('cover-prev').style.display = 'none';
             $('panel-h').textContent = 'Nova Análise'; $('btn-pub').textContent = 'Publicar Análise Oficial'; $('edit-banner').style.display = 'none';
             if ($('panel').style.display !== 'none') offerDraft();
@@ -511,32 +636,46 @@
             if (!keys.length) { box.innerHTML = '<p class="empty">Nenhum artigo publicado ainda.</p>'; return; }
             box.innerHTML = keys.map(k => {
                 const a = db[k], d = artDate(a), v = a.views || 0;
-                return `<div class="mrow">${a.image ? `<img class="mthumb" src="${esc(a.image)}" alt="" loading="lazy">` : '<span class="mthumb"></span>'}
-                    <div class="minfo"><a class="mtitle" href="artigo.html?id=${encodeURIComponent(a.id)}" target="_blank" rel="noopener">${esc(a.title)}</a>
-                    <div class="mmeta">${esc(a.category)}${d ? ' · ' + fmtDateShort(d) : ''} · ${v} ${v === 1 ? 'visualização' : 'visualizações'}</div></div>
+                return `<div class="mrow">${a.image ? `<img class="mthumb" src="${esc(a.image)}" alt="${esc(a.imageCaption || a.title)}" loading="lazy">` : '<span class="mthumb"></span>'}
+                    <div class="minfo"><a class="mtitle" href="${artUrl(a)}" target="_blank" rel="noopener">${esc(a.title)}</a>
+                    <div class="mmeta">${a.premium ? '🔒 ' : ''}${esc(a.category)}${d ? ' · ' + fmtDateShort(d) : ''} · ${v} ${v === 1 ? 'visualização' : 'visualizações'}</div></div>
                     <div class="mact"><button type="button" class="btn-sm" onclick="startEdit('${esc(k)}')">✎ Editar</button><button type="button" class="btn-sm dl" onclick="del('${esc(k)}')">Excluir</button></div></div>`;
             }).join('');
         }
 
+        /* ---------- FILTRO POR TAG ---------- */
+        const tagOk = a => !tagFilter || tagList(a).some(t => slugify(t) === tagFilter);
+        function renderTagBar() {
+            const bar = $('tag-bar'); if (!tagFilter) { bar.style.display = 'none'; bar.innerHTML = ''; return; }
+            let nome = tagFilter; Object.values(db).some(a => tagList(a).some(t => slugify(t) === tagFilter && (nome = t)));
+            bar.style.display = 'flex'; bar.innerHTML = `<span>Artigos com a tag</span><span class="chip">#${esc(nome)}</span><a href="/" onclick="clearTag();return false">Limpar filtro</a>`;
+        }
+        function clearTag(silent) {
+            if (!tagFilter) return; tagFilter = '';
+            try { history.replaceState(null, '', location.pathname); } catch (e) {}
+            renderTagBar(); if (!silent) { rnd(db); trending(); }
+        }
+
         /* ---------- FEED ---------- */
         function st(s, el) {
-            sec = s; document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active')); el.classList.add('active');
+            sec = s; clearTag(true); document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active')); el.classList.add('active');
             $('ft').textContent = s === 'Home' ? 'Últimas Análises' : `Análises: ${s}`;
             $('sb').value = ''; rnd(db); trending();
         }
         function sch() {
             const q = $('sb').value.toLowerCase().trim(); if (!q) { rnd(db); return; }
-            const f = {}; Object.keys(db).forEach(k => { const a = db[k]; if ((a.title || '').toLowerCase().includes(q) || (a.content || '').toLowerCase().includes(q)) f[k] = a; }); rnd(f);
+            const f = {}; Object.keys(db).forEach(k => { const a = db[k]; if ((a.title || '').toLowerCase().includes(q) || (a.content || '').toLowerCase().includes(q) || (a.description || '').toLowerCase().includes(q) || tagList(a).some(t => t.toLowerCase().includes(q))) f[k] = a; }); rnd(f);
         }
         async function sh(e, id) {
             e.preventDefault(); e.stopPropagation();
-            const url = await shareUrl(id), a = Object.values(db).find(x => x.id === id);
-            if (navigator.share) navigator.share({ title: a ? a.title : SITE.name, text: a ? a.excerpt : '', url }).catch(() => {});
-            else navigator.clipboard.writeText(url).then(() => alert('Link copiado!'));
+            const a = Object.values(db).find(x => x.id === id); if (!a) return;
+            const url = await shareUrl(a);
+            if (navigator.share) navigator.share({ title: a.title, text: a.description || a.excerpt || '', url }).catch(() => {});
+            else copyText(url, 'Link copiado!');
         }
         // destaque = artigo mais lido (empate: o mais recente)
         function pickHero() {
-            const arr = Object.keys(db).filter(k => sec === 'Home' || db[k].category === sec);
+            const arr = Object.keys(db).filter(k => (sec === 'Home' || db[k].category === sec) && tagOk(db[k]));
             if (!arr.length) return null;
             arr.sort((x, y) => (db[y].views || 0) - (db[x].views || 0) || (artDate(db[y])?.getTime() || 0) - (artDate(db[x])?.getTime() || 0));
             return arr[0];
@@ -546,14 +685,14 @@
             if (!k) { h.style.display = 'none'; h.innerHTML = ''; return; }
             const a = db[k], d = artDate(a);
             h.style.display = 'block';
-            h.innerHTML = `<a class="hero-link" href="artigo.html?id=${encodeURIComponent(a.id)}">${a.image ? `<img class="hero-img" src="${esc(a.image)}" alt="">` : ''}
-                <span class="kicker">${(a.views || 0) > 0 ? 'Mais lido' : 'Destaque'} · ${esc(a.category)}${d ? ' · ' + fmtDateShort(d) : ''}</span>
-                <h2>${esc(a.title)}</h2><p>${esc(a.excerpt)}</p><span class="hero-by">Por ${esc(a.author)}</span></a>`;
+            h.innerHTML = `<a class="hero-link" href="${artUrl(a)}">${a.image ? `<img class="hero-img" src="${esc(a.image)}" alt="${esc(a.imageCaption || a.title)}">` : ''}
+                <span class="kicker">${(a.views || 0) > 0 ? 'Mais lido' : 'Destaque'} · ${esc(a.category)}${d ? ' · ' + fmtDateShort(d) : ''}</span>${a.premium ? ' <span class="badge-premium">Assinantes</span>' : ''}
+                <h2>${esc(a.title)}</h2><p>${esc(a.description || a.excerpt)}</p><span class="hero-by">Por ${esc(a.author)}</span></a>`;
         }
         function rnd(data) {
             const f = $('feed'); f.innerHTML = ''; if (!data) return;
             const searching = $('sb').value.trim() !== '';
-            const keys = Object.keys(data).filter(k => searching || sec === 'Home' || data[k].category === sec)
+            const keys = Object.keys(data).filter(k => (searching || sec === 'Home' || data[k].category === sec) && tagOk(data[k]))
                 .sort((x, y) => (artDate(data[y])?.getTime() || 0) - (artDate(data[x])?.getTime() || 0));
             const hk = searching ? null : pickHero();
             renderHero(hk);
@@ -562,7 +701,8 @@
                 const a = data[k]; n++;
                 const d = artDate(a);
                 const w = document.createElement('div'); w.className = 'card-wrap'; w.id = `l-${a.id}`;
-                w.innerHTML = `<a class="card-link" href="artigo.html?id=${encodeURIComponent(a.id)}"><article class="card">${a.image ? `<img src="${esc(a.image)}" class="card-img" alt="" loading="lazy">` : ''}<div class="card-body"><div class="card-meta"><b>${esc(a.category)}</b>${d ? ` · <time datetime="${isoDay(d)}">${fmtDateShort(d)}</time>` : ''}</div><h3 class="card-title">${esc(a.title)}</h3><p class="card-ex">${esc(a.excerpt)}</p><div class="card-footer"><span>Por ${esc(a.author)}</span><button class="btn-share" onclick="sh(event,'${esc(a.id)}')">${ICON.share}Compartilhar</button></div></div></article></a>`;
+                const tg = tagList(a).slice(0, 3);
+                w.innerHTML = `<a class="card-link" href="${artUrl(a)}"><article class="card">${a.image ? `<img src="${esc(a.image)}" class="card-img" alt="${esc(a.imageCaption || a.title)}" loading="lazy">` : ''}<div class="card-body"><div class="card-meta"><b>${esc(a.category)}</b>${d ? ` · <time datetime="${isoDay(d)}">${fmtDateShort(d)}</time>` : ''}${a.premium ? ' <span class="badge-premium">Assinantes</span>' : ''}</div><h3 class="card-title">${esc(a.title)}</h3><p class="card-ex">${esc(a.description || a.excerpt)}</p>${tg.length ? `<div class="card-chips">${tg.map(t => `<span class="chip">#${esc(t)}</span>`).join('')}</div>` : ''}<div class="card-footer"><span>Por ${esc(a.author)}</span><button class="btn-share" onclick="sh(event,'${esc(a.id)}')">${ICON.share}Compartilhar</button></div></div></article></a>`;
                 f.appendChild(w);
                 if (!searching && (n === 4 || n === 10)) f.appendChild(createAd('feed'));
             });
@@ -578,14 +718,16 @@
             });
         }
         function trending() {
-            const items = Object.values(db).filter(a => sec === 'Home' || a.category === sec).sort((x, y) => (y.views || 0) - (x.views || 0)).slice(0, 5);
+            const items = Object.values(db).filter(a => (sec === 'Home' || a.category === sec) && tagOk(a)).sort((x, y) => (y.views || 0) - (x.views || 0)).slice(0, 5);
             $('trend-box').style.display = items.length ? 'block' : 'none';
             $('tt').textContent = sec === 'Home' ? 'Mais Lidos' : `Mais Lidos: ${sec}`;
-            $('trend-list').innerHTML = items.map((a, i) => `<a class="t-item" href="artigo.html?id=${encodeURIComponent(a.id)}"><span class="t-num">0${i + 1}</span><span>${esc(a.title)}</span></a>`).join('');
+            $('trend-list').innerHTML = items.map((a, i) => `<a class="t-item" href="${artUrl(a)}"><span class="t-num">0${i + 1}</span><span>${esc(a.title)}</span></a>`).join('');
         }
         function load() {
             fetch(`${SITE.db}/artigos.json`).then(r => r.json()).then(data => {
-                db = (data && !data.error) ? data : {}; rnd(db); trending(); if (isAdmin()) renderManager();
+                db = (data && !data.error) ? data : {};
+                tagFilter = slugify(new URLSearchParams(location.search).get('tag') || ''); renderTagBar();
+                rnd(db); trending(); if (isAdmin()) renderManager();
                 const ed = new URLSearchParams(location.search).get('editar');
                 if (ed && Admin.token) { const k = Object.keys(db).find(k => db[k].id === ed); if (k) startEdit(k); }
             }).catch(() => { $('feed').innerHTML = '<p class="empty">Não foi possível carregar as análises agora. Tente novamente em instantes.</p>'; });
