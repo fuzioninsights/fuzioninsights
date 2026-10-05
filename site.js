@@ -523,7 +523,7 @@ document.addEventListener("DOMContentLoaded", () => {
               submitButton.disabled = false;
               submitButton.style.backgroundColor = ""; // Volta pro estilo original do CSS
               submitButton.innerText = originalText;
-            }, 4000);
+            }, 10000);
 
           } else {
             throw new Error("Erro no servidor");
