@@ -264,14 +264,23 @@
                 <h3 id="tt">Mais Lidos</h3>
                 <div id="trend-list"></div>
             </div>
-            <div class="side-news">
-                <h4>Fuzion Briefing</h4>
-                <p>Receba nossa inteligência macro semanal</p>
-                <form onsubmit="return subscribeNewsletter(event,this)">
-                    <input type="email" placeholder="Seu e-mail corporativo" required aria-label="E-mail">
-                    <button type="submit">Assinar</button>
-                </form>
-            </div>
+            <div class="newsletter-box">
+  <h4>Fuzion Briefing</h4>
+  <p>Receba nossa inteligência macro semanal</p>
+  
+  <!-- FORMULÁRIO CONFIGURADO PARA O NETLIFY -->
+  <form name="assinantes-briefing" method="POST" data-netlify="true" style="display: flex; flex-direction: column; gap: 10px;">
+    <!-- Importante manter o atributo name="form-name" para formulários AJAX se for o caso -->
+    <input type="hidden" name="form-name" value="assinantes-briefing" />
+    
+    <input type="email" name="email" id="newsletter-email" placeholder="Seu melhor e-mail" required 
+           style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;"/>
+    <button type="submit" id="btn-assinar" style="padding: 8px; background-color: #000; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+      Assinar
+    </button>
+  </form>
+</div>
+
         </aside>
     </main>
 

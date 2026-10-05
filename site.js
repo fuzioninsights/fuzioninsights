@@ -474,3 +474,62 @@ document.addEventListener('DOMContentLoaded', () => {
   if (Admin.token) setInterval(() => Admin.fresh(), 5 * 60 * 1000);
   cookieBanner(); trackHeader(); initAds(); fMkt(); setInterval(fMkt, 60000);
 });
+
+// ==========================================
+// COMEÇO DO CÓDIGO DA NEWSLETTER (NETLIFY)
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+  // Captura todos os formulários com o nome "assinantes-briefing" (funciona no index e artigo)
+  const newsletterForms = document.querySelectorAll('form[name="assinantes-briefing"]');
+
+  newsletterForms.forEach((form) => {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault(); // Impede a página de recarregar
+
+      const emailInput = form.querySelector('input[type="email"]');
+      const submitButton = form.querySelector('button[type="submit"]');
+
+      if (!emailInput || !emailInput.value) return;
+
+      // Desativa o botão temporariamente para evitar cliques duplos
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.innerText = "Enviando...";
+      }
+
+      // Prepara os dados para o padrão que o Netlify Forms exige
+      const formData = new URLSearchParams();
+      formData.append("form-name", "assinantes-briefing");
+      formData.append("email", emailInput.value);
+
+      // Envia a requisição AJAX para a raiz do site
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData.toString(),
+      })
+        .then((response) => {
+          if (response.ok) {
+            alert("Inscrição realizada com sucesso! Você receberá o Fuzion Briefing.");
+            form.reset(); // Limpa o campo de e-mail
+          } else {
+            throw new Error("Erro na resposta do servidor");
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao enviar para o Netlify:", error);
+          alert("Ops! Ocorreu um erro ao salvar sua inscrição. Tente novamente.");
+        })
+        .finally(() => {
+          // Reativa o botão após o término do envio
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerText = "Assinar";
+          }
+        });
+    });
+  });
+});
+// ==========================================
+// FIM DO CÓDIGO DA NEWSLETTER
+// ==========================================
