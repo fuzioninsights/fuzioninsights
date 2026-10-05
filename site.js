@@ -479,30 +479,29 @@ document.addEventListener('DOMContentLoaded', () => {
 // COMEÇO DO CÓDIGO DA NEWSLETTER (NETLIFY)
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-  // Captura todos os formulários com o nome "assinantes-briefing" (funciona no index e artigo)
   const newsletterForms = document.querySelectorAll('form[name="assinantes-briefing"]');
 
   newsletterForms.forEach((form) => {
     form.addEventListener("submit", function (e) {
-      e.preventDefault(); // Impede a página de recarregar
+      e.preventDefault(); 
 
       const emailInput = form.querySelector('input[type="email"]');
       const submitButton = form.querySelector('button[type="submit"]');
 
       if (!emailInput || !emailInput.value) return;
 
-      // Desativa o botão temporariamente para evitar cliques duplos
-      if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.innerText = "Enviando...";
-      }
+      // Guarda o texto original do botão (geralmente "Assinar")
+      const originalText = submitButton.innerText;
 
-      // Prepara os dados para o padrão que o Netlify Forms exige
+      // Desativa o campo e o botão durante o envio
+      emailInput.disabled = true;
+      submitButton.disabled = true;
+      submitButton.innerText = "Enviando...";
+
       const formData = new URLSearchParams();
       formData.append("form-name", "assinantes-briefing");
       formData.append("email", emailInput.value);
 
-      // Envia a requisição AJAX para a raiz do site
       fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -510,22 +509,39 @@ document.addEventListener("DOMContentLoaded", () => {
       })
         .then((response) => {
           if (response.ok) {
-            alert("Inscrição realizada com sucesso! Você receberá o Fuzion Briefing.");
-            form.reset(); // Limpa o campo de e-mail
+            // EFEITO DE SUCESSO: Muda o botão para verde com ícone/texto amigável
+            submitButton.style.backgroundColor = "#28a745";
+            submitButton.style.color = "#fff";
+            submitButton.innerText = "✓ Sucesso!";
+            
+            // Limpa o e-mail digitado
+            form.reset(); 
+
+            // Após 4 segundos, o botão volta ao estado normal para novas inscrições
+            setTimeout(() => {
+              emailInput.disabled = false;
+              submitButton.disabled = false;
+              submitButton.style.backgroundColor = ""; // Volta pro estilo original do CSS
+              submitButton.innerText = originalText;
+            }, 4000);
+
           } else {
-            throw new Error("Erro na resposta do servidor");
+            throw new Error("Erro no servidor");
           }
         })
         .catch((error) => {
-          console.error("Erro ao enviar para o Netlify:", error);
-          alert("Ops! Ocorreu um erro ao salvar sua inscrição. Tente novamente.");
-        })
-        .finally(() => {
-          // Reativa o botão após o término do envio
-          if (submitButton) {
+          console.error("Erro Netlify Forms:", error);
+          
+          // EFEITO DE ERRO: Alerta visual rápido no botão se falhar
+          submitButton.style.backgroundColor = "#dc3545";
+          submitButton.innerText = "Erro ao salvar";
+          
+          setTimeout(() => {
+            emailInput.disabled = false;
             submitButton.disabled = false;
-            submitButton.innerText = "Assinar";
-          }
+            submitButton.style.backgroundColor = "";
+            submitButton.innerText = originalText;
+          }, 3000);
         });
     });
   });
@@ -533,3 +549,4 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================
 // FIM DO CÓDIGO DA NEWSLETTER
 // ==========================================
+
