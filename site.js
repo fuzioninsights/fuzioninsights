@@ -465,12 +465,12 @@ function trackHeader() {
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
   document.querySelectorAll('[data-cookie-prefs]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); cookieBanner(true); }));
-  const membro = Member.get();
-  document.querySelectorAll('[data-subscribe]').forEach(b => {
+    document.querySelectorAll('.data-subscribe').forEach(b => {
+    if (b.closest('form[name="assinantes-briefing"]')) return;
+
     if (b.classList.contains('btn-sub')) b.textContent = membro ? 'Minha área' : SITE.botao;
     b.addEventListener('click', () => membro && b.classList.contains('btn-sub') ? (location.href = '/acesso.html') : openSubscribe());
   });
-  document.querySelectorAll('.f-links').forEach(n => { if (!n.querySelector('[href$="acesso.html"]')) n.insertAdjacentHTML('beforeend', '<a href="/assine.html">Assinar</a><a href="/acesso.html">Área do assinante</a>'); });
   if (Admin.token) setInterval(() => Admin.fresh(), 5 * 60 * 1000);
   cookieBanner(); trackHeader(); initAds(); fMkt(); setInterval(fMkt, 60000);
 });
