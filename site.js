@@ -83,7 +83,7 @@ function slugFromTitle(t) {
 }
 const artSlug = a => a.slug || slugFromTitle(a.title);
 const artUrl = a => '/artigo/' + encodeURIComponent(artSlug(a));
-const tagList = a => Array.isArray(a.tags) ? a.tags : (a.tags ? Object.values(a.tags) : []);
+const tagList = a => (Array.isArray(a.tags) ? a.tags : (a.tags ? Object.values(a.tags) : [])).map(t => String(t).replace(/^#+\s*/, '').trim()).filter(Boolean);
 
 /* Link de compartilhamento: usa /s/<id> (card com imagem) quando a função do Netlify estiver publicada; senão o link normal */
 let _shareOk = null;
@@ -465,88 +465,12 @@ function trackHeader() {
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
   document.querySelectorAll('[data-cookie-prefs]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); cookieBanner(true); }));
-    document.querySelectorAll('.data-subscribe').forEach(b => {
-    if (b.closest('form[name="assinantes-briefing"]')) return;
-
+  const membro = Member.get();
+  document.querySelectorAll('[data-subscribe]').forEach(b => {
     if (b.classList.contains('btn-sub')) b.textContent = membro ? 'Minha área' : SITE.botao;
     b.addEventListener('click', () => membro && b.classList.contains('btn-sub') ? (location.href = '/acesso.html') : openSubscribe());
   });
+  document.querySelectorAll('.f-links').forEach(n => { if (!n.querySelector('[href$="acesso.html"]')) n.insertAdjacentHTML('beforeend', '<a href="/assine.html">Assinar</a><a href="/acesso.html">Área do assinante</a>'); });
   if (Admin.token) setInterval(() => Admin.fresh(), 5 * 60 * 1000);
   cookieBanner(); trackHeader(); initAds(); fMkt(); setInterval(fMkt, 60000);
 });
-
-// ==========================================
-// COMEÇO DO CÓDIGO DA NEWSLETTER (NETLIFY)
-// ==========================================
-document.addEventListener("DOMContentLoaded", () => {
-  const newsletterForms = document.querySelectorAll('form[name="assinantes-briefing"]');
-
-  newsletterForms.forEach((form) => {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault(); 
-
-      const emailInput = form.querySelector('input[type="email"]');
-      const submitButton = form.querySelector('button[type="submit"]');
-
-      if (!emailInput || !emailInput.value) return;
-
-      // Guarda o texto original do botão (geralmente "Assinar")
-      const originalText = submitButton.innerText;
-
-      // Desativa o campo e o botão durante o envio
-      emailInput.disabled = true;
-      submitButton.disabled = true;
-      submitButton.innerText = "Enviando...";
-
-      const formData = new URLSearchParams();
-      formData.append("form-name", "assinantes-briefing");
-      formData.append("email", emailInput.value);
-
-      fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: formData.toString(),
-      })
-        .then((response) => {
-          if (response.ok) {
-            // EFEITO DE SUCESSO: Muda o botão para verde com ícone/texto amigável
-            submitButton.style.backgroundColor = "#28a745";
-            submitButton.style.color = "#fff";
-            submitButton.innerText = "✓ Sucesso!";
-            
-            // Limpa o e-mail digitado
-            form.reset(); 
-
-            // Após 4 segundos, o botão volta ao estado normal para novas inscrições
-            setTimeout(() => {
-              emailInput.disabled = false;
-              submitButton.disabled = false;
-              submitButton.style.backgroundColor = ""; // Volta pro estilo original do CSS
-              submitButton.innerText = originalText;
-            }, 10000);
-
-          } else {
-            throw new Error("Erro no servidor");
-          }
-        })
-        .catch((error) => {
-          console.error("Erro Netlify Forms:", error);
-          
-          // EFEITO DE ERRO: Alerta visual rápido no botão se falhar
-          submitButton.style.backgroundColor = "#dc3545";
-          submitButton.innerText = "Erro ao salvar";
-          
-          setTimeout(() => {
-            emailInput.disabled = false;
-            submitButton.disabled = false;
-            submitButton.style.backgroundColor = "";
-            submitButton.innerText = originalText;
-          }, 3000);
-        });
-    });
-  });
-});
-// ==========================================
-// FIM DO CÓDIGO DA NEWSLETTER
-// ==========================================
-

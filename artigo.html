@@ -96,12 +96,10 @@
         <section class="box">
             <h4>Fuzion Briefing</h4>
             <p>Receba nossa inteligência macro semanal</p>
-           <form name="assinantes-briefing" method="POST" data-netlify="true" style="display: flex; flex-direction: column; gap: 10px;">
-           <input type="hidden" name="form-name" value="assinantes-briefing" />
-           <input type="email" name="email" id="newsletter-email-artigo" placeholder="Seu melhor e-mail" required />
-           <button type="submit">Assinar</button>
-        </form>
-
+            <form onsubmit="return subscribeNewsletter(event,this)">
+                <input type="email" placeholder="Seu e-mail corporativo" required aria-label="E-mail">
+                <button type="submit">Assinar</button>
+            </form>
         </section>
 
         <section class="related" id="related" style="display:none"><h3>Leia também</h3><div class="rel-grid" id="related-list"></div></section>
@@ -195,7 +193,7 @@
                     $('art-cap').textContent = a.imageCaption || ''; $('art-cap').style.display = a.imageCaption ? '' : 'none';
                     $('art-fig').style.display = 'block';
                 }
-                $('art-tags').innerHTML = tags.map(t => `<a class="chip" href="/?tag=${encodeURIComponent(slugify(t))}" rel="tag">#${esc(t)}</a>`).join('');
+                $('art-tags').innerHTML = tags.map(t => `<a class="chip" href="/?tag=${encodeURIComponent(slugify(t))}" rel="tag">${esc(t)}</a>`).join('');
                 $('art-body').innerHTML = sanitizeHTML(a.content);
                 // imagens do texto: a legenda vira o texto alternativo (alt) quando faltar
                 $('art-body').querySelectorAll('figure').forEach(f => { const im = f.querySelector('img'), fc = f.querySelector('figcaption'); if (im && fc && !im.alt) im.alt = fc.textContent.trim(); });

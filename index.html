@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="wKyUA8zs3zc1uZhnO7WazLyUf0KNIIYeICbPioE3Rn0" />
     <link rel="canonical" href="https://fuzioninsights.netlify.app/">
-    <title>Fuzion Insights</title>
-    <meta name="description" content="Fuzion Insights publica análises independentes sobre estratégia, liderança, negócios e mercado para executivos e profissionais.">
-    <meta property="og:url" content="https://fuzioninsights.netlify.app/"><meta property="og:title" content="Fuzion Insights"><meta property="og:type" content="website">
-    <meta property="og:description" content="Análises independentes sobre estratégia, liderança, negócios e mercado.">
+    <title>Fuzion Insights | Análises de economia, mercado, tecnologia e negócios</title>
+    <meta name="description" content="Análises independentes sobre economia, finanças, mercado, tecnologia, tendências, negócios e liderança. Informação clara para quem toma decisões.">
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+    <meta property="og:url" content="https://fuzioninsights.netlify.app/"><meta property="og:title" content="Fuzion Insights | Análises de economia, mercado, tecnologia e negócios"><meta property="og:type" content="website">
+    <meta property="og:description" content="Análises independentes sobre economia, mercado, tecnologia, tendências, negócios e liderança.">
+    <meta property="og:site_name" content="Fuzion Insights"><meta property="og:locale" content="pt_BR">
+    <meta property="og:image" content="https://fuzioninsights.netlify.app/favicon-512x512.png">
+    <meta name="twitter:card" content="summary"><meta name="twitter:title" content="Fuzion Insights | Análises de economia, mercado, tecnologia e negócios"><meta name="twitter:description" content="Análises independentes sobre economia, mercado, tecnologia, tendências, negócios e liderança.">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"NewsMediaOrganization","@id":"https://fuzioninsights.netlify.app/#org","name":"Fuzion Insights","url":"https://fuzioninsights.netlify.app/","logo":{"@type":"ImageObject","url":"https://fuzioninsights.netlify.app/favicon-512x512.png"},"email":"fuzioninsights@gmail.com"},{"@type":"WebSite","@id":"https://fuzioninsights.netlify.app/#site","url":"https://fuzioninsights.netlify.app/","name":"Fuzion Insights","inLanguage":"pt-BR","publisher":{"@id":"https://fuzioninsights.netlify.app/#org"}}]}</script>
     <link rel="icon" href="/favicon.ico" sizes="48x48">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3">
@@ -37,15 +42,29 @@
             .status-in{flex-direction:column;align-items:flex-start;gap:.6rem}
             .search-wrapper{width:100%}main{margin-top:1.5rem;gap:2rem}
         }
-        .hero{border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:2rem}
-        .hero-link{text-decoration:none;color:inherit;display:block}
-        .hero-img{width:100%;aspect-ratio:16/9;max-height:380px;object-fit:cover;margin-bottom:1.1rem;background:#F3F4F6}
-        .kicker{color:var(--gold-d);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
-        .hero h2{font-size:2.05rem;font-weight:800;color:#000;margin:.5rem 0;line-height:1.18;letter-spacing:-.025em}
-        .hero p{font-size:1rem;color:#4B5563;line-height:1.6}
-        .hero-by{display:block;margin-top:.7rem;font-size:.75rem;color:var(--muted);font-weight:600}
-        .hero-link:hover h2{color:var(--gold-d)}
-        @media(max-width:680px){.hero h2{font-size:1.5rem}}
+        .hero{margin-bottom:2rem}
+        .slider{position:relative;background:#000;border-bottom:3px solid var(--gold)}
+        .sl-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+        .sl-track::-webkit-scrollbar{display:none}
+        .sl-slide{position:relative;flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always;display:block;color:#fff;text-decoration:none;aspect-ratio:16/9;max-height:440px;min-height:260px;overflow:hidden;background:#111}
+        .sl-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+        .sl-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.6) 38%,rgba(0,0,0,0) 70%)}
+        .sl-body{position:absolute;left:0;right:0;bottom:0;padding:1.4rem 1.6rem 3.4rem 1.6rem}
+        .sl-kicker{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--gold)}
+        .sl-kicker time{color:#D4D4D8}
+        .sl-slide h2{font-size:1.75rem;font-weight:800;line-height:1.18;letter-spacing:-.02em;margin:.5rem 0 .45rem;color:#fff;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+        .sl-slide p{font-size:.92rem;line-height:1.5;color:#D4D4D8;max-width:62ch;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .sl-slide:hover h2,.sl-slide:focus-visible h2{color:var(--gold)}
+        .sl-slide:focus-visible{outline:3px solid var(--gold);outline-offset:-3px}
+        .sl-btn{position:absolute;bottom:0;width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);border:1px solid rgba(197,160,89,.7);color:var(--gold);cursor:pointer;z-index:2;padding:0}
+        .sl-btn:hover{background:var(--gold);color:#000}.sl-btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+        .sl-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+        .sl-prev{right:42px}.sl-next{right:0}
+        .sl-dots{position:absolute;left:1.6rem;bottom:1.1rem;display:flex;gap:.45rem;z-index:2}
+        .sl-dot{width:26px;height:4px;border:0;padding:0;background:rgba(255,255,255,.4);cursor:pointer}
+        .sl-dot[aria-current="true"]{background:var(--gold)}
+        .sl-dot:focus-visible{outline:2px solid #fff;outline-offset:3px}
+        @media(max-width:680px){.sl-slide{aspect-ratio:4/5;max-height:none;min-height:0}.sl-slide h2{font-size:1.3rem}.sl-body{padding:1.1rem 1.1rem 2.4rem}.sl-btn{display:none}.sl-dots{left:1.1rem}}
         .sec-title{font-family:'Inter',system-ui,sans-serif;font-size:.85rem;letter-spacing:1px;border-bottom:2px solid #000;padding-bottom:.35rem;margin-bottom:1.2rem;text-transform:uppercase}
         .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.75rem;align-items:stretch}
         .card-wrap{min-width:0}.card-link{display:block;height:100%;text-decoration:none;color:inherit}
@@ -144,7 +163,7 @@
         </div>
         <div class="search-wrapper">
             <svg class="search-icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="search" class="search-box" id="sb" placeholder="Pesquisar análises..." aria-label="Pesquisar" oninput="sch()">
+            <input type="search" class="search-box" id="sb" name="fz-busca" placeholder="Pesquisar análises..." aria-label="Pesquisar" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-lpignore="true" data-1p-ignore oninput="sch()">
         </div>
     </div></div>
 
@@ -253,7 +272,7 @@
 
         <div>
             <section class="hero" id="hero" style="display:none"></section>
-            <h2 class="sec-title" id="ft">Últimas Análises</h2>
+            <h2 class="sec-title" id="ft">Todas as Análises</h2>
             <div class="tag-filter" id="tag-bar" style="display:none"></div>
             <div class="grid" id="feed"><p class="empty">Carregando análises…</p></div>
         </div>
@@ -264,23 +283,14 @@
                 <h3 id="tt">Mais Lidos</h3>
                 <div id="trend-list"></div>
             </div>
-            <div class="newsletter-box">
-  <h4>Fuzion Briefing</h4>
-  <p>Receba nossa inteligência macro semanal</p>
-  
-  <!-- FORMULÁRIO CONFIGURADO PARA O NETLIFY -->
-  <form name="assinantes-briefing" method="POST" data-netlify="true" style="display: flex; flex-direction: column; gap: 10px;">
-    <!-- Importante manter o atributo name="form-name" para formulários AJAX se for o caso -->
-    <input type="hidden" name="form-name" value="assinantes-briefing" />
-    
-    <input type="email" name="email" id="newsletter-email" placeholder="Seu melhor e-mail" required 
-           style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;"/>
-    <button type="submit" id="btn-assinar" style="padding: 8px; background-color: #000; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
-      Assinar
-    </button>
-  </form>
-</div>
-
+            <div class="side-news">
+                <h4>Fuzion Briefing</h4>
+                <p>Receba nossa inteligência macro semanal</p>
+                <form onsubmit="return subscribeNewsletter(event,this)">
+                    <input type="email" placeholder="Seu e-mail corporativo" required aria-label="E-mail">
+                    <button type="submit">Assinar</button>
+                </form>
+            </div>
         </aside>
     </main>
 
@@ -719,7 +729,7 @@
         function renderTagBar() {
             const bar = $('tag-bar'); if (!tagFilter) { bar.style.display = 'none'; bar.innerHTML = ''; return; }
             let nome = tagFilter; Object.values(db).some(a => tagList(a).some(t => slugify(t) === tagFilter && (nome = t)));
-            bar.style.display = 'flex'; bar.innerHTML = `<span>Artigos com a tag</span><span class="chip">#${esc(nome)}</span><a href="/" onclick="clearTag();return false">Limpar filtro</a>`;
+            bar.style.display = 'flex'; bar.innerHTML = `<span>Artigos com a tag</span><span class="chip">${esc(nome)}</span><a href="/" onclick="clearTag();return false">Limpar filtro</a>`;
         }
         function clearTag(silent) {
             if (!tagFilter) return; tagFilter = '';
@@ -731,7 +741,7 @@
         const inSec = a => sec === 'Home' || (sec === 'Exclusivos' ? !!a.premium : a.category === sec);
         function st(s, el) {
             sec = s; clearTag(true); document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active')); el.classList.add('active');
-            $('ft').textContent = s === 'Home' ? 'Últimas Análises' : (s === 'Exclusivos' ? 'Análises exclusivas para assinantes' : `Análises: ${s}`);
+            $('ft').textContent = s === 'Home' ? 'Todas as Análises' : (s === 'Exclusivos' ? 'Análises exclusivas para assinantes' : `Análises: ${s}`);
             $('sb').value = ''; rnd(db); trending();
         }
         function sch() {
@@ -745,41 +755,54 @@
             if (navigator.share) navigator.share({ title: a.title, text: a.description || a.excerpt || '', url }).catch(() => {});
             else copyText(url, 'Link copiado!');
         }
-        // destaque = artigo mais lido (empate: o mais recente)
-        function pickHero() {
-            const arr = Object.keys(db).filter(k => inSec(db[k]) && tagOk(db[k]));
-            if (!arr.length) return null;
-            arr.sort((x, y) => (db[y].views || 0) - (db[x].views || 0) || (artDate(db[y])?.getTime() || 0) - (artDate(db[x])?.getTime() || 0));
-            return arr[0];
+        // slider: as 5 análises mais recentes da seção atual
+        const SL_MAX = 5; let slTimer = null;
+        function pickSlides() {
+            return Object.keys(db).filter(k => inSec(db[k]) && tagOk(db[k]))
+                .sort((x, y) => (artDate(db[y])?.getTime() || 0) - (artDate(db[x])?.getTime() || 0)).slice(0, SL_MAX);
         }
-        function renderHero(k) {
-            const h = $('hero');
-            if (!k) { h.style.display = 'none'; h.innerHTML = ''; return; }
-            const a = db[k], d = artDate(a);
+        function renderSlider(keys) {
+            const h = $('hero'); clearInterval(slTimer);
+            if (!keys.length) { h.style.display = 'none'; h.innerHTML = ''; return; }
             h.style.display = 'block';
-            h.innerHTML = `<a class="hero-link" href="${artUrl(a)}">${a.image ? `<img class="hero-img" src="${esc(a.image)}" alt="${esc(a.imageCaption || a.title)}">` : ''}
-                <span class="kicker">${(a.views || 0) > 0 ? 'Mais lido' : 'Destaque'} · ${esc(a.category)}${d ? ' · ' + fmtDateShort(d) : ''}</span>${a.premium ? ' <span class="badge-premium">Assinantes</span>' : ''}
-                <h2>${esc(a.title)}</h2><p>${esc(a.description || a.excerpt)}</p><span class="hero-by">Por ${esc(a.author)}</span></a>`;
+            const arrow = d => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`;
+            h.innerHTML = `<div class="slider" role="region" aria-roledescription="carrossel" aria-label="Últimas análises"><div class="sl-track" tabindex="-1">${keys.map((k, i) => {
+                const a = db[k], d = artDate(a);
+                return `<a class="sl-slide" href="${artUrl(a)}" aria-label="${i + 1} de ${keys.length}: ${esc(a.title)}">${a.image ? `<img class="sl-img" src="${esc(a.image)}" alt="${esc(a.imageCaption || a.title)}"${i ? ' loading="lazy"' : ''}>` : ''}<span class="sl-shade"></span><span class="sl-body"><span class="sl-kicker"><b>${esc(a.category)}</b>${d ? `<time datetime="${isoDay(d)}">${fmtDateShort(d)}</time>` : ''}${a.premium ? '<span class="badge-premium">Assinantes</span>' : ''}</span><h2>${esc(a.title)}</h2><p>${esc(a.description || a.excerpt)}</p></span></a>`;
+            }).join('')}</div>${keys.length > 1 ? `<button type="button" class="sl-btn sl-prev" aria-label="Anterior">${arrow('M15 5l-7 7 7 7')}</button><button type="button" class="sl-btn sl-next" aria-label="Próxima">${arrow('M9 5l7 7-7 7')}</button><div class="sl-dots">${keys.map((k, i) => `<button type="button" class="sl-dot" aria-label="Ir para a análise ${i + 1}"></button>`).join('')}</div>` : ''}</div>`;
+            if (keys.length < 2) return;
+            const box = h.querySelector('.slider'), tr = box.querySelector('.sl-track'), dots = [...box.querySelectorAll('.sl-dot')];
+            const idx = () => Math.round(tr.scrollLeft / tr.clientWidth);
+            const go = i => { const n = (i + keys.length) % keys.length; tr.scrollTo({ left: n * tr.clientWidth, behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth' }); };
+            const mark = () => dots.forEach((d, i) => d.setAttribute('aria-current', i === idx() ? 'true' : 'false'));
+            tr.addEventListener('scroll', () => { clearTimeout(tr._t); tr._t = setTimeout(mark, 60); }, { passive: true });
+            box.querySelector('.sl-prev').onclick = () => go(idx() - 1);
+            box.querySelector('.sl-next').onclick = () => go(idx() + 1);
+            dots.forEach((d, i) => d.onclick = () => go(i));
+            let paused = false;
+            ['mouseenter', 'focusin', 'touchstart'].forEach(ev => box.addEventListener(ev, () => { paused = true; }, { passive: true }));
+            ['mouseleave', 'focusout'].forEach(ev => box.addEventListener(ev, () => { paused = false; }));
+            if (!matchMedia('(prefers-reduced-motion:reduce)').matches) slTimer = setInterval(() => { if (!paused && !document.hidden && box.isConnected) go(idx() + 1); }, 6500);
+            mark();
         }
         function rnd(data) {
             const f = $('feed'); f.innerHTML = ''; if (!data) return;
             const searching = $('sb').value.trim() !== '';
             const keys = Object.keys(data).filter(k => (searching || inSec(data[k])) && tagOk(data[k]))
                 .sort((x, y) => (artDate(data[y])?.getTime() || 0) - (artDate(data[x])?.getTime() || 0));
-            const hk = searching ? null : pickHero();
-            renderHero(hk);
+            renderSlider(searching ? [] : pickSlides());
             let n = 0;
-            keys.filter(k => k !== hk).forEach(k => {
+            keys.forEach(k => {
                 const a = data[k]; n++;
                 const d = artDate(a);
                 const w = document.createElement('div'); w.className = 'card-wrap'; w.id = `l-${a.id}`;
                 const tg = tagList(a).slice(0, 3);
-                w.innerHTML = `<a class="card-link" href="${artUrl(a)}"><article class="card">${a.image ? `<img src="${esc(a.image)}" class="card-img" alt="${esc(a.imageCaption || a.title)}" loading="lazy">` : ''}<div class="card-body"><div class="card-meta"><b>${esc(a.category)}</b>${d ? ` · <time datetime="${isoDay(d)}">${fmtDateShort(d)}</time>` : ''}${a.premium ? ' <span class="badge-premium">Assinantes</span>' : ''}</div><h3 class="card-title">${esc(a.title)}</h3><p class="card-ex">${esc(a.description || a.excerpt)}</p>${tg.length ? `<div class="card-chips">${tg.map(t => `<span class="chip">#${esc(t)}</span>`).join('')}</div>` : ''}<div class="card-footer"><span>Por ${esc(a.author)}</span><button class="btn-share" onclick="sh(event,'${esc(a.id)}')">${ICON.share}Compartilhar</button></div></div></article></a>`;
+                w.innerHTML = `<a class="card-link" href="${artUrl(a)}"><article class="card">${a.image ? `<img src="${esc(a.image)}" class="card-img" alt="${esc(a.imageCaption || a.title)}" loading="lazy">` : ''}<div class="card-body"><div class="card-meta"><b>${esc(a.category)}</b>${d ? ` · <time datetime="${isoDay(d)}">${fmtDateShort(d)}</time>` : ''}${a.premium ? ' <span class="badge-premium">Assinantes</span>' : ''}</div><h3 class="card-title">${esc(a.title)}</h3><p class="card-ex">${esc(a.description || a.excerpt)}</p>${tg.length ? `<div class="card-chips">${tg.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}<div class="card-footer"><span>Por ${esc(a.author)}</span><button class="btn-share" onclick="sh(event,'${esc(a.id)}')">${ICON.share}Compartilhar</button></div></div></article></a>`;
                 f.appendChild(w);
                 if (!searching && (n === 4 || n === 10)) f.appendChild(createAd('feed'));
             });
             initAds(f);
-            if (!n) f.innerHTML = `<p class="empty">${searching ? 'Nenhuma análise encontrada para esta busca.' : (hk ? 'Em breve, mais análises nesta seção.' : 'Ainda não há análises nesta seção.')}</p>`;
+            if (!n) f.innerHTML = `<p class="empty">${searching ? 'Nenhuma análise encontrada para esta busca.' : 'Ainda não há análises nesta seção.'}</p>`;
         }
         async function del(k) {
             if (!confirm('Apagar este artigo definitivamente?')) return;
@@ -797,9 +820,11 @@
             $('tt').textContent = sec === 'Home' ? 'Mais Lidos' : `Mais Lidos: ${sec}`;
             $('trend-list').innerHTML = items.map((a, i) => `<a class="t-item" href="${artUrl(a)}"><span class="t-num">0${i + 1}</span><span>${esc(a.title)}</span></a>`).join('');
         }
+        window.addEventListener('pageshow', e => { if (e.persisted && $('sb') && Object.keys(db || {}).length) { $('sb').value = ''; rnd(db); trending(); } });
         function load() {
             fetch(`${SITE.db}/artigos.json`).then(r => r.json()).then(data => {
                 db = (data && !data.error) ? data : {};
+                $('sb').value = '';
                 tagFilter = slugify(new URLSearchParams(location.search).get('tag') || ''); renderTagBar();
                 rnd(db); trending(); if (isAdmin()) renderManager();
                 if (new URLSearchParams(location.search).get('secao') === 'exclusivos' && $('nav-exc')) st('Exclusivos', $('nav-exc'));
