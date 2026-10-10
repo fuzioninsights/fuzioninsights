@@ -92,9 +92,7 @@
         .side-news button{background:#000;color:#FFF;border:none;padding:.65rem;font-size:.68rem;font-weight:700;text-transform:uppercase;cursor:pointer}
 
         /* PAINEL EDITORIAL */
-        #panel{display:none;background:var(--bg-s);border:1px dashed var(--gold);padding:1.5rem;grid-column:1/-1}
         @media(max-width:680px){#panel{padding:1rem}}
-        .panel-h{font-family:'Inter',system-ui,sans-serif;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
         .edit-banner{display:none;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:#FEF3C7;border:1px solid #F59E0B;padding:.6rem .9rem;font-size:.8rem;margin-bottom:1rem}
         .f-g{display:flex;flex-direction:column;gap:1rem}
         .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
@@ -106,18 +104,70 @@
         .hint{font-size:.7rem;color:var(--muted);font-weight:500;text-transform:none}
         .cover-prev{max-width:220px;max-height:120px;object-fit:cover;margin-top:.4rem;display:none}
         /* BARRA DE ESTILO FIXA: acompanha a rolagem enquanto o editor estiver na tela */
-        .editor-toolbar{position:sticky;top:var(--hdr-h);z-index:60;display:flex;align-items:center;gap:.3rem;background:#1A1A1E;padding:.5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 3px 10px rgba(0,0,0,.25)}
-        .editor-toolbar::-webkit-scrollbar{display:none}
-        .editor-btn{flex:0 0 auto;min-width:38px;height:36px;padding:0 .7rem;background:#333;color:#fff;border:none;font:600 .8rem 'Inter',sans-serif;cursor:pointer}
-        .editor-btn:hover{background:#555}.editor-btn.on{background:var(--gold);color:#000}
-        .tb-sep{flex:0 0 1px;align-self:stretch;background:#555;margin:0 .25rem}
-        .medium-textarea{width:100%;min-height:340px;background:#FFF;border:1px solid var(--border);border-top:none;padding:1.2rem;outline:none}
         .medium-textarea:focus{border-color:var(--gold)}
         .medium-textarea:empty:before{content:'Comece a escrever sua análise aqui…';color:#A1A1AA}
         .ed-count{font-size:.72rem;color:var(--muted);text-align:right}
         .btn-row{display:flex;gap:.6rem;flex-wrap:wrap}
+        /* ===== PAINEL EDITORIAL (v2) ===== */
+        #panel{display:none;background:var(--bg-s);border:1px solid var(--border);border-top:3px solid var(--gold);padding:1.6rem;grid-column:1/-1}
+        .panel-h{font-family:'Inter',system-ui,sans-serif;font-size:1.05rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:1.1rem;display:flex;align-items:center;gap:.7rem}
+        .panel-h::before{content:"";width:6px;height:1.1em;background:var(--gold)}
+        .ed-sec{background:#fff;border:1px solid var(--border);padding:1.2rem 1.3rem 1.3rem;display:flex;flex-direction:column;gap:1rem}
+        .ed-sec-h{display:flex;align-items:center;gap:.6rem;font:800 .74rem 'Inter',sans-serif;letter-spacing:1.1px;text-transform:uppercase;color:#000;padding-bottom:.7rem;border-bottom:1px solid var(--border)}
+        .ed-sec-h i{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--bg-h);color:var(--gold);font:800 .72rem 'Inter',sans-serif;font-style:normal}
+        .f-g input:focus,.f-g select:focus,.f-g textarea:focus{outline:2px solid rgba(197,160,89,.35);border-color:var(--gold)}
+        .ed-ct{font-size:.7rem;font-weight:600;color:var(--muted);display:flex;justify-content:space-between;gap:.6rem}
+        .ed-ct b{font-weight:700}.ed-ct .ok{color:#15803D}.ed-ct .warn{color:#B45309}
+        /* barra de ferramentas: quebra de linha em vez de rolar (nenhum botão fica cortado) */
+        .editor-toolbar{position:sticky;top:var(--hdr-h);z-index:60;display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .5rem;background:var(--bg-h);border:1px solid #000;border-bottom:2px solid var(--gold);padding:.5rem .6rem;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+        .tb-g{display:flex;align-items:center;gap:2px;padding-right:.55rem;border-right:1px solid #2E2E33}
+        .tb-g:last-child{border-right:none;padding-right:0}.tb-end{margin-left:auto}
+        .editor-btn{flex:0 0 auto;min-width:34px;height:34px;padding:0 .65rem;background:#1F1F23;color:#E4E4E7;border:1px solid #2E2E33;font:600 .76rem 'Inter',sans-serif;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s,border-color .15s}
+        .editor-btn:hover{background:#2A2A30;border-color:var(--gold);color:#fff}
+        .editor-btn.on{background:var(--gold);border-color:var(--gold);color:#000}
+        .editor-btn:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+        .editor-btn.accent{background:var(--gold);border-color:var(--gold);color:#000;font-weight:800}.editor-btn.accent:hover{background:#D8B26A;color:#000}
+        .tb-sep{display:none}
+        @media(max-width:680px){#panel{padding:.9rem}.ed-sec{padding:1rem}.editor-btn{min-width:32px;height:32px;padding:0 .5rem;font-size:.72rem}.tb-g{padding-right:.35rem}.tb-end{margin-left:0}.editor-toolbar{position:static}}
+        .medium-textarea{width:100%;min-height:440px;background:#FFF;border:1px solid var(--border);border-top:none;padding:1.4rem 1.5rem;outline:none}
+        .ed-foot{display:flex;justify-content:space-between;gap:1rem;font-size:.72rem;color:var(--muted);margin-top:.5rem}
+        #pcn .fz-embed{position:relative;border:1px dashed var(--gold);background:#FFFCF5;padding:1.9rem .6rem .6rem;margin:1.2rem 0;user-select:none;cursor:default}
+        #pcn .fz-embed::before{content:attr(data-label);position:absolute;top:.4rem;left:.6rem;font:800 .62rem 'Inter',sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--gold-d)}
+        #pcn .fz-embed iframe{pointer-events:none}
+        .fz-tools{position:absolute;top:.3rem;right:.4rem;display:flex;gap:.3rem;z-index:2}
+        .fz-tools button{border:1px solid #000;background:#000;color:var(--gold);padding:.25rem .6rem;font:700 .62rem 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.5px;cursor:pointer}
+        .fz-tools button::after{content:attr(data-label)}
+        .fz-tools button:hover{background:var(--gold);color:#000}
+        .ed-actions{position:sticky;bottom:0;z-index:55;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border:1px solid var(--border);border-top:2px solid var(--gold);padding:.8rem 1rem;margin-top:.2rem}
+        .ed-actions .sp{flex:1}
+        .btn.gold{background:var(--gold);color:#000}.btn.gold:hover{background:#D8B26A}
+        /* janelas: HTML e pré-visualização */
+        .hm-card,.pv-card{background:#fff;width:100%;max-height:94vh;display:flex;flex-direction:column;border-top:4px solid var(--gold);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+        .hm-card{max-width:1080px}.pv-card{max-width:820px}
+        .hm-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 1.2rem;border-bottom:1px solid var(--border)}
+        .hm-head h3{font:800 .85rem 'Inter',sans-serif;letter-spacing:1px;text-transform:uppercase}
+        .hm-x{border:none;background:transparent;font-size:1.6rem;line-height:1;cursor:pointer;color:var(--muted);padding:0 .3rem}.hm-x:hover{color:#000}
+        .hm-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.2rem;padding:1.1rem 1.2rem;overflow:auto;min-height:0}
+        @media(max-width:860px){.hm-body{grid-template-columns:1fr}}
+        .hm-col{display:flex;flex-direction:column;gap:.7rem;min-width:0}
+        .hm-col label{font:700 .68rem 'Inter',sans-serif;text-transform:uppercase;color:var(--muted);letter-spacing:.4px}
+        .hm-tpls{display:flex;flex-wrap:wrap;gap:.35rem}
+        .hm-tpls button{border:1px solid var(--border);background:var(--bg-s);padding:.35rem .65rem;font:600 .72rem 'Inter',sans-serif;cursor:pointer}.hm-tpls button:hover{border-color:var(--gold);background:#FFFCF5}
+        #hm-code{width:100%;min-height:290px;resize:vertical;font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:.8rem;background:#0F0F12;color:#E4E4E7;border:1px solid #000;tab-size:2}
+        .hm-row{display:grid;grid-template-columns:1fr 150px;gap:.7rem}.hm-row>div{display:flex;flex-direction:column;gap:.3rem}
+        .hm-row input,.hm-row select{padding:.55rem;border:1px solid var(--border);background:#fff;font:inherit;font-size:.85rem;width:100%}
+        .hm-note{font-size:.72rem;line-height:1.5;color:var(--muted);background:var(--bg-s);border-left:3px solid var(--gold);padding:.55rem .7rem}
+        #hm-prev{width:100%;min-height:340px;height:100%;border:1px solid var(--border);background:repeating-conic-gradient(#fafafa 0 25%,#fff 0 50%) 0 0/16px 16px}
+        .hm-foot{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.8rem 1.2rem;border-top:1px solid var(--border)}.hm-foot .sp{flex:1;font-size:.72rem;color:var(--muted)}
+        .pv-bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 1.2rem;background:var(--bg-h);color:var(--gold);font:700 .7rem 'Inter',sans-serif;letter-spacing:1px;text-transform:uppercase}
+        .pv-bar button{border:1px solid var(--gold);background:transparent;color:var(--gold);padding:.4rem .9rem;font:700 .66rem 'Inter',sans-serif;text-transform:uppercase;cursor:pointer}.pv-bar button:hover{background:var(--gold);color:#000}
+        .pv-body{overflow:auto;padding:1.8rem 2rem 2.4rem}
+        .pv-kicker{font:800 .68rem 'Inter',sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--gold-d);margin-bottom:.6rem}
+        .pv-body h1{font:800 2rem/1.2 'Inter',sans-serif;letter-spacing:-.02em;margin-bottom:.7rem}
+        .pv-desc{font-size:1.05rem;color:#3F3F46;margin-bottom:1rem}.pv-by{font-size:.78rem;color:var(--muted);margin-bottom:1.2rem}
+        .pv-body>img{display:block;width:100%;max-height:380px;object-fit:cover;margin-bottom:1.6rem}
+        @media(max-width:680px){.pv-body{padding:1.2rem}.pv-body h1{font-size:1.5rem}}
 
-        .ed-foot{display:flex;justify-content:space-between;gap:1rem;font-size:.72rem;color:var(--muted)}
         .draft-banner{display:none;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;background:#EFF6FF;border:1px solid #93C5FD;padding:.6rem .9rem;font-size:.8rem;margin-bottom:1rem}
         .draft-banner button{border:none;padding:.4rem .8rem;font:700 .68rem 'Inter',sans-serif;text-transform:uppercase;cursor:pointer;background:#1A1A1E;color:#fff;margin-left:.3rem}
         .draft-banner button.alt{background:transparent;color:#1A1A1E;border:1px solid #1A1A1E}
@@ -181,6 +231,7 @@
                 <span><button type="button" onclick="restoreDraft()">Recuperar</button><button type="button" class="alt" onclick="discardDraft()">Descartar</button></span>
             </div>
             <form onsubmit="pub(event)" class="f-g" id="art-form">
+                <section class="ed-sec"><h3 class="ed-sec-h"><i>1</i>Seção, autor e capa</h3>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="pc">Seção do Portal</label>
@@ -200,19 +251,25 @@
                     <label for="pic">Descrição da imagem de capa <span class="hint">(aparece abaixo da imagem e vira o texto alternativo)</span></label>
                     <input type="text" id="pic" maxlength="200" placeholder="Ex: Executivos analisam o cenário em sala de reunião">
                 </div>
+                </section>
+                <section class="ed-sec"><h3 class="ed-sec-h"><i>2</i>Título, resumo e tags</h3>
                 <div class="form-group">
                     <label for="pt">Manchete de Capa (Título principal)</label>
                     <input type="text" id="pt" placeholder="Insira o título da notícia" required>
                     <span class="hint" id="slug-prev"></span>
+                    <div class="ed-ct" id="ct-t"></div>
                 </div>
                 <div class="form-group">
                     <label for="pd">Descrição do artigo <span class="hint">(resumo exibido nos cards, no Google e ao compartilhar)</span></label>
                     <textarea id="pd" maxlength="200" rows="2" placeholder="Se deixar em branco, usamos o começo do texto."></textarea>
+                    <div class="ed-ct" id="ct-d"></div>
                 </div>
                 <div class="form-group">
                     <label for="pg">Tags <span class="hint">(separadas por vírgula, até 8)</span></label>
                     <input type="text" id="pg" placeholder="Ex: liderança, gestão de crise, CEOs">
                 </div>
+                </section>
+                <section class="ed-sec"><h3 class="ed-sec-h"><i>3</i>Acesso e arquivos</h3>
                 <div class="form-group">
                     <label style="display:flex;gap:.6rem;align-items:flex-start;text-transform:none;font-size:.85rem;color:#000;font-weight:600"><input type="checkbox" id="pp" style="width:auto;margin-top:.2rem"><span>Conteúdo exclusivo para assinantes <span class="hint">Só a prévia fica pública. No texto, use o botão “🔒 Prévia” para marcar onde ela termina (sem marcar, os 3 primeiros parágrafos são a prévia).</span></span></label>
                 </div>
@@ -221,43 +278,52 @@
                     <input type="file" id="pf" multiple onchange="pfAdd(this)">
                     <div id="pf-list" style="display:flex;flex-direction:column;gap:.35rem;margin-top:.5rem"></div>
                 </div>
+                </section>
+                <section class="ed-sec"><h3 class="ed-sec-h"><i>4</i>Conteúdo da análise</h3>
                 <div class="form-group">
                     <label>Corpo de Leitura do Artigo</label>
                     <div>
-                        <div class="editor-toolbar" id="toolbar" role="toolbar" aria-label="Estilo do texto">
-                            <button type="button" class="editor-btn" data-cmd="bold" title="Negrito (Ctrl+B)"><b>B</b></button>
-                            <button type="button" class="editor-btn" data-cmd="italic" title="Itálico (Ctrl+I)"><i>I</i></button>
-                            <button type="button" class="editor-btn" data-cmd="underline" title="Sublinhado (Ctrl+U)"><u>U</u></button>
-                            <span class="tb-sep"></span>
-                            <button type="button" class="editor-btn" data-block="h2" title="Subtítulo">H2</button>
-                            <button type="button" class="editor-btn" data-block="h3" title="Subtítulo menor">H3</button>
-                            <button type="button" class="editor-btn" data-block="blockquote" title="Citação">❝</button>
-                            <span class="tb-sep"></span>
-                            <button type="button" class="editor-btn" data-cmd="insertUnorderedList" title="Marcadores">• Lista</button>
-                            <button type="button" class="editor-btn" data-cmd="insertOrderedList" title="Lista numerada">1. Lista</button>
-                            <span class="tb-sep"></span>
-                            <button type="button" class="editor-btn" data-cmd="createLink" title="Inserir link">🔗 Link</button>
-                            <button type="button" class="editor-btn" data-cmd="unlink" title="Remover link">Sem link</button>
-                            <button type="button" class="editor-btn" data-cmd="removeFormat" title="Limpar formatação">Limpar</button>
-                            <span class="tb-sep"></span>
-                            <button type="button" class="editor-btn" data-ins="img" title="Inserir imagem por link">🖼 Imagem</button>
-                            <button type="button" class="editor-btn" data-ins="video" title="Inserir vídeo do YouTube ou Vimeo">▶ Vídeo</button>
-                            <button type="button" class="editor-btn" data-ins="table" title="Inserir tabela">▦ Tabela</button>
-                            <span class="tb-sep"></span>
-                            <button type="button" class="editor-btn" data-ins="assine" title="Link que abre a tela de assinatura (selecione um texto ou clique sem selecionar)">★ Assine</button>
-                            <button type="button" class="editor-btn" data-ins="paywall" title="Marca o fim da parte pública (para artigos exclusivos)">🔒 Prévia</button>
-                            <span class="tb-sep"></span>
-                            <button type="button" class="editor-btn" data-cmd="undo" title="Desfazer">↶</button>
-                            <button type="button" class="editor-btn" data-cmd="redo" title="Refazer">↷</button>
+                        <div class="editor-toolbar" id="toolbar" role="toolbar" aria-label="Ferramentas de edição">
+                            <div class="tb-g" role="group" aria-label="Texto">
+                                <button type="button" class="editor-btn" data-cmd="bold" title="Negrito (Ctrl+B)"><b>B</b></button>
+                                <button type="button" class="editor-btn" data-cmd="italic" title="Itálico (Ctrl+I)"><i>I</i></button>
+                                <button type="button" class="editor-btn" data-cmd="underline" title="Sublinhado (Ctrl+U)"><u>U</u></button>
+                            </div>
+                            <div class="tb-g" role="group" aria-label="Blocos">
+                                <button type="button" class="editor-btn" data-block="h2" title="Subtítulo">H2</button>
+                                <button type="button" class="editor-btn" data-block="h3" title="Subtítulo menor">H3</button>
+                                <button type="button" class="editor-btn" data-block="blockquote" title="Citação">❝</button>
+                            </div>
+                            <div class="tb-g" role="group" aria-label="Listas">
+                                <button type="button" class="editor-btn" data-cmd="insertUnorderedList" title="Lista com marcadores">• Lista</button>
+                                <button type="button" class="editor-btn" data-cmd="insertOrderedList" title="Lista numerada">1. Lista</button>
+                            </div>
+                            <div class="tb-g" role="group" aria-label="Links">
+                                <button type="button" class="editor-btn" data-cmd="createLink" title="Inserir link no texto selecionado">Link</button>
+                                <button type="button" class="editor-btn" data-cmd="unlink" title="Remover link">Sem link</button>
+                                <button type="button" class="editor-btn" data-cmd="removeFormat" title="Limpar formatação">Limpar</button>
+                            </div>
+                            <div class="tb-g" role="group" aria-label="Mídia">
+                                <button type="button" class="editor-btn" data-ins="img" title="Inserir imagem por link">Imagem</button>
+                                <button type="button" class="editor-btn" data-ins="video" title="Inserir vídeo do YouTube ou Vimeo">Vídeo</button>
+                                <button type="button" class="editor-btn" data-ins="table" title="Inserir tabela">Tabela</button>
+                                <button type="button" class="editor-btn accent" data-ins="html" title="Incorporar código HTML: gráficos, quadros, linha do tempo, indicadores…">&lt;/&gt; HTML</button>
+                            </div>
+                            <div class="tb-g" role="group" aria-label="Assinatura">
+                                <button type="button" class="editor-btn" data-ins="assine" title="Link que abre a tela de assinatura (selecione um texto ou clique sem selecionar)">★ Assine</button>
+                                <button type="button" class="editor-btn" data-ins="paywall" title="Marca o fim da parte pública (para artigos exclusivos)">🔒 Prévia</button>
+                            </div>
+                            <div class="tb-g tb-end" role="group" aria-label="Histórico">
+                                <button type="button" class="editor-btn" data-cmd="undo" title="Desfazer (Ctrl+Z)">↶</button>
+                                <button type="button" class="editor-btn" data-cmd="redo" title="Refazer (Ctrl+Y)">↷</button>
+                            </div>
                         </div>
                         <div class="medium-textarea art-content" id="pcn" contenteditable="true" role="textbox" aria-multiline="true"></div>
                     </div>
                     <div class="ed-foot"><span id="draft-note"></span><span id="ed-count">0 palavras</span></div>
                 </div>
-                <div class="btn-row">
-                    <button type="submit" class="btn" id="btn-pub">Publicar Análise Oficial</button>
-                    <button type="button" class="btn danger" onclick="out()">Sair do Painel</button>
-                </div>
+                </section>
+                <div class="ed-actions"><button type="button" class="btn ghost" onclick="pvOpen()">Pré-visualizar</button><span class="sp"></span><button type="button" class="btn danger" onclick="out()">Sair do painel</button><button type="submit" class="btn gold" id="btn-pub">Publicar análise oficial</button></div>
             </form>
             <div style="margin-top:2.5rem;border-top:2px solid #000;padding-top:1.2rem">
                 <h3 class="mng-h">Artigos publicados (<span id="mng-count">0</span>)</h3>
@@ -294,6 +360,35 @@
         </aside>
     </main>
 
+    <div id="hm" class="modal" role="dialog" aria-modal="true" aria-labelledby="hm-t">
+        <div class="hm-card">
+            <div class="hm-head"><h3 id="hm-t">Inserir bloco HTML</h3><button type="button" class="hm-x" aria-label="Fechar" onclick="hmClose()">×</button></div>
+            <div class="hm-body">
+                <div class="hm-col">
+                    <label>Comece por um modelo</label>
+                    <div class="hm-tpls" id="hm-tpls"></div>
+                    <label for="hm-code">Código HTML <span style="text-transform:none;font-weight:500">(aceita CSS e JavaScript)</span></label>
+                    <textarea id="hm-code" spellcheck="false" autocomplete="off" placeholder="Cole aqui o código do gráfico, quadro, infográfico…"></textarea>
+                    <div class="hm-row">
+                        <div><label for="hm-title">Descrição do bloco <span style="text-transform:none;font-weight:500">(acessibilidade)</span></label><input type="text" id="hm-title" maxlength="120" placeholder="Ex: Gráfico da variação do dólar"></div>
+                        <div><label for="hm-h">Altura</label><select id="hm-h"><option value="">Automática</option><option value="240">240 px</option><option value="320">320 px</option><option value="420">420 px</option><option value="560">560 px</option><option value="760">760 px</option></select></div>
+                    </div>
+                    <p class="hm-note">O bloco roda isolado do site (não acessa login, dados nem outras páginas). Use só código de fontes confiáveis. Bibliotecas como Chart.js entram por link <code>&lt;script src="https://…"&gt;</code>. Não coloque anúncios dentro do bloco.</p>
+                </div>
+                <div class="hm-col">
+                    <label>Pré-visualização ao vivo</label>
+                    <iframe id="hm-prev" title="Pré-visualização do bloco HTML" sandbox="allow-scripts allow-popups" data-fixed="1"></iframe>
+                </div>
+            </div>
+            <div class="hm-foot"><span class="sp" id="hm-size"></span><button type="button" class="btn ghost" onclick="hmClose()">Cancelar</button><button type="button" class="btn gold" id="hm-ok" onclick="hmSave()">Inserir no artigo</button></div>
+        </div>
+    </div>
+    <div id="pv" class="modal" role="dialog" aria-modal="true" aria-label="Pré-visualização do artigo">
+        <div class="pv-card">
+            <div class="pv-bar"><span>Pré-visualização · como o leitor vê</span><button type="button" onclick="pvClose()">Fechar</button></div>
+            <div class="pv-body" id="pv-body"></div>
+        </div>
+    </div>
     <div id="lm" class="modal">
         <div class="m-content">
             <h3 style="font-size:.95rem;text-align:center;font-family:'Inter',system-ui,sans-serif;letter-spacing:1px">Autenticação Editorial</h3>
@@ -335,6 +430,87 @@
         window.addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'e') $('lm').style.display = 'flex'; });
         window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 
+        /* ---------- BLOCO HTML (gráficos, quadros, linha do tempo…) ---------- */
+        const HM_TPL = {
+            'Pontos-chave': '<div style="background:#0A0A0B;color:#fff;padding:1.3rem 1.5rem;border-left:4px solid #C5A059;border-radius:8px">\n  <div style="font:800 .7rem Inter,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:#C5A059;margin-bottom:.7rem">Pontos-chave</div>\n  <ul style="margin:0;padding-left:1.1rem;line-height:1.75">\n    <li>Primeiro ponto importante da análise.</li>\n    <li>Segundo ponto, com um dado ou conclusão.</li>\n    <li>Terceiro ponto: o que o leitor deve levar daqui.</li>\n  </ul>\n</div>',
+            'Indicadores': '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.8rem">\n  <div style="background:#fff;border:1px solid #E4E4E7;border-top:3px solid #C5A059;padding:1rem">\n    <div style="font:700 .66rem Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase;color:#52525B">Indicador 1</div>\n    <div style="font:800 1.9rem Inter,sans-serif;margin:.2rem 0">5,00%</div>\n    <div style="font-size:.78rem;color:#15803D;font-weight:600">▲ +0,4 p.p. no período</div>\n  </div>\n  <div style="background:#fff;border:1px solid #E4E4E7;border-top:3px solid #C5A059;padding:1rem">\n    <div style="font:700 .66rem Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase;color:#52525B">Indicador 2</div>\n    <div style="font:800 1.9rem Inter,sans-serif;margin:.2rem 0">R$ 120 mi</div>\n    <div style="font-size:.78rem;color:#B91C1C;font-weight:600">▼ −2,1% no período</div>\n  </div>\n  <div style="background:#fff;border:1px solid #E4E4E7;border-top:3px solid #C5A059;padding:1rem">\n    <div style="font:700 .66rem Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase;color:#52525B">Indicador 3</div>\n    <div style="font:800 1.9rem Inter,sans-serif;margin:.2rem 0">1,2 mil</div>\n    <div style="font-size:.78rem;color:#52525B;font-weight:600">● estável</div>\n  </div>\n</div>',
+            'Gráfico de barras': '<div style="padding:1.2rem;border:1px solid #E4E4E7;border-top:3px solid #C5A059;background:#fff;border-radius:8px">\n  <div style="font:800 .68rem Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#94722F">Gráfico</div>\n  <h3 style="margin:.3rem 0 1rem;font-size:1.1rem">Título do gráfico</h3>\n  <div style="position:relative;height:320px"><canvas id="c1" role="img" aria-label="Descreva o gráfico aqui"></canvas></div>\n  <p style="margin:.8rem 0 0;font-size:.76rem;color:#52525B">Fonte: informe a fonte dos dados.</p>\n</div>\n<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.js"><\/script>\n<script>\nnew Chart(document.getElementById("c1"),{type:"bar",data:{labels:["2022","2023","2024","2025"],datasets:[{label:"Série",data:[12,19,8,15],backgroundColor:"#C5A059"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:"#F4F4F5"}},x:{grid:{display:false}}}}});\n<\/script>',
+            'Gráfico de linha': '<div style="padding:1.2rem;border:1px solid #E4E4E7;border-top:3px solid #C5A059;background:#fff;border-radius:8px">\n  <div style="font:800 .68rem Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#94722F">Evolução</div>\n  <h3 style="margin:.3rem 0 1rem;font-size:1.1rem">Título do gráfico</h3>\n  <div style="position:relative;height:320px"><canvas id="c1" role="img" aria-label="Descreva o gráfico aqui"></canvas></div>\n  <p style="margin:.8rem 0 0;font-size:.76rem;color:#52525B">Fonte: informe a fonte dos dados.</p>\n</div>\n<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.js"><\/script>\n<script>\nnew Chart(document.getElementById("c1"),{type:"line",data:{labels:["Jan","Fev","Mar","Abr","Mai","Jun"],datasets:[{label:"Série",data:[4.8,5.1,4.9,5.4,5.2,5.6],borderColor:"#C5A059",backgroundColor:"rgba(197,160,89,.15)",fill:true,tension:.3,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:"#F4F4F5"}},x:{grid:{display:false}}}}});\n<\/script>',
+            'Linha do tempo': '<div style="border-left:3px solid #C5A059;padding-left:1.3rem;margin-left:.4rem">\n  <div style="position:relative;margin-bottom:1.3rem"><span style="position:absolute;left:-1.78rem;top:.3rem;width:13px;height:13px;border-radius:50%;background:#C5A059;border:3px solid #fff;box-shadow:0 0 0 1px #C5A059"></span>\n    <div style="font:800 .7rem Inter,sans-serif;letter-spacing:.8px;color:#94722F">1994</div><div style="font-weight:700">Primeiro marco</div><div style="font-size:.9rem;color:#52525B">Explique em uma frase o que aconteceu.</div></div>\n  <div style="position:relative;margin-bottom:1.3rem"><span style="position:absolute;left:-1.78rem;top:.3rem;width:13px;height:13px;border-radius:50%;background:#C5A059;border:3px solid #fff;box-shadow:0 0 0 1px #C5A059"></span>\n    <div style="font:800 .7rem Inter,sans-serif;letter-spacing:.8px;color:#94722F">2008</div><div style="font-weight:700">Segundo marco</div><div style="font-size:.9rem;color:#52525B">Explique em uma frase o que aconteceu.</div></div>\n  <div style="position:relative"><span style="position:absolute;left:-1.78rem;top:.3rem;width:13px;height:13px;border-radius:50%;background:#C5A059;border:3px solid #fff;box-shadow:0 0 0 1px #C5A059"></span>\n    <div style="font:800 .7rem Inter,sans-serif;letter-spacing:.8px;color:#94722F">Hoje</div><div style="font-weight:700">Cenário atual</div><div style="font-size:.9rem;color:#52525B">Explique em uma frase o que aconteceu.</div></div>\n</div>',
+            'Comparativo': '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.92rem">\n  <thead><tr><th style="background:#0A0A0B;color:#C5A059;text-align:left;padding:.7rem .9rem;font:800 .7rem Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase">Critério</th><th style="background:#0A0A0B;color:#C5A059;text-align:left;padding:.7rem .9rem;font:800 .7rem Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase">Opção A</th><th style="background:#0A0A0B;color:#C5A059;text-align:left;padding:.7rem .9rem;font:800 .7rem Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase">Opção B</th></tr></thead>\n  <tbody>\n    <tr><td style="padding:.7rem .9rem;border-bottom:1px solid #E4E4E7;font-weight:700">Custo</td><td style="padding:.7rem .9rem;border-bottom:1px solid #E4E4E7">Baixo</td><td style="padding:.7rem .9rem;border-bottom:1px solid #E4E4E7">Alto</td></tr>\n    <tr style="background:#F8F9FA"><td style="padding:.7rem .9rem;border-bottom:1px solid #E4E4E7;font-weight:700">Risco</td><td style="padding:.7rem .9rem;border-bottom:1px solid #E4E4E7">Médio</td><td style="padding:.7rem .9rem;border-bottom:1px solid #E4E4E7">Baixo</td></tr>\n    <tr><td style="padding:.7rem .9rem;border-bottom:1px solid #E4E4E7;font-weight:700">Prazo</td><td style="padding:.7rem .9rem;border-bottom:1px solid #E4E4E7">Curto</td><td style="padding:.7rem .9rem;border-bottom:1px solid #E4E4E7">Longo</td></tr>\n  </tbody></table></div>'
+        };
+        Object.assign(HM_TPL, {"Gráfico interativo": "<style>.fzb{border:1px solid #D4D4D8;background:#fff;padding:.38rem .8rem;border-radius:6px;font:600 .74rem Inter,sans-serif;cursor:pointer;color:#18181B}.fzb:hover{border-color:#C5A059}.fzb.on{background:#C5A059;border-color:#C5A059;color:#000}<\/style>\n<div style=\"padding:1.2rem;border:1px solid #E4E4E7;border-top:3px solid #C5A059;background:#fff;border-radius:8px\">\n  <div style=\"display:flex;flex-wrap:wrap;gap:.6rem;justify-content:space-between;align-items:center;margin-bottom:.9rem\">\n    <div><div style=\"font:800 .68rem Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#94722F\">Interativo<\/div><h3 style=\"margin:.2rem 0 0;font-size:1.1rem\">Título do gráfico<\/h3><\/div>\n    <div id=\"per\" style=\"display:flex;gap:.3rem\"><\/div>\n  <\/div>\n  <div style=\"position:relative;height:320px\"><canvas id=\"c1\" role=\"img\" aria-label=\"Descreva o gráfico aqui\"><\/canvas><\/div>\n  <div id=\"typ\" style=\"display:flex;gap:.3rem;margin-top:.8rem\"><\/div>\n  <p style=\"margin:.8rem 0 0;font-size:.76rem;color:#52525B\">Passe o mouse (ou toque) nos pontos para ver os valores. Fonte: informe a fonte dos dados.<\/p>\n<\/div>\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.js\"><\/script>\n<script>\nvar D={\"6 meses\":{l:[\"Mai\",\"Jun\",\"Jul\",\"Ago\",\"Set\",\"Out\"],v:[5.1,5.3,5.2,5.6,5.4,5.7]},\n\"12 meses\":{l:[\"Nov\",\"Dez\",\"Jan\",\"Fev\",\"Mar\",\"Abr\",\"Mai\",\"Jun\",\"Jul\",\"Ago\",\"Set\",\"Out\"],v:[4.9,5.0,5.2,5.1,5.4,5.3,5.1,5.3,5.2,5.6,5.4,5.7]},\n\"5 anos\":{l:[\"2021\",\"2022\",\"2023\",\"2024\",\"2025\"],v:[5.4,5.2,4.9,5.4,5.7]}};\nvar per=\"12 meses\",typ=\"line\",ch;\nfunction make(){var c=document.getElementById(\"c1\");if(ch)ch.destroy();\nch=new Chart(c,{type:typ,data:{labels:D[per].l,datasets:[{label:\"Série\",data:D[per].v,borderColor:\"#C5A059\",backgroundColor:typ===\"bar\"?\"#C5A059\":\"rgba(197,160,89,.15)\",fill:typ===\"line\",tension:.3,pointRadius:4,pointHoverRadius:7,borderRadius:4}]},\noptions:{responsive:true,maintainAspectRatio:false,interaction:{mode:\"index\",intersect:false},plugins:{legend:{display:false}},scales:{y:{grid:{color:\"#F4F4F5\"}},x:{grid:{display:false}}}}})}\nfunction btns(id,items,get,set){var box=document.getElementById(id);box.innerHTML=\"\";items.forEach(function(it){var b=document.createElement(\"button\");b.className=\"fzb\"+(get()===it[0]?\" on\":\"\");b.textContent=it[1];b.onclick=function(){set(it[0]);make();draw()};box.appendChild(b)})}\nfunction draw(){btns(\"per\",Object.keys(D).map(function(k){return[k,k]}),function(){return per},function(v){per=v});btns(\"typ\",[[\"line\",\"Linha\"],[\"bar\",\"Barras\"]],function(){return typ},function(v){typ=v})}\nmake();draw();\n<\/script>", "Rosca (distribuição)": "\n<div style=\"padding:1.2rem;border:1px solid #E4E4E7;border-top:3px solid #C5A059;background:#fff;border-radius:8px\">\n  <div style=\"font:800 .68rem Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#94722F\">Distribuição<\/div>\n  <h3 style=\"margin:.2rem 0 .6rem;font-size:1.1rem\">Título do gráfico<\/h3>\n  <div style=\"position:relative;height:320px\"><canvas id=\"c1\" role=\"img\" aria-label=\"Descreva o gráfico aqui\"><\/canvas><\/div>\n  <p style=\"margin:.8rem 0 0;font-size:.76rem;color:#52525B\">Clique em um item da legenda para ocultar ou mostrar a fatia. Fonte: informe a fonte dos dados.<\/p>\n<\/div>\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.js\"><\/script>\n<script>\nnew Chart(document.getElementById(\"c1\"),{type:\"doughnut\",data:{labels:[\"Categoria A\",\"Categoria B\",\"Categoria C\",\"Categoria D\"],datasets:[{data:[40,28,20,12],backgroundColor:[\"#C5A059\",\"#0A0A0B\",\"#94722F\",\"#A1A1AA\"],borderColor:\"#fff\",borderWidth:3,hoverOffset:10}]},\noptions:{responsive:true,maintainAspectRatio:false,cutout:\"62%\",plugins:{legend:{position:\"bottom\",labels:{usePointStyle:true,padding:16}},tooltip:{callbacks:{label:function(c){return \" \"+c.label+\": \"+c.parsed+\"%\"}}}}}});\n<\/script>", "Mapa de calor": "\n<div style=\"padding:1.2rem;border:1px solid #E4E4E7;border-top:3px solid #C5A059;background:#fff;border-radius:8px\">\n  <div style=\"font:800 .68rem Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#94722F\">Mapa de calor<\/div>\n  <h3 style=\"margin:.2rem 0 .8rem;font-size:1.1rem\">Título do mapa<\/h3>\n  <div style=\"overflow-x:auto\"><div id=\"hm\" style=\"display:grid;gap:4px;min-width:420px\"><\/div><\/div>\n  <div id=\"rd\" style=\"margin-top:.8rem;font:600 .86rem Inter,sans-serif;min-height:1.3em;color:#18181B\">Passe o mouse (ou toque) em uma célula.<\/div>\n  <div style=\"display:flex;align-items:center;gap:.5rem;margin-top:.6rem;font-size:.72rem;color:#52525B\"><span>menor<\/span><span style=\"flex:0 0 120px;height:8px;border-radius:4px;background:linear-gradient(90deg,#F5EDDA,#C5A059,#0A0A0B)\"><\/span><span>maior<\/span><\/div>\n<\/div>\n<script>\nvar cols=[\"Seg\",\"Ter\",\"Qua\",\"Qui\",\"Sex\"],rows=[\"Setor A\",\"Setor B\",\"Setor C\",\"Setor D\"];\nvar V=[[2,5,3,8,6],[4,9,7,3,5],[1,3,10,6,2],[7,4,5,9,8]];\nvar mn=Math.min.apply(null,[].concat.apply([],V)),mx=Math.max.apply(null,[].concat.apply([],V));\nfunction mix(a,b,t){return a.map(function(x,i){return Math.round(x+(b[i]-x)*t)})}\nfunction color(v){var t=(v-mn)/(mx-mn||1);var c=t<.5?mix([245,237,218],[197,160,89],t*2):mix([197,160,89],[10,10,11],(t-.5)*2);return\"rgb(\"+c.join(\",\")+\")\"}\nvar g=document.getElementById(\"hm\"),rd=document.getElementById(\"rd\");g.style.gridTemplateColumns=\"110px repeat(\"+cols.length+\",1fr)\";\ng.appendChild(document.createElement(\"div\"));\ncols.forEach(function(c){var d=document.createElement(\"div\");d.textContent=c;d.style.cssText=\"font:700 .72rem Inter,sans-serif;text-align:center;color:#52525B\";g.appendChild(d)});\nrows.forEach(function(r,i){var h=document.createElement(\"div\");h.textContent=r;h.style.cssText=\"font:700 .78rem Inter,sans-serif;align-self:center\";g.appendChild(h);\nV[i].forEach(function(v,j){var d=document.createElement(\"div\");d.textContent=v;d.tabIndex=0;d.style.cssText=\"padding:.9rem 0;text-align:center;border-radius:6px;font:700 .82rem Inter,sans-serif;cursor:pointer;background:\"+color(v)+\";color:\"+((v-mn)/(mx-mn||1)>.45?\"#fff\":\"#18181B\");\nfunction show(){rd.textContent=r+\" · \"+cols[j]+\": \"+v}d.onmouseenter=show;d.onfocus=show;d.onclick=show;g.appendChild(d)})});\n<\/script>", "Lado a lado": "\n<div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.9rem\">\n  <div style=\"padding:1.2rem;border:1px solid #E4E4E7;border-top:3px solid #C5A059;background:#fff;border-radius:8px\">\n    <div style=\"font:800 .68rem Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#94722F\">Cenário A<\/div>\n    <h3 style=\"margin:.2rem 0 .7rem;font-size:1.1rem\">Nome da opção<\/h3>\n    <div style=\"font:800 1.8rem Inter,sans-serif;margin-bottom:.6rem\">R$ 0,00<\/div>\n    <ul style=\"margin:0;padding-left:1.1rem;line-height:1.7;font-size:.92rem\"><li>Vantagem 1<\/li><li>Vantagem 2<\/li><li>Ponto de atenção<\/li><\/ul>\n  <\/div>\n  <div style=\"padding:1.2rem;border:1px solid #0A0A0B;border-top:3px solid #C5A059;background:#0A0A0B;color:#fff;border-radius:8px\">\n    <div style=\"font:800 .68rem Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#C5A059\">Cenário B<\/div>\n    <h3 style=\"margin:.2rem 0 .7rem;font-size:1.1rem;color:#fff\">Nome da opção<\/h3>\n    <div style=\"font:800 1.8rem Inter,sans-serif;margin-bottom:.6rem\">R$ 0,00<\/div>\n    <ul style=\"margin:0;padding-left:1.1rem;line-height:1.7;font-size:.92rem\"><li>Vantagem 1<\/li><li>Vantagem 2<\/li><li>Ponto de atenção<\/li><\/ul>\n  <\/div>\n<\/div>", "Checklist": "<style>.fzb{border:1px solid #D4D4D8;background:#fff;padding:.38rem .8rem;border-radius:6px;font:600 .74rem Inter,sans-serif;cursor:pointer;color:#18181B}.fzb:hover{border-color:#C5A059}.fzb.on{background:#C5A059;border-color:#C5A059;color:#000}<\/style>\n<div style=\"padding:1.2rem;border:1px solid #E4E4E7;border-top:3px solid #C5A059;background:#fff;border-radius:8px\">\n  <div style=\"font:800 .68rem Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#94722F\">Checklist<\/div>\n  <h3 style=\"margin:.2rem 0 .7rem;font-size:1.1rem\">Título do checklist<\/h3>\n  <div style=\"height:8px;background:#F4F4F5;border-radius:4px;overflow:hidden\"><div id=\"bar\" style=\"height:100%;width:0;background:#C5A059;transition:width .25s\"><\/div><\/div>\n  <div id=\"pc\" style=\"font:600 .74rem Inter,sans-serif;color:#52525B;margin:.4rem 0 .7rem\">0 de 0 concluídos<\/div>\n  <div id=\"lst\"><\/div>\n<\/div>\n<script>\nvar items=[\"Primeiro item da lista\",\"Segundo item da lista\",\"Terceiro item da lista\",\"Quarto item da lista\"];\nvar lst=document.getElementById(\"lst\");\nfunction upd(){var n=lst.querySelectorAll(\"input:checked\").length;document.getElementById(\"bar\").style.width=(n/items.length*100)+\"%\";document.getElementById(\"pc\").textContent=n+\" de \"+items.length+\" concluídos\"}\nitems.forEach(function(t){var l=document.createElement(\"label\");l.style.cssText=\"display:flex;gap:.6rem;align-items:flex-start;padding:.55rem 0;border-bottom:1px solid #F4F4F5;cursor:pointer;font-size:.95rem\";\nvar c=document.createElement(\"input\");c.type=\"checkbox\";c.style.cssText=\"width:18px;height:18px;margin-top:.15rem;accent-color:#C5A059\";c.onchange=upd;\nvar s=document.createElement(\"span\");s.textContent=t;l.appendChild(c);l.appendChild(s);lst.appendChild(l)});upd();\n<\/script>", "Simulador de juros": "\n<div style=\"padding:1.2rem;border:1px solid #E4E4E7;border-top:3px solid #C5A059;background:#fff;border-radius:8px\">\n  <div style=\"font:800 .68rem Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#94722F\">Simulador<\/div>\n  <h3 style=\"margin:.2rem 0 .9rem;font-size:1.1rem\">Juros compostos<\/h3>\n  <div id=\"f\" style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem 1.4rem\"><\/div>\n  <div style=\"margin-top:1.1rem;padding:1rem;background:#0A0A0B;color:#fff;border-radius:8px\">\n    <div style=\"font:700 .66rem Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase;color:#C5A059\">Valor acumulado<\/div>\n    <div id=\"tot\" style=\"font:800 1.9rem Inter,sans-serif;margin:.2rem 0\"><\/div>\n    <div style=\"height:8px;background:#2E2E33;border-radius:4px;overflow:hidden\"><div id=\"bi\" style=\"height:100%;background:#C5A059\"><\/div><\/div>\n    <div id=\"det\" style=\"font-size:.8rem;color:#D4D4D8;margin-top:.5rem\"><\/div>\n  <\/div>\n  <p style=\"margin:.8rem 0 0;font-size:.72rem;color:#52525B\">Simulação ilustrativa, sem considerar impostos e taxas. Não é recomendação de investimento.<\/p>\n<\/div>\n<script>\nvar F=[[\"p\",\"Valor inicial (R$)\",0,100000,1000,10000],[\"a\",\"Aporte mensal (R$)\",0,10000,100,500],[\"r\",\"Taxa ao ano (%)\",0,30,0.5,10],[\"y\",\"Prazo (anos)\",1,40,1,10]];\nvar S={},box=document.getElementById(\"f\"),brl=function(n){return n.toLocaleString(\"pt-BR\",{style:\"currency\",currency:\"BRL\"})};\nfunction calc(){var i=Math.pow(1+S.r/100,1/12)-1,n=S.y*12,f=i?S.p*Math.pow(1+i,n)+S.a*((Math.pow(1+i,n)-1)/i):S.p+S.a*n,inv=S.p+S.a*n;\ndocument.getElementById(\"tot\").textContent=brl(f);document.getElementById(\"bi\").style.width=(f?inv/f*100:100)+\"%\";\ndocument.getElementById(\"det\").textContent=\"Investido: \"+brl(inv)+\"  ·  Juros: \"+brl(f-inv)}\nF.forEach(function(x){S[x[0]]=x[5];var w=document.createElement(\"label\");w.style.cssText=\"display:flex;flex-direction:column;gap:.3rem;font:700 .72rem Inter,sans-serif;color:#52525B\";\nvar t=document.createElement(\"span\"),r=document.createElement(\"input\");r.type=\"range\";r.min=x[2];r.max=x[3];r.step=x[4];r.value=x[5];r.style.accentColor=\"#C5A059\";\nfunction up(){S[x[0]]=+r.value;t.textContent=x[1]+\": \"+(x[0]===\"p\"||x[0]===\"a\"?brl(+r.value):r.value);calc()}r.oninput=up;w.appendChild(t);w.appendChild(r);box.appendChild(w);up()});\n<\/script>"});
+        let hmTarget = null, hmRange = null, hmT, pvUrl = null;
+        function hmOpen(fig) {
+            hmTarget = fig || null; hmRange = fig ? null : saveRange();
+            $('hm-t').textContent = fig ? 'Editar bloco HTML' : 'Inserir bloco HTML';
+            $('hm-code').value = fig ? fzB64.dec(fig.getAttribute('data-fz') || '') : '';
+            $('hm-title').value = fig ? (fig.getAttribute('data-t') || '') : '';
+            $('hm-h').value = fig && fig.getAttribute('data-h') ? fig.getAttribute('data-h') : '';
+            $('hm-ok').textContent = fig ? 'Salvar alterações' : 'Inserir no artigo';
+            $('hm').style.display = 'flex'; document.body.style.overflow = 'hidden';
+            hmPrev(); setTimeout(() => $('hm-code').focus(), 30);
+        }
+        function hmClose() { $('hm').style.display = 'none'; document.body.style.overflow = ''; hmTarget = null; $('hm-prev').srcdoc = ''; }
+        function hmPrev() {
+            const c = $('hm-code').value;
+            $('hm-prev').srcdoc = c.trim() ? fzEmbedDoc(c, 'prev') : '<p style="font:14px Inter,system-ui,sans-serif;color:#71717A;padding:1rem">A pré-visualização aparece aqui.</p>';
+            $('hm-size').textContent = c ? (c.length / 1000).toFixed(1).replace('.', ',') + ' mil de 45 mil caracteres' + (c.length > 45000 ? ' — acima do limite' : '') : 'Limite: 45 mil caracteres';
+        }
+        /* insere um bloco inteiro (figure) logo após o parágrafo onde está o cursor */
+        function insertBlockAtCaret(node, range) {
+            const ed = $('pcn'); restoreRange(range); const sel = getSelection(); const r = sel.rangeCount ? sel.getRangeAt(0) : null;
+            if (!r || !ed.contains(r.endContainer)) ed.appendChild(node);
+            else {
+                let top = r.endContainer; while (top.parentNode && top.parentNode !== ed) top = top.parentNode;
+                if (top.parentNode === ed && top.nodeType === 1) top.after(node); else { r.collapse(false); r.insertNode(node); }
+            }
+            const p = document.createElement('p'); p.innerHTML = '<br>'; node.after(p);
+            const rg = document.createRange(); rg.setStart(p, 0); rg.collapse(true); sel.removeAllRanges(); sel.addRange(rg);
+        }
+        function hmSave() {
+            const code = $('hm-code').value.trim();
+            if (!code) { alert('Cole ou escreva o código HTML do bloco.'); return; }
+            if (code.length > 45000) { alert('O bloco passa de 45 mil caracteres. Reduza o código (carregue bibliotecas por link em vez de colar o código delas).'); return; }
+            const b64 = fzB64.enc(code), t = $('hm-title').value.trim().slice(0, 120), h = parseInt($('hm-h').value, 10) || 0;
+            const apply = f => { f.setAttribute('data-fz', b64); t ? f.setAttribute('data-t', t) : f.removeAttribute('data-t'); h ? f.setAttribute('data-h', h) : f.removeAttribute('data-h'); };
+            if (hmTarget) { apply(hmTarget); hmTarget.querySelectorAll('iframe,.fz-tools').forEach(x => x.remove()); }
+            else { const f = document.createElement('figure'); f.className = 'fz-embed'; f.textContent = '\u200b'; apply(f); insertBlockAtCaret(f, hmRange); }
+            hydrateEmbeds($('pcn'), { editor: true }); hmClose(); updCount(); dirty = true; saveDraftSoon();
+        }
+        function pvOpen() {
+            let img = ''; const f = $('pi').files && $('pi').files[0];
+            if (f) { if (pvUrl) URL.revokeObjectURL(pvUrl); pvUrl = URL.createObjectURL(f); img = pvUrl; } else if ($('cover-prev').style.display === 'block') img = $('cover-prev').src;
+            $('pv-body').innerHTML = `<div class="pv-kicker">${esc($('pc').value)}</div><h1>${esc($('pt').value || 'Título da análise')}</h1>${$('pd').value ? `<p class="pv-desc">${esc($('pd').value)}</p>` : ''}<div class="pv-by">Por ${esc($('pa').value || 'Autor')}</div>${img ? `<img src="${esc(img)}" alt="">` : ''}<div class="art-content" id="pv-art"></div>`;
+            const lock = '<div style="margin:1.6rem 0;padding:.9rem 1rem;border:1px dashed #C5A059;background:#FFFCF5;font:700 .72rem Inter,sans-serif;text-transform:uppercase;letter-spacing:.8px;color:#94722F;text-align:center">🔒 Daqui em diante: conteúdo exclusivo para assinantes</div>';
+            const art = $('pv-art'); art.innerHTML = sanitizeHTML($('pcn').innerHTML).replace(/<p>\s*\[\[\s*assinantes\s*\]\]\s*<\/p>/gi, lock);
+            hydrateEmbeds(art); $('pv').style.display = 'flex'; document.body.style.overflow = 'hidden';
+        }
+        function pvClose() { $('pv').style.display = 'none'; $('pv-body').innerHTML = ''; document.body.style.overflow = ''; }
+        function updSeo() {
+            const one = (id, n, min, max) => {
+                const el = $(id); if (!n) { el.innerHTML = '<span></span><b>0/' + max + '</b>'; return; }
+                const ok = n >= min && n <= max;
+                el.innerHTML = `<span class="${ok ? 'ok' : 'warn'}">${ok ? '✓ bom tamanho para o Google' : n < min ? `curto — ideal de ${min} a ${max}` : `longo — o Google pode cortar (ideal até ${max})`}</span><b>${n}/${max}</b>`;
+            };
+            one('ct-t', $('pt').value.trim().length, 30, 60); one('ct-d', $('pd').value.trim().length, 70, 160);
+        }
+        (function wireEditorV2() {
+            const tpls = $('hm-tpls');
+            Object.keys(HM_TPL).forEach(k => { const b = document.createElement('button'); b.type = 'button'; b.textContent = k; b.onclick = () => { if ($('hm-code').value.trim() && !confirm('Substituir o código atual por este modelo?')) return; $('hm-code').value = HM_TPL[k]; if (!$('hm-title').value) $('hm-title').value = k; hmPrev(); }; tpls.appendChild(b); });
+            $('hm-code').addEventListener('input', () => { clearTimeout(hmT); hmT = setTimeout(hmPrev, 450); });
+            $('hm-code').addEventListener('keydown', e => { if (e.key === 'Tab') { e.preventDefault(); const t = e.target, s = t.selectionStart; t.value = t.value.slice(0, s) + '  ' + t.value.slice(t.selectionEnd); t.selectionStart = t.selectionEnd = s + 2; } });
+            $('pcn').addEventListener('click', e => {
+                const b = e.target.closest('[data-fz-act]'); if (!b) return;
+                const f = b.closest('figure.fz-embed'); if (!f) return;
+                if (b.dataset.fzAct === 'edit') hmOpen(f);
+                else if (confirm('Remover este bloco HTML do artigo?')) { f.remove(); updCount(); dirty = true; saveDraftSoon(); }
+            });
+            ['pt', 'pd'].forEach(id => $(id).addEventListener('input', updSeo));
+            document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; if ($('pv').style.display === 'flex') pvClose(); else if ($('hm').style.display === 'flex' && (!$('hm-code').value.trim() || confirm('Fechar sem salvar o bloco?'))) hmClose(); });
+            updSeo();
+        })();
+
         /* ---------- EDITOR ---------- */
         function initEditor() {
             const ed = $('pcn');
@@ -346,7 +522,7 @@
                 if (b.dataset.ins) insertMedia(b.dataset.ins);
                 else if (b.dataset.block) toggleBlock(b.dataset.block); else fmt(b.dataset.cmd);
             });
-            ed.addEventListener('input', () => { updCount(); dirty = true; saveDraftSoon(); });
+            ed.addEventListener('input', () => { hydrateEmbeds(ed, { editor: true }); updCount(); dirty = true; saveDraftSoon(); });
             ['pt', 'pa', 'pc', 'pd', 'pg', 'pic', 'pp'].forEach(id => $(id).addEventListener('input', () => { dirty = true; saveDraftSoon(); }));
             $('pt').addEventListener('input', showSlugPrev);
             // COLAR: converte Markdown (##, **negrito**, tabelas, links, imagens, vídeos) em texto formatado
@@ -356,7 +532,7 @@
                 let out;
                 if (html && hasStructure(html)) out = sanitizeHTML(html);
                 else out = mdToHtml(plain);
-                document.execCommand('insertHTML', false, out);
+                document.execCommand('insertHTML', false, out); hydrateEmbeds(ed, { editor: true });
                 updCount(); dirty = true; saveDraftSoon();
             });
             document.addEventListener('selectionchange', updToolbar);
@@ -384,6 +560,7 @@
             updToolbar(); updCount(); dirty = true; saveDraftSoon();
         }
         function insertMedia(kind) {
+            if (kind === 'html') { hmOpen(); return; }
             if (kind === 'assine') {
                 const sel = getSelection();
                 if (inEditor() && !sel.isCollapsed) document.execCommand('createLink', false, '#assine');
@@ -429,7 +606,7 @@
         }
         function updCount() {
             const t = $('pcn').innerText.trim(); const n = t ? t.split(/\s+/).length : 0;
-            $('ed-count').textContent = n + (n === 1 ? ' palavra' : ' palavras');
+            $('ed-count').textContent = n + (n === 1 ? ' palavra' : ' palavras') + (n ? ' · ≈ ' + Math.max(1, Math.round(n / 200)) + ' min de leitura' : '');
         }
 
         /* ---------- RASCUNHO AUTOMÁTICO (nada se perde se a sessão cair) ---------- */
@@ -439,7 +616,7 @@
         function saveDraft() {
             if (!$('pcn').innerText.trim() && !$('pt').value.trim()) return;
             try {
-                localStorage.setItem(draftKey(), JSON.stringify({ c: $('pc').value, a: $('pa').value, t: $('pt').value, d: $('pd').value, g: $('pg').value, ic: $('pic').value, p: $('pp').checked, h: $('pcn').innerHTML, at: Date.now() }));
+                localStorage.setItem(draftKey(), JSON.stringify({ c: $('pc').value, a: $('pa').value, t: $('pt').value, d: $('pd').value, g: $('pg').value, ic: $('pic').value, p: $('pp').checked, h: sanitizeHTML($('pcn').innerHTML), at: Date.now() }));
                 $('draft-note').textContent = 'Rascunho salvo automaticamente às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             } catch (e) {}
         }
@@ -455,7 +632,7 @@
             let d = null; try { d = JSON.parse(localStorage.getItem(draftKey()) || 'null'); } catch (e) {}
             if (!d) return;
             $('pc').value = d.c || $('pc').value; $('pa').value = d.a || ''; $('pt').value = d.t || ''; $('pd').value = d.d || ''; $('pg').value = d.g || ''; $('pic').value = d.ic || ''; $('pp').checked = !!d.p; showSlugPrev();
-            $('pcn').innerHTML = sanitizeHTML(d.h || ''); updCount(); dirty = true; $('draft-banner').style.display = 'none';
+            $('pcn').innerHTML = sanitizeHTML(d.h || ''); hydrateEmbeds($('pcn'), { editor: true }); updCount(); dirty = true; $('draft-banner').style.display = 'none';
         }
         function discardDraft() { dropDraft(editingKey); $('draft-banner').style.display = 'none'; }
 
@@ -592,7 +769,7 @@
             if (!on) { kids.filter(isMark).forEach(n => n.remove()); return { free: box.innerHTML, freeText: box.textContent, locked: null }; }
             const freeN = mi > -1 ? kids.slice(0, mi) : kids.slice(0, 3), lockedN = (mi > -1 ? kids.slice(mi + 1) : kids.slice(3)).filter(n => !isMark(n));
             if (!freeN.length) return { error: 'Escreva ao menos um parágrafo antes do “🔒 Prévia”: ele será a parte pública do artigo.' };
-            if (!txt(lockedN).trim() && !lockedN.some(n => n.querySelector && n.querySelector('img,table,iframe')))
+            if (!txt(lockedN).trim() && !lockedN.some(n => n.querySelector && n.querySelector('img,table,iframe,.fz-embed') || n.classList.contains('fz-embed')))
                 return { error: 'Não há conteúdo depois da prévia. Escreva a parte exclusiva (ou desmarque “Conteúdo exclusivo para assinantes”).' };
             return { free: freeN.map(n => n.outerHTML).join(''), freeText: txt(freeN), locked: lockedN.map(n => n.outerHTML).join('') };
         }
@@ -687,7 +864,7 @@
             editingKey = key; showP();
             $('pc').value = a.category || 'Estratégia'; $('pa').value = a.author || ''; $('pt').value = a.title || '';
             $('pd').value = a.description || ''; $('pg').value = tagList(a).join(', '); $('pic').value = a.imageCaption || ''; showSlugPrev();
-            $('pcn').innerHTML = sanitizeHTML(a.content || ''); updCount(); dirty = false;
+            $('pcn').innerHTML = sanitizeHTML(a.content || ''); hydrateEmbeds($('pcn'), { editor: true }); updCount(); dirty = false;
             $('pi').required = false; $('pi').value = ''; $('pi-label').textContent = 'Imagem de Capa (deixe vazio para manter a atual)';
             if (a.image) { $('cover-prev').src = a.image; $('cover-prev').style.display = 'block'; }
             $('panel-h').textContent = 'Editar Análise'; $('btn-pub').textContent = 'Salvar Alterações';
@@ -695,7 +872,7 @@
             $('pp').checked = !!a.premium; premiumLoaded = !a.premium;
             pfReset(); pfOld = (Array.isArray(a.files) ? a.files : Object.values(a.files || {})).filter(Boolean); pfDraw();
             if (a.premium) tok().then(tk => fetch(`${SITE.db}/premium/${encodeURIComponent(a.id)}.json?auth=${tk}`)).then(r => r.json()).then(c => {
-                if (typeof c === 'string' && editingKey === key) { $('pcn').innerHTML = sanitizeHTML((a.content || '') + '<p>[[assinantes]]</p>' + c); updCount(); premiumLoaded = true; }
+                if (typeof c === 'string' && editingKey === key) { $('pcn').innerHTML = sanitizeHTML((a.content || '') + '<p>[[assinantes]]</p>' + c); hydrateEmbeds($('pcn'), { editor: true }); updCount(); premiumLoaded = true; }
                 else if (editingKey === key) alert('Não foi possível carregar a parte exclusiva. Confira as regras do Firebase antes de editar este artigo.');
             }).catch(() => { if (editingKey === key) alert('Não foi possível carregar a parte exclusiva agora.'); });
             offerDraft();
@@ -755,8 +932,8 @@
             if (navigator.share) navigator.share({ title: a.title, text: a.description || a.excerpt || '', url }).catch(() => {});
             else copyText(url, 'Link copiado!');
         }
-        // slider: as 5 análises mais recentes da seção atual
-        const SL_MAX = 5; let slTimer = null;
+        // slider: as 6 análises mais recentes da seção atual
+        const SL_MAX = 6; let slTimer = null;
         function pickSlides() {
             return Object.keys(db).filter(k => inSec(db[k]) && tagOk(db[k]))
                 .sort((x, y) => (artDate(db[y])?.getTime() || 0) - (artDate(db[x])?.getTime() || 0)).slice(0, SL_MAX);

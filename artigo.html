@@ -79,7 +79,7 @@
                     <span id="art-views"></span>
                     <a id="btn-edit" class="btn-edit" href="#">✎ Editar artigo</a>
                 </div>
-                <div class="chips" id="art-tags"></div>
+                <div class="topics" id="art-topics"><span class="topics-h">Tópicos</span><div class="chips" id="art-tags"></div></div>
                 <div class="share-bar" id="share-top"></div>
             </header>
             <div class="art-content" id="art-body"></div>
@@ -194,7 +194,8 @@
                     $('art-fig').style.display = 'block';
                 }
                 $('art-tags').innerHTML = tags.map(t => `<a class="chip" href="/?tag=${encodeURIComponent(slugify(t))}" rel="tag">${esc(t)}</a>`).join('');
-                $('art-body').innerHTML = sanitizeHTML(a.content);
+                $('art-topics').style.display = tags.length ? '' : 'none';
+                $('art-body').innerHTML = sanitizeHTML(a.content); hydrateEmbeds($('art-body'));
                 // imagens do texto: a legenda vira o texto alternativo (alt) quando faltar
                 $('art-body').querySelectorAll('figure').forEach(f => { const im = f.querySelector('img'), fc = f.querySelector('figcaption'); if (im && fc && !im.alt) im.alt = fc.textContent.trim(); });
                 // anúncio no meio do texto (depois do 3º parágrafo, só em artigos com 5+ parágrafos)
@@ -284,7 +285,7 @@
                 const d = await Member.check(m.email, m.codigo, a.id);
                 if (d.ok) {
                     Member.set({ email: m.email, codigo: m.codigo, ate: d.ate, plano: d.plano });
-                    const wrap = document.createElement('div'); wrap.id = 'art-locked'; wrap.innerHTML = sanitizeHTML(d.html || '');
+                    const wrap = document.createElement('div'); wrap.id = 'art-locked'; wrap.innerHTML = sanitizeHTML(d.html || ''); hydrateEmbeds(wrap);
                     wrap.querySelectorAll('figure').forEach(f => { const im = f.querySelector('img'), fc = f.querySelector('figcaption'); if (im && fc && !im.alt) im.alt = fc.textContent.trim(); });
                     body.appendChild(wrap);
                     const fl = fileList(a);

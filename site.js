@@ -118,6 +118,16 @@ function sanitizeHTML(html) {
       if (n.nodeType === 3) { dst.appendChild(document.createTextNode(n.nodeValue)); return; }
       if (n.nodeType !== 1) return;
       let t = n.tagName; const st = n.getAttribute('style') || '';
+      if (t === 'FIGURE' && n.classList.contains('fz-embed')) { // bloco HTML incorporado: só guarda o código (base64) e as opções
+        const code = (n.getAttribute('data-fz') || '').trim();
+        if (/^[A-Za-z0-9+/=]{4,70000}$/.test(code)) {
+          const f = document.createElement('figure'); f.className = 'fz-embed'; f.setAttribute('data-fz', code);
+          const h = parseInt(n.getAttribute('data-h'), 10); if (h >= 80 && h <= 2000) f.setAttribute('data-h', h);
+          const ti = (n.getAttribute('data-t') || '').replace(/[\u0000-\u001f]/g, '').slice(0, 120); if (ti) f.setAttribute('data-t', ti);
+          dst.appendChild(f);
+        }
+        return;
+      }
       if (t === 'IMG') {
         const s = (n.getAttribute('src') || '').trim();
         if (/^https:\/\//i.test(s)) {
@@ -473,4 +483,48 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.f-links').forEach(n => { if (!n.querySelector('[href$="acesso.html"]')) n.insertAdjacentHTML('beforeend', '<a href="/assine.html">Assinar</a><a href="/acesso.html">Área do assinante</a>'); });
   if (Admin.token) setInterval(() => Admin.fresh(), 5 * 60 * 1000);
   cookieBanner(); trackHeader(); initAds(); fMkt(); setInterval(fMkt, 60000);
+});
+
+/* ===== Blocos HTML incorporados (gráficos, quadros, linhas do tempo…) =====
+   O código fica guardado em base64 num <figure class="fz-embed"> e só é executado dentro de um
+   iframe isolado (sandbox sem allow-same-origin): ele não enxerga o site, o login nem o armazenamento. */
+const fzB64 = {
+  enc: s => btoa(unescape(encodeURIComponent(s))),
+  dec: b => { try { return decodeURIComponent(escape(atob(b))); } catch (e) { return ''; } }
+};
+function fzEmbedDoc(code, id) {
+  return '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base target="_blank">'
+    + '<style>*{box-sizing:border-box}html,body{margin:0;padding:0;background:transparent}body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#1A1A1E;line-height:1.5;overflow-y:hidden}img,svg,canvas,video{max-width:100%}</style></head>'
+    + '<body><div id="fz-root">' + code + '</div><script>(function(){var id=' + JSON.stringify(id) + ',r=document.getElementById("fz-root");'
+    + 'function s(){var h=Math.ceil(r.getBoundingClientRect().height)+2;parent.postMessage({fzEmbed:id,h:h},"*")}'
+    + 'addEventListener("load",s);if(window.ResizeObserver)new ResizeObserver(s).observe(r);setInterval(s,800);s()})()<\/script></body></html>';
+}
+function hydrateEmbeds(root, opt) {
+  opt = opt || {};
+  (root || document).querySelectorAll('figure.fz-embed').forEach(f => {
+    if (f.querySelector('iframe')) return;
+    [...f.childNodes].forEach(c => { if (c.nodeType === 3) c.remove(); });
+    f.querySelectorAll('.fz-tools').forEach(x => x.remove());
+    const code = fzB64.dec(f.getAttribute('data-fz') || ''); if (!code) return;
+    const id = 'fz' + Math.random().toString(36).slice(2, 10), fixed = parseInt(f.getAttribute('data-h'), 10);
+    const ifr = document.createElement('iframe');
+    ifr.setAttribute('sandbox', 'allow-scripts allow-popups allow-popups-to-escape-sandbox');
+    ifr.setAttribute('referrerpolicy', 'no-referrer'); ifr.setAttribute('loading', 'lazy');
+    ifr.setAttribute('title', f.getAttribute('data-t') || 'Conteúdo interativo'); ifr.dataset.fzid = id;
+    if (fixed >= 80 && fixed <= 2000) { ifr.style.height = fixed + 'px'; ifr.dataset.fixed = '1'; } else ifr.style.height = '240px';
+    ifr.srcdoc = fzEmbedDoc(code, id);
+    f.appendChild(ifr);
+    if (opt.editor) {
+      f.setAttribute('contenteditable', 'false'); f.dataset.label = f.getAttribute('data-t') || 'Bloco HTML';
+      const t = document.createElement('div'); t.className = 'fz-tools'; t.contentEditable = 'false';
+      t.innerHTML = '<button type="button" data-fz-act="edit" data-label="Editar"></button><button type="button" data-fz-act="del" data-label="Remover"></button>';
+      f.appendChild(t);
+    }
+  });
+}
+window.addEventListener('message', e => {
+  const d = e.data; if (!d || typeof d.fzEmbed !== 'string' || typeof d.h !== 'number') return;
+  const f = document.querySelector('iframe[data-fzid="' + String(d.fzEmbed).replace(/[^\w]/g, '') + '"]');
+  if (!f || f.contentWindow !== e.source || f.dataset.fixed) return;
+  f.style.height = Math.min(2000, Math.max(60, d.h)) + 'px';
 });
