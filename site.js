@@ -13,7 +13,7 @@ const SITE = {
     mid: '3532793076', side2: '1384218444' },
   // Player de vídeos da home (YouTube). Sem configurar nada, mostra os últimos vídeos do canal abaixo.
   // Para escolher os vídeos: videos: [{ id: 'ID_DE_11_LETRAS', title: 'Título' }, …]  ·  ou playlistId: 'PL…'
-  video: { handle: '@fuzioninsights', channelId: '', playlistId: '', videos: [] },
+  video: { handle: '@fuzioninsights', channelId: 'UCXNsYZ1mfIGO--TIa66_tCQ', playlistId: '', videos: [] },
   // E-mail que recebe TODAS as mensagens do site (comentários, contato, newsletter, pedidos de assinatura)
   // e que também é a chave Pix para receber os pagamentos.
   // Texto do botão do topo: 'Assine' ou 'Apoie' (troque aqui; vale para o site inteiro)
@@ -494,32 +494,32 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ===== Seções, subcategorias e cores (cabeçalho, filtros, painel e cards usam esta lista) ===== */
 const SECTIONS = [
   { n: 'Economia', c: '#15803D', s: ['Câmbio e Juros', 'Inflação', 'Indicadores', 'Contas Públicas', 'Comércio Exterior'] },
-  { n: 'Mercado', c: '#B45309', s: ['Bolsa e Ações', 'Renda Fixa', 'Fundos e ETFs', 'Criptomoedas', 'Commodities'] },
+  { n: 'Mercado', c: '#D97706', s: ['Bolsa e Ações', 'Renda Fixa', 'Fundos e ETFs', 'Criptomoedas', 'Commodities'] },
   { n: 'Negócios', c: '#1D4ED8', s: ['Empreendedorismo', 'Finanças da Empresa', 'Marketing e Vendas', 'Carreira', 'Setores'] },
   { n: 'Estratégia', c: '#4338CA', s: ['Planejamento', 'Inovação', 'Tendências', 'Concorrência'] },
   { n: 'Liderança', c: '#7C3AED', s: ['Gestão de Pessoas', 'Cultura', 'Tomada de Decisão', 'Produtividade'] },
   { n: 'Tecnologia', c: '#0891B2', s: ['Inteligência Artificial', 'Cibersegurança', 'Startups', 'Software e Nuvem', 'Gadgets'] },
   { n: 'Ciência', c: '#0D9488', s: ['Saúde', 'Espaço', 'Meio Ambiente', 'Pesquisa e Descobertas', 'Energia'] },
   { n: 'Política', c: '#B91C1C', s: ['Eleições', 'Governo', 'Congresso', 'Mundo'] },
-  { n: 'Cidade', c: '#EA580C', s: ['Brasília e DF', 'Mobilidade', 'Serviços', 'Meio Ambiente Urbano', 'Segurança'] },
+  { n: 'Cidade', c: '#475569', s: ['Brasília e DF', 'Mobilidade', 'Serviços', 'Meio Ambiente Urbano', 'Segurança'] },
   { n: 'Entretenimento', c: '#E11D48', s: ['Cinema e TV', 'Música', 'Games', 'Celebridades', 'Esportes'] },
   { n: 'Arte e Cultura', c: '#A21CAF', s: ['Artes Visuais', 'Livros', 'Teatro e Dança', 'Design e Arquitetura', 'Patrimônio'] },
   { n: 'Social', c: '#4D7C0F', s: ['Educação', 'Comportamento', 'Trabalho e Renda', 'Direitos e Cidadania', 'Consumo'] }
 ];
 // abas que aparecem sempre na barra; as demais ficam no menu ☰ (todas as seções)
 const PRIMARY = ['Economia', 'Mercado', 'Negócios', 'Tecnologia', 'Ciência', 'Liderança', 'Cidade', 'Entretenimento', 'Arte e Cultura', 'Social'];
-const secColor = n => (SECTIONS.find(x => x.n === n) || {}).c || '#C5A059';
+const secColor = n => (SECTIONS.find(x => x.n === n) || {}).c || '#2F80ED';
 const secLink = (n, sub) => '/?secao=' + slugify(n) + (sub ? '&sub=' + slugify(sub) : '');
 
 function mountHeader() {
   const h = document.querySelector('.site-header'); if (!h || h.dataset.v3) return; h.dataset.v3 = '1';
   const tab = (n, c) => `<a href="${secLink(n)}" data-sec="${esc(n)}" style="--c:${c || secColor(n)}">${esc(n)}</a>`;
   const mega = SECTIONS.map(s => `<div class="mg-col" style="--c:${s.c}"><a class="mg-h" href="${secLink(s.n)}" data-sec="${esc(s.n)}">${esc(s.n)}</a>${s.s.map(x => `<a href="${secLink(s.n, x)}" data-sec="${esc(s.n)}" data-sub="${esc(x)}">${esc(x)}</a>`).join('')}</div>`).join('');
-  h.innerHTML = `<div class="wrap hd-top"><button type="button" class="hd-burger" aria-label="Todas as seções" aria-expanded="false" aria-controls="mega"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>`
-    + `<a class="logo" href="/"><img class="logo-mark" src="/favicon-192x192.png" alt="" width="34" height="34">FUZION<span>INSIGHTS</span></a><span class="hd-sp"></span><button type="button" class="btn-sub" data-subscribe>Assine</button></div>`
-    + `<nav class="hd-tabs" aria-label="Seções"><div class="wrap hd-tabs-in"><a href="/" data-sec="Home" style="--c:#C5A059">Início</a>${PRIMARY.map(n => tab(n)).join('')}<a href="/?secao=exclusivos" data-sec="Exclusivos" style="--c:#C5A059">🔒 Exclusivos</a></div></nav>`
+  h.innerHTML = `<div class="hd-bar"><a class="logo-sq" href="/" aria-label="Fuzion Insights — página inicial"><img src="/logo-quadrado.png" alt="Fuzion Insights" width="56" height="56"></a>`
+    + `<button type="button" class="hd-burger" aria-label="Todas as seções" aria-expanded="false" aria-controls="mega"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>`
+    + `<nav class="hd-tabs" aria-label="Seções">${PRIMARY.map(n => tab(n)).join('')}<a href="/?secao=exclusivos" data-sec="Exclusivos" style="--c:#2F80ED">🔒 Exclusivos</a></nav><span class="hd-sp"></span><button type="button" class="btn-sub" data-subscribe>Assine</button></div>`
     + `<div class="hd-sub" id="subbar" hidden></div>`
-    + `<div class="mega" id="mega" hidden><div class="wrap mg-in">${mega}<div class="mg-col" style="--c:#C5A059"><a class="mg-h" href="/?secao=exclusivos" data-sec="Exclusivos">🔒 Exclusivos</a><a href="/assine.html">Planos de assinatura</a><a href="/sobre.html">Sobre</a><a href="/contato.html">Contato</a></div></div></div>`;
+    + `<div class="mega" id="mega" hidden><div class="wrap mg-in">${mega}<div class="mg-col" style="--c:#2F80ED"><a class="mg-h" href="/?secao=exclusivos" data-sec="Exclusivos">🔒 Exclusivos</a><a href="/assine.html">Planos de assinatura</a><a href="/sobre.html">Sobre</a><a href="/contato.html">Contato</a></div></div></div>`;
   const burger = h.querySelector('.hd-burger'), mg = h.querySelector('#mega');
   const close = () => { mg.hidden = true; burger.setAttribute('aria-expanded', 'false'); };
   burger.addEventListener('click', e => { e.stopPropagation(); const open = mg.hidden; mg.hidden = !open; burger.setAttribute('aria-expanded', String(open)); });
