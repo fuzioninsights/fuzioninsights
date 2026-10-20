@@ -199,7 +199,7 @@ a.chip:hover,a.chip:focus-visible{background:#fff;border-color:var(--gold-d);col
 @media(max-width:680px){.rel-grid{grid-template-columns:1fr}}
 .rel-card{display:flex;flex-direction:column;height:100%;background:#fff;border:1px solid var(--border);border-top:3px solid #000;text-decoration:none;color:inherit;overflow:hidden;transition:transform .2s,box-shadow .2s}
 .rel-card:hover,.rel-card:focus-visible{transform:translateY(-3px);box-shadow:0 12px 24px -12px rgba(0,0,0,.25)}
-.rel-card .ri{width:100%;aspect-ratio:16/9;object-fit:cover;background:#F3F4F6;margin:0}
+.rel-card .cv{margin:0}
 .rel-card .rb{display:flex;flex-direction:column;gap:.4rem;padding:.9rem .95rem 1rem;flex:1}
 .rel-card small{font-size:.66rem;font-weight:700;color:var(--muted);letter-spacing:.3px}
 .rel-card small b{color:var(--gold-d)}
@@ -298,3 +298,49 @@ a.chip:hover,a.chip:focus-visible{background:#fff;border-color:var(--gold-d);col
 /* blocos HTML incorporados */
 .art-content .fz-embed{margin:1.8rem 0;padding:0}
 .fz-embed iframe{display:block;width:100%;border:0;background:transparent;min-height:60px}
+
+/* ===== v3: cabeçalho de portal, abas coloridas, capas inteiras e redes sociais ===== */
+.top-fixed{position:relative}
+.site-header{padding:0;background:#0A0A0B;border-bottom:0;position:relative;z-index:120}
+.hd-top{display:flex;align-items:center;gap:.9rem;padding:.7rem var(--gutter)}
+.hd-sp{flex:1}
+.hd-burger{width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;background:#1A1A1E;border:1px solid #2E2E33;border-radius:10px!important;color:#fff;cursor:pointer;padding:0}
+.hd-burger:hover,.hd-burger[aria-expanded="true"]{background:var(--gold);border-color:var(--gold);color:#000}
+.logo{display:inline-flex;align-items:center;gap:.65rem}
+.logo-mark{width:34px;height:34px;border-radius:9px!important;display:block}
+.hd-tabs{background:#111113;border-top:1px solid #1F1F23;border-bottom:2px solid var(--gold)}
+.hd-tabs-in{display:flex;gap:2px;padding:0 var(--gutter);flex-wrap:wrap}
+.hd-tabs a{flex:0 0 auto;padding:.72rem .72rem .62rem;border-top:3px solid var(--c,#2E2E33);font:700 .7rem 'Inter',sans-serif;letter-spacing:.35px;text-transform:uppercase;color:#D4D4D8;text-decoration:none;white-space:nowrap;transition:background .15s,color .15s}
+.hd-tabs a:hover,.hd-tabs a:focus-visible{background:#1C1C21;color:#fff}
+.hd-tabs a.active{background:var(--c);color:#fff}
+.hd-tabs a[data-sec="Home"].active,.hd-tabs a[data-sec="Exclusivos"].active{color:#000}
+@media(max-width:1180px){.hd-tabs{display:none}}
+.hd-sub{background:#fff;border-bottom:1px solid var(--border)}
+.hd-sub[hidden],.mega[hidden]{display:none}
+.hd-sub-in{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;padding:.6rem var(--gutter)}
+.sb-t{font:800 .72rem 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.6px;color:var(--c);margin-right:.5rem;padding-right:.8rem;border-right:1px solid var(--border)}
+.hd-sub a{font:500 .78rem 'Inter',sans-serif;padding:.35rem .75rem;border:1px solid #D4D4D8;border-radius:6px!important;color:#18181B;text-decoration:none;background:#fff}
+.hd-sub a:hover{border-color:var(--c);color:var(--c)}
+.hd-sub a.on{background:var(--c);border-color:var(--c);color:#fff}
+.mega{position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:3px solid var(--gold);box-shadow:0 24px 40px -12px rgba(0,0,0,.35);max-height:calc(100vh - 80px);overflow:auto}
+.mg-in{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1.4rem 1.6rem;padding:1.5rem var(--gutter)}
+.mg-col{display:flex;flex-direction:column;gap:.15rem;border-top:3px solid var(--c);padding-top:.6rem}
+.mg-col a{font:500 .85rem 'Inter',sans-serif;color:#3F3F46;text-decoration:none;padding:.22rem 0}
+.mg-col a:hover{color:var(--c)}
+.mg-col .mg-h{font:800 .78rem 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.6px;color:var(--c);margin-bottom:.2rem}
+@media(max-width:680px){.logo{font-size:1.05rem}.hd-top{gap:.6rem}}
+/* capas inteiras: nunca cortadas (imagem contida sobre fundo desfocado da própria capa) */
+.cv{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:#0A0A0B}
+.cv::before{content:"";position:absolute;inset:-14%;background:var(--bg) center/cover no-repeat;filter:blur(18px) brightness(.55) saturate(1.1)}
+.cv img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain}
+.cv-none{display:flex;align-items:center;justify-content:center;color:#C5A059;font:800 .8rem 'Inter',sans-serif;letter-spacing:1px;text-transform:uppercase}.cv-none::before{display:none}
+/* redes sociais */
+.f-socials{gap:.7rem;flex-wrap:wrap}
+.f-socials a{width:46px;height:46px;padding:0;display:inline-flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--border);color:#18181B;border-radius:12px!important;transition:transform .15s,background .15s,color .15s,border-color .15s}
+.f-socials a svg{width:22px;height:22px}
+.f-socials a:hover,.f-socials a:focus-visible{transform:translateY(-2px);color:#fff;border-color:transparent}
+.f-socials a[title="Instagram"]:hover{background:linear-gradient(45deg,#F58529,#DD2A7B 55%,#8134AF)}
+.f-socials a[title^="X"]:hover{background:#000}
+.f-socials a[title="TikTok"]:hover{background:#010101;box-shadow:inset 2px 0 #25F4EE,inset -2px 0 #FE2C55}
+.f-socials a[title="YouTube"]:hover{background:#F00}
+@media(prefers-reduced-motion:reduce){.f-socials a{transition:none}.f-socials a:hover{transform:none}}

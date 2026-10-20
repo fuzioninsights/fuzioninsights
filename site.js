@@ -8,7 +8,12 @@ const SITE = {
   // Enquanto estiver vazio, o espaço NÃO aparece no site (caixas vazias prejudicam a aprovação).
     // top = faixa abaixo do cabeçalho · feed = entre os cards da home · sidebar = coluna lateral da home
   // inline = no meio do artigo · end = no fim do artigo
-  adSlots: { top: '7762672961', feed: '3532793076', sidebar: '1384218444', inline: '4749496810', end: '5823914492' },
+  adSlots: { top: '7762672961', feed: '3532793076', sidebar: '1384218444', inline: '4749496810', end: '5823914492',
+    // mid = faixa entre o slider/vídeos e as matérias · side2 = 2º anúncio da coluna lateral (reaproveitam as unidades acima; crie unidades novas no AdSense se quiser relatórios separados)
+    mid: '3532793076', side2: '1384218444' },
+  // Player de vídeos da home (YouTube). Sem configurar nada, mostra os últimos vídeos do canal abaixo.
+  // Para escolher os vídeos: videos: [{ id: 'ID_DE_11_LETRAS', title: 'Título' }, …]  ·  ou playlistId: 'PL…'
+  video: { handle: '@fuzioninsights', channelId: '', playlistId: '', videos: [] },
   // E-mail que recebe TODAS as mensagens do site (comentários, contato, newsletter, pedidos de assinatura)
   // e que também é a chave Pix para receber os pagamentos.
   // Texto do botão do topo: 'Assine' ou 'Apoie' (troque aqui; vale para o site inteiro)
@@ -325,7 +330,7 @@ function fMkt() {
 const AD_PREVIEW = (() => {
   try { const q = new URLSearchParams(location.search).get('adpreview'); if (q === '1') sessionStorage.setItem('fz_adprev', '1'); if (q === '0') sessionStorage.removeItem('fz_adprev'); return sessionStorage.getItem('fz_adprev') === '1'; } catch (e) { return false; }
 })();
-const AD_PH_H = { top: 90, feed: 250, sidebar: 250, inline: 250, end: 250 };
+const AD_PH_H = { top: 90, feed: 250, sidebar: 250, inline: 250, end: 250, mid: 90, side2: 250 };
 function createAd(key) { const d = document.createElement('div'); d.className = 'ad-box'; d.dataset.ad = key; return d; }
 function initAds(root) {
   (root || document).querySelectorAll('[data-ad]:not([data-ad-ready])').forEach(box => {
@@ -473,6 +478,7 @@ function trackHeader() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  mountHeader();
   document.querySelectorAll('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
   document.querySelectorAll('[data-cookie-prefs]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); cookieBanner(true); }));
   const membro = Member.get();
@@ -484,6 +490,91 @@ document.addEventListener('DOMContentLoaded', () => {
   if (Admin.token) setInterval(() => Admin.fresh(), 5 * 60 * 1000);
   cookieBanner(); trackHeader(); initAds(); fMkt(); setInterval(fMkt, 60000);
 });
+
+/* ===== Seções, subcategorias e cores (cabeçalho, filtros, painel e cards usam esta lista) ===== */
+const SECTIONS = [
+  { n: 'Economia', c: '#15803D', s: ['Câmbio e Juros', 'Inflação', 'Indicadores', 'Contas Públicas', 'Comércio Exterior'] },
+  { n: 'Mercado', c: '#B45309', s: ['Bolsa e Ações', 'Renda Fixa', 'Fundos e ETFs', 'Criptomoedas', 'Commodities'] },
+  { n: 'Negócios', c: '#1D4ED8', s: ['Empreendedorismo', 'Finanças da Empresa', 'Marketing e Vendas', 'Carreira', 'Setores'] },
+  { n: 'Estratégia', c: '#4338CA', s: ['Planejamento', 'Inovação', 'Tendências', 'Concorrência'] },
+  { n: 'Liderança', c: '#7C3AED', s: ['Gestão de Pessoas', 'Cultura', 'Tomada de Decisão', 'Produtividade'] },
+  { n: 'Tecnologia', c: '#0891B2', s: ['Inteligência Artificial', 'Cibersegurança', 'Startups', 'Software e Nuvem', 'Gadgets'] },
+  { n: 'Ciência', c: '#0D9488', s: ['Saúde', 'Espaço', 'Meio Ambiente', 'Pesquisa e Descobertas', 'Energia'] },
+  { n: 'Política', c: '#B91C1C', s: ['Eleições', 'Governo', 'Congresso', 'Mundo'] },
+  { n: 'Cidade', c: '#EA580C', s: ['Brasília e DF', 'Mobilidade', 'Serviços', 'Meio Ambiente Urbano', 'Segurança'] },
+  { n: 'Entretenimento', c: '#E11D48', s: ['Cinema e TV', 'Música', 'Games', 'Celebridades', 'Esportes'] },
+  { n: 'Arte e Cultura', c: '#A21CAF', s: ['Artes Visuais', 'Livros', 'Teatro e Dança', 'Design e Arquitetura', 'Patrimônio'] },
+  { n: 'Social', c: '#4D7C0F', s: ['Educação', 'Comportamento', 'Trabalho e Renda', 'Direitos e Cidadania', 'Consumo'] }
+];
+// abas que aparecem sempre na barra; as demais ficam no menu ☰ (todas as seções)
+const PRIMARY = ['Economia', 'Mercado', 'Negócios', 'Tecnologia', 'Ciência', 'Liderança', 'Cidade', 'Entretenimento', 'Arte e Cultura', 'Social'];
+const secColor = n => (SECTIONS.find(x => x.n === n) || {}).c || '#C5A059';
+const secLink = (n, sub) => '/?secao=' + slugify(n) + (sub ? '&sub=' + slugify(sub) : '');
+
+function mountHeader() {
+  const h = document.querySelector('.site-header'); if (!h || h.dataset.v3) return; h.dataset.v3 = '1';
+  const tab = (n, c) => `<a href="${secLink(n)}" data-sec="${esc(n)}" style="--c:${c || secColor(n)}">${esc(n)}</a>`;
+  const mega = SECTIONS.map(s => `<div class="mg-col" style="--c:${s.c}"><a class="mg-h" href="${secLink(s.n)}" data-sec="${esc(s.n)}">${esc(s.n)}</a>${s.s.map(x => `<a href="${secLink(s.n, x)}" data-sec="${esc(s.n)}" data-sub="${esc(x)}">${esc(x)}</a>`).join('')}</div>`).join('');
+  h.innerHTML = `<div class="wrap hd-top"><button type="button" class="hd-burger" aria-label="Todas as seções" aria-expanded="false" aria-controls="mega"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>`
+    + `<a class="logo" href="/"><img class="logo-mark" src="/favicon-192x192.png" alt="" width="34" height="34">FUZION<span>INSIGHTS</span></a><span class="hd-sp"></span><button type="button" class="btn-sub" data-subscribe>Assine</button></div>`
+    + `<nav class="hd-tabs" aria-label="Seções"><div class="wrap hd-tabs-in"><a href="/" data-sec="Home" style="--c:#C5A059">Início</a>${PRIMARY.map(n => tab(n)).join('')}<a href="/?secao=exclusivos" data-sec="Exclusivos" style="--c:#C5A059">🔒 Exclusivos</a></div></nav>`
+    + `<div class="hd-sub" id="subbar" hidden></div>`
+    + `<div class="mega" id="mega" hidden><div class="wrap mg-in">${mega}<div class="mg-col" style="--c:#C5A059"><a class="mg-h" href="/?secao=exclusivos" data-sec="Exclusivos">🔒 Exclusivos</a><a href="/assine.html">Planos de assinatura</a><a href="/sobre.html">Sobre</a><a href="/contato.html">Contato</a></div></div></div>`;
+  const burger = h.querySelector('.hd-burger'), mg = h.querySelector('#mega');
+  const close = () => { mg.hidden = true; burger.setAttribute('aria-expanded', 'false'); };
+  burger.addEventListener('click', e => { e.stopPropagation(); const open = mg.hidden; mg.hidden = !open; burger.setAttribute('aria-expanded', String(open)); });
+  document.addEventListener('click', e => { if (!mg.hidden && !mg.contains(e.target)) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  h.addEventListener('click', e => {
+    const a = e.target.closest('a[data-sec]'); if (!a) return; close();
+    if (window.FZ_HOME && window.st) { e.preventDefault(); window.st(a.dataset.sec, a.dataset.sub || ''); }
+  });
+  setNav(window.FZ_SEC || 'Home', '');
+}
+/* marca a aba ativa e mostra as subcategorias da seção */
+function setNav(name, sub) {
+  document.querySelectorAll('.hd-tabs a').forEach(a => a.classList.toggle('active', a.dataset.sec === name));
+  const bar = document.getElementById('subbar'); if (!bar) return;
+  const s = SECTIONS.find(x => x.n === name);
+  if (!s) { bar.hidden = true; bar.innerHTML = ''; return; }
+  bar.style.setProperty('--c', s.c); bar.hidden = false;
+  bar.innerHTML = `<div class="wrap hd-sub-in"><span class="sb-t">${esc(s.n)}</span><a href="${secLink(s.n)}" data-sec="${esc(s.n)}" class="${sub ? '' : 'on'}">Todas</a>${s.s.map(x => `<a href="${secLink(s.n, x)}" data-sec="${esc(s.n)}" data-sub="${esc(x)}" class="${sub === x ? 'on' : ''}">${esc(x)}</a>`).join('')}</div>`;
+}
+
+/* ===== Capas inteiras (sem corte): imagem “contida” sobre fundo desfocado da própria capa ===== */
+function coverHTML(a, cls, eager) {
+  const u = a.image;
+  if (!u) return `<span class="cv cv-none ${cls || ''}"><b>${esc(a.category || 'Fuzion Insights')}</b></span>`;
+  return `<span class="cv ${cls || ''}" style="--bg:url('${esc(u)}')"><img src="${esc(u)}" alt="${esc(a.imageCaption || a.title)}" ${eager ? '' : 'loading="lazy" '}decoding="async"></span>`;
+}
+
+/* ===== Lista leve de artigos (/lista no Firebase) =====
+   /artigos guarda o texto completo e a capa em base64 de CADA matéria; baixar tudo a cada visita estoura a cota do
+   Firebase e a home fica vazia. /lista tem só título, resumo, tags etc. (poucos KB) e a capa vem de /img/ID (cache do Netlify). */
+const LKEY = 'fz_lista_v2';
+const plainTxt = h => String(h || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+function liteOf(a) { const { content, image, og, ...r } = a; r.hasImg = !!image; r.iv = image ? image.length : 0; r.txt = plainTxt(content).slice(0, 500); return r; }
+function normLite(map) {
+  const o = {};
+  Object.keys(map || {}).forEach(k => {
+    const x = map[k]; if (!x || typeof x !== 'object' || !x.title) return;
+    const y = Object.assign({}, x);
+    if ('hasImg' in y) y.image = y.hasImg ? `/img/${encodeURIComponent(y.id)}?c=1&v=${y.iv || 0}` : '';
+    o[k] = y;
+  });
+  return o;
+}
+async function loadLista() {
+  const get = async u => { const r = await fetch(u); if (!r.ok) throw 0; return r.json(); };
+  let d = null; try { d = await get(`${SITE.db}/lista.json`); } catch (e) {}
+  if (!d || d.error || !Object.keys(d).length) {          // ainda sem /lista: usa o método antigo (mais pesado)
+    const f = await get(`${SITE.db}/artigos.json`); if (!f || f.error) throw 0;
+    d = {}; Object.keys(f).forEach(k => { d[k] = liteOf(f[k]); });
+  }
+  const m = normLite(d); try { localStorage.setItem(LKEY, JSON.stringify(m)); } catch (e) {}
+  return m;
+}
+const cachedLista = () => { try { return JSON.parse(localStorage.getItem(LKEY) || 'null') || {}; } catch (e) { return {}; } };
 
 /* ===== Blocos HTML incorporados (gráficos, quadros, linhas do tempo…) =====
    O código fica guardado em base64 num <figure class="fz-embed"> e só é executado dentro de um

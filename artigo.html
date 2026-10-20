@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .article-wrap{max-width:760px;margin:2.5rem auto 0;padding:0 var(--gutter)}
-        .art-fig{margin:0 0 1.8rem}.art-cover{display:block;width:100%;aspect-ratio:16/9;max-height:440px;object-fit:cover;background:#F3F4F6}
+        .art-fig{margin:0 0 1.8rem;background:#0A0A0B}.article-header .art-fig{margin:1.5rem 0 1.3rem}.art-cover{display:block;width:auto;max-width:100%;max-height:600px;margin:0 auto;object-fit:contain}
         .article-header{border-bottom:1px solid var(--border);padding-bottom:1.3rem;margin-bottom:2rem}
         .category{color:var(--gold-d);font-size:.72rem;text-transform:uppercase;font-weight:700;letter-spacing:1px;display:block;margin-bottom:.5rem}
         h1{font-family:'Inter',system-ui,sans-serif;font-size:2.3rem;line-height:1.18;color:#000;margin-bottom:1rem;font-weight:800;letter-spacing:-.025em}
@@ -68,7 +68,6 @@
 
     <main class="article-wrap">
         <article>
-            <figure class="art-fig" id="art-fig" style="display:none"><img id="art-cover" class="art-cover" alt=""><figcaption id="art-cap"></figcaption></figure>
             <header class="article-header">
                 <span class="category" id="art-category">&nbsp;</span>
                 <h1 id="art-title">Carregando…</h1>
@@ -79,6 +78,7 @@
                     <span id="art-views"></span>
                     <a id="btn-edit" class="btn-edit" href="#">✎ Editar artigo</a>
                 </div>
+                <figure class="art-fig" id="art-fig" style="display:none"><img id="art-cover" class="art-cover" alt=""><figcaption id="art-cap"></figcaption></figure>
                 <div class="topics" id="art-topics"><span class="topics-h">Tópicos</span><div class="chips" id="art-tags"></div></div>
                 <div class="share-bar" id="share-top"></div>
             </header>
@@ -155,13 +155,17 @@
         }
 
         function loadArticle() {
-            fetch(`${SITE.db}/artigos.json`).then(r => r.json()).then(data => {
-                if (!data || data.error) return notFound();
-                const keys = Object.keys(data);
-                const key = (artId && keys.find(k => data[k].id === artId)) ||
-                    (pathSlug && (keys.find(k => data[k].slug === pathSlug) || keys.find(k => artSlug(data[k]) === pathSlug) || keys.find(k => data[k].id === pathSlug)));
+            // lista leve para achar o artigo e sugerir "Leia também"; só o artigo aberto é baixado inteiro
+            loadLista().catch(() => cachedLista()).then(async list => {
+                list = list || {};
+                const keys = Object.keys(list);
+                const key = (artId && keys.find(k => list[k].id === artId)) ||
+                    (pathSlug && (keys.find(k => list[k].slug === pathSlug) || keys.find(k => artSlug(list[k]) === pathSlug) || keys.find(k => list[k].id === pathSlug)));
                 if (!key) return notFound();
-                const a = data[key]; curArt = a; artId = a.id;
+                let full = null; try { full = await (await fetch(`${SITE.db}/artigos/${key}.json`)).json(); } catch (e) {}
+                if (!full || full.error) return notFound();
+                const data = Object.assign({}, list, { [key]: full });
+                const a = full; curArt = a; artId = a.id;
                 const pub = artDate(a), upd = a.updatedAt ? new Date(a.updatedAt) : null;
                 const pretty = artUrl(a), fullUrl = location.origin + pretty;
                 if (location.pathname !== pretty) { try { history.replaceState(null, '', pretty); } catch (e) {} }   // link antigo (?id=) vira /artigo/nome-da-materia
@@ -171,6 +175,7 @@
                 if (!sessionStorage.getItem('v_' + artId)) {
                     views++; sessionStorage.setItem('v_' + artId, '1');
                     fetch(`${SITE.db}/artigos/${key}/views.json?auth=${idToken}`, { method: 'PUT', body: views }).catch(() => {});
+                    fetch(`${SITE.db}/lista/${key}/views.json?auth=${idToken}`, { method: 'PUT', body: views }).catch(() => {});
                 }
 
                 const desc = (a.description || a.excerpt || '').replace(/…$/, '');
@@ -180,7 +185,8 @@
                 if (desc) document.querySelector('meta[name="description"]').setAttribute('content', desc);
                 if (tags.length) setMeta('name', 'keywords', tags.join(', '));
                 setMeta('property', 'og:type', 'article'); setMeta('property', 'og:title', a.title); setMeta('property', 'og:description', desc); setMeta('property', 'og:url', fullUrl);
-                $('art-category').innerHTML = esc(a.category || '') + (a.premium ? ' <span class="badge-premium">Assinantes</span>' : '');
+                $('art-category').style.color = secColor(a.category); setNav(a.category, a.sub || '');
+                $('art-category').innerHTML = esc(a.category || '') + (a.sub ? ' · ' + esc(a.sub) : '') + (a.premium ? ' <span class="badge-premium">Assinantes</span>' : '');
                 $('art-title').textContent = a.title;
                 if (a.description) { const d = $('art-desc'); d.textContent = a.description; d.style.display = 'block'; }
                 $('art-author').textContent = 'Por ' + a.author;
@@ -249,7 +255,7 @@
                 if (rel.length) {
                     $('related-list').innerHTML = rel.map(x => {
                         const d = artDate(x);
-                        return `<a class="rel-card" href="${artUrl(x)}">${x.image ? `<img class="ri" src="${esc(x.image)}" alt="${esc(x.imageCaption || x.title)}" loading="lazy">` : ''}
+                        return `<a class="rel-card" href="${artUrl(x)}">${coverHTML(x, 'ri')}
                             <div class="rb"><small><b>${esc(x.category)}</b>${d ? ' · ' + fmtDateShort(d) : ''}${x.premium ? ' <span class="badge-premium">Assinantes</span>' : ''}</small><strong>${esc(x.title)}</strong><p>${esc(x.description || x.excerpt)}</p><span class="rmore">Ler análise</span></div></a>`;
                     }).join('');
                     $('related').style.display = 'block';
