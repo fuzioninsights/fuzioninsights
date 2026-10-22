@@ -185,7 +185,7 @@
                 if (desc) document.querySelector('meta[name="description"]').setAttribute('content', desc);
                 if (tags.length) setMeta('name', 'keywords', tags.join(', '));
                 setMeta('property', 'og:type', 'article'); setMeta('property', 'og:title', a.title); setMeta('property', 'og:description', desc); setMeta('property', 'og:url', fullUrl);
-                $('art-category').style.color = secColor(a.category); setNav(a.category, a.sub || '');
+                $('art-category').style.color = secText(a.category); setNav(a.category, a.sub || '');
                 $('art-category').innerHTML = esc(a.category || '') + (a.sub ? ' · ' + esc(a.sub) : '') + (a.premium ? ' <span class="badge-premium">Assinantes</span>' : '');
                 $('art-title').textContent = a.title;
                 if (a.description) { const d = $('art-desc'); d.textContent = a.description; d.style.display = 'block'; }
@@ -274,7 +274,7 @@
         async function baixar(id, fid, m, btn) {
             const sm = btn.querySelector('small'), old = sm.textContent; sm.textContent = 'baixando…'; btn.disabled = true;
             try {
-                const r = await fetch('/.netlify/functions/premium', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: m.email, codigo: m.codigo, id, arquivo: fid }) });
+                const r = await fetch('/.netlify/functions/premium', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ id, arquivo: fid }, m)) });
                 const d = await r.json().catch(() => ({}));
                 if (!d.ok || !d.arquivo) throw 0;
                 const bin = atob(d.arquivo.data), u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
@@ -286,11 +286,11 @@
 
         /* Conteúdo exclusivo: assinante com acesso ativo recebe o restante do texto; os demais veem a prévia e o convite */
         async function applyPremium(a) {
-            const body = $('art-body'), m = Member.get();
-            if (m) {
-                const d = await Member.check(m.email, m.codigo, a.id);
-                if (d.ok) {
-                    Member.set({ email: m.email, codigo: m.codigo, ate: d.ate, plano: d.plano });
+            const body = $('art-body'), m = Member.get(); let d = null, via = null;
+            if (m) { d = await Member.check(m.email, m.codigo, a.id); if (d.ok) { via = { email: m.email, codigo: m.codigo }; Member.set({ email: m.email, codigo: m.codigo, ate: d.ate, plano: d.plano }); } else if (d.status === 401) Member.clear(); }
+            if (!via) { const tk = await FZAuth.token(); if (tk) { d = await Member.checkToken(tk, a.id); if (d.ok) via = { token: tk }; } }
+            {
+                if (via) {
                     const wrap = document.createElement('div'); wrap.id = 'art-locked'; wrap.innerHTML = sanitizeHTML(d.html || ''); hydrateEmbeds(wrap);
                     wrap.querySelectorAll('figure').forEach(f => { const im = f.querySelector('img'), fc = f.querySelector('figcaption'); if (im && fc && !im.alt) im.alt = fc.textContent.trim(); });
                     body.appendChild(wrap);
@@ -298,21 +298,23 @@
                     if (fl.length) {
                         const bx = document.createElement('div'); bx.className = 'files-box';
                         bx.innerHTML = '<h3>Arquivos para assinantes</h3>' + fl.map(f => `<button type="button" class="file-btn" data-f="${esc(f.id)}"><span>📎 ${esc(f.nome)}</span><small>${fmtSize(f.tam)} · baixar</small></button>`).join('');
-                        bx.querySelectorAll('.file-btn').forEach(b => b.onclick = () => baixar(a.id, b.dataset.f, m, b));
+                        bx.querySelectorAll('.file-btn').forEach(b => b.onclick = () => baixar(a.id, b.dataset.f, via, b));
                         wrap.appendChild(bx);
                     }
                     body.insertAdjacentHTML('beforebegin', `<p class="member-note">Você está lendo como assinante (acesso até ${esc(d.ate.split('-').reverse().join('/'))}).</p>`);
                     $('cta-assine').style.display = 'none';
                     return;
                 }
-                if (d.status === 401) Member.clear();   // código errado ou vencido: pede para entrar de novo
             }
             $('cta-assine').style.display = 'none';
             const pw = document.createElement('div'); pw.className = 'paywall';
             pw.innerHTML = `<div class="paywall-box" id="paywall"><h3>O restante desta análise é exclusivo para assinantes</h3>
                 <p>Assine para ler o texto completo e as demais análises exclusivas da Fuzion Insights.</p>
-                <div class="acts"><button type="button" class="btn-sub">${esc(SITE.botao)}</button><a class="lk" href="/acesso.html?voltar=${encodeURIComponent(location.pathname)}">Já sou assinante: entrar</a></div></div>`;
+                <div class="acts"><button type="button" class="btn-sub">${esc(SITE.botao)}</button><a class="lk" id="pw-login" href="#">Entrar na minha conta</a><a class="lk" href="/acesso.html?voltar=${encodeURIComponent(location.pathname)}">Tenho um código de acesso</a></div></div>`;
             pw.querySelector('button').onclick = openSubscribe;
+            const U = FZAuth.user;
+            if (U) { pw.querySelector('.paywall-box p').insertAdjacentHTML('afterend', `<p class="pw-who">Você entrou como <b>${esc(U.email)}</b> · ${d && d.erro === 'verificar' ? 'confirme seu e-mail (enviamos um link) para liberar o acesso' : 'plano gratuito'}.</p>`); pw.querySelector('#pw-login').remove(); }
+            else pw.querySelector('#pw-login').onclick = e => { e.preventDefault(); FZAuth.open().then(u => u && location.reload()); };
             const fl2 = fileList(a);
             if (fl2.length) pw.querySelector('.paywall-box').insertAdjacentHTML('beforeend', '<p class="files-lock">🔒 Inclui ' + fl2.length + (fl2.length === 1 ? ' arquivo exclusivo: ' : ' arquivos exclusivos: ') + fl2.map(f => esc(f.nome)).join(', ') + '</p>');
             body.after(pw);

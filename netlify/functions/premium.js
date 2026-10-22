@@ -31,21 +31,35 @@ async function adminToken() {
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return out(405, { ok: false, erro: 'metodo' });
   let b; try { b = JSON.parse(event.body || '{}'); } catch (e) { return out(400, { ok: false, erro: 'dados' }); }
-  const email = String(b.email || '').trim().toLowerCase();
+  let email = String(b.email || '').trim().toLowerCase();
   const codigo = String(b.codigo || '').replace(/[^A-Za-z0-9]/g, '').toUpperCase();
   const id = String(b.id || '').trim();
-  if (!email || !codigo || email.length > 200) return out(400, { ok: false, erro: 'dados' });
+  const viaToken = !!b.token;   // entrou com Google / e-mail e senha (Firebase Authentication)
+  if (viaToken) {
+    // confere o login no servidor: o e-mail vem do Firebase e precisa estar confirmado
+    const u = await (await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${KEY}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken: String(b.token) })
+    })).json().catch(() => ({}));
+    const usr = u && u.users && u.users[0];
+    if (!usr || !usr.email) return out(401, { ok: false, erro: 'login' });
+    if (!usr.emailVerified) return out(403, { ok: false, erro: 'verificar' });
+    email = String(usr.email).toLowerCase();
+  } else if (!email || !codigo || email.length > 200) return out(400, { ok: false, erro: 'dados' });
   if (!process.env.FB_ADMIN_EMAIL || !process.env.FB_ADMIN_PASSWORD) return out(503, { ok: false, erro: 'configuracao' });
 
   try {
     const t = await adminToken();
     const rec = await (await fetch(`${DB}/ativos/${encodeURIComponent(emailKey(email))}.json?auth=${t}`)).json();
     const hoje = new Date().toISOString().slice(0, 10);
-    const ok = rec && !rec.error && String(rec.email || '').toLowerCase() === email &&
-      String(rec.codigo || '').toUpperCase() === codigo && rec.ate && rec.ate >= hoje;
-    if (!ok) { await sleep(700); return out(401, { ok: false, erro: rec && rec.ate && rec.ate < hoje && String(rec.codigo || '').toUpperCase() === codigo ? 'expirado' : 'invalido' }); }
+    const isAdm = viaToken && process.env.FB_ADMIN_EMAIL && email === String(process.env.FB_ADMIN_EMAIL).toLowerCase();
+    const ok = isAdm || (rec && !rec.error && String(rec.email || '').toLowerCase() === email &&
+      (viaToken || String(rec.codigo || '').toUpperCase() === codigo) && rec.ate && rec.ate >= hoje);
+    if (!ok) {
+      if (viaToken) return out(403, { ok: false, erro: rec && rec.ate && rec.ate < hoje ? 'expirado' : 'sem_assinatura' });
+      await sleep(700); return out(401, { ok: false, erro: rec && rec.ate && rec.ate < hoje && String(rec.codigo || '').toUpperCase() === codigo ? 'expirado' : 'invalido' });
+    }
 
-    const res = { ok: true, plano: rec.plano || '', ate: rec.ate };
+    const res = isAdm ? { ok: true, plano: 'administrador', ate: '2099-12-31' } : { ok: true, plano: rec.plano || '', ate: rec.ate };
     if (id) {
       const c = await (await fetch(`${DB}/premium/${encodeURIComponent(id)}.json?auth=${t}`)).json();
       res.html = typeof c === 'string' ? c : '';

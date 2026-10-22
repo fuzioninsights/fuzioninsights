@@ -51,7 +51,7 @@
         .sl-slide .cv{aspect-ratio:auto;height:100%;min-height:340px}
         .sl-txt{display:flex;flex-direction:column;justify-content:center;gap:.8rem;padding:2rem 2rem 4.2rem;border-left:5px solid var(--c);background:linear-gradient(135deg,#0A0A0B,#17171C)}
         .sl-kick{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;font:700 .68rem 'Inter',sans-serif;letter-spacing:.7px;text-transform:uppercase;color:#A1A1AA}
-        .sl-kick b{background:var(--c);color:#fff;padding:.28rem .6rem;border-radius:5px!important}
+        .sl-kick b{background:var(--c);color:var(--tc,#fff);padding:.28rem .6rem;border-radius:5px!important}
         .sl-txt h2{font:800 1.8rem/1.2 'Inter',sans-serif;letter-spacing:-.02em;color:#fff;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
         .sl-txt p{color:#D4D4D8;font-size:.95rem;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
         .sl-more{font:800 .72rem 'Inter',sans-serif;letter-spacing:.8px;text-transform:uppercase;color:var(--gold)}
@@ -63,7 +63,7 @@
         .sl-btn:hover{background:var(--gold);color:#000}
         @media(max-width:860px){.sl-slide{grid-template-columns:1fr}.sl-slide .cv{aspect-ratio:16/9;height:auto;min-height:0}.sl-txt{padding:1.2rem 1.2rem 3.6rem;border-left:0;border-top:4px solid var(--c)}.sl-txt h2{font-size:1.35rem}.sl-btn{display:none}.sl-nav{left:1.2rem;right:auto}}
         .sec-title.colored{border-bottom-color:var(--c);border-left:6px solid var(--c);padding-left:.7rem}
-        .card-meta b{color:var(--c,var(--gold-d))}
+        .card-meta b{color:var(--cd,var(--c,var(--gold-d)))}
         .card-img{width:100%}
         /* Fuzion TV (player do YouTube) */
         .tv{grid-column:1/-1;background:#0A0A0B;color:#fff;border-top:3px solid #F00;padding:1.1rem 1.2rem 1.3rem}
@@ -84,8 +84,49 @@
         .tv-item img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;border-radius:6px!important}
         .tv-item span{font:600 .8rem/1.35 'Inter',sans-serif;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
         @media(max-width:860px){.tv-in{grid-template-columns:1fr}.tv-list{flex-direction:row;max-height:none;overflow-x:auto}.tv-item{flex:0 0 250px}}
+        .tv-ph{display:flex;align-items:center;justify-content:center;aspect-ratio:16/9;background:#0A0A0B;border:1px solid #2E2E33;font:800 .62rem 'Inter',sans-serif;letter-spacing:.8px;color:#A1A1AA;border-radius:6px!important}.tv-ph.live{background:#7F1D1D;border-color:#B91C1C;color:#fff}
+        .tv-item.is-live{border-color:#B91C1C}.tv-item.is-live span{font-weight:800}
+        .tv-badge{position:absolute;top:.8rem;left:.8rem;background:#DC2626;color:#fff;font:800 .68rem 'Inter',sans-serif;letter-spacing:.8px;padding:.3rem .6rem;border-radius:4px!important}
         .tv-cta{display:flex;align-items:center;gap:1rem;padding:1rem;background:#15151A;border:1px solid #26262C;color:#fff;text-decoration:none;font:700 .95rem 'Inter',sans-serif;line-height:1.35}
         .tv-cta:hover{border-color:var(--gold)}.tv-cta .tv-play{flex:0 0 auto;transform:scale(.7)}.tv-wide{grid-column:1/-1}
+
+        /* Fuzion TV · visual high-tech com brilho neon azul */
+        .tv{background:radial-gradient(900px 260px at 15% -20%,rgba(47,128,237,.28),transparent 65%),radial-gradient(700px 240px at 100% 110%,rgba(91,155,255,.16),transparent 60%),#050B18;border-top:3px solid #2F80ED;box-shadow:0 0 0 1px rgba(47,128,237,.25),0 0 42px rgba(47,128,237,.22);position:relative;overflow:hidden}
+        .tv::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(47,128,237,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(47,128,237,.06) 1px,transparent 1px);background-size:34px 34px;pointer-events:none;mask-image:linear-gradient(180deg,#000,transparent 85%);-webkit-mask-image:linear-gradient(180deg,#000,transparent 85%)}
+        .tv>*{position:relative}
+        .tv-h b{text-shadow:0 0 14px rgba(47,128,237,.9),0 0 2px #fff;letter-spacing:2px}.tv-h b::before{background:#EF4444;box-shadow:0 0 10px #EF4444}
+        .tv-h a{color:#8DB8FF}.tv-h a:hover{color:#fff;text-shadow:0 0 10px #2F80ED}
+        .tv-player{border:1px solid rgba(47,128,237,.7);box-shadow:0 0 0 1px rgba(47,128,237,.25),0 0 26px rgba(47,128,237,.45),0 0 70px rgba(47,128,237,.18);background:#000}
+        .tv-stage{position:absolute;inset:0;background:#000}.tv-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+        .tv-top{position:absolute;left:0;right:0;top:0;height:64px;background:linear-gradient(#000 20%,transparent);pointer-events:none}
+        .tv-click{position:absolute;inset:0 0 54px 0;background:transparent;border:0;cursor:pointer;padding:0}
+        .tv-click[hidden]{display:none}
+        .tv-hud{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:.5rem;padding:.5rem .7rem;background:linear-gradient(transparent,rgba(5,11,24,.92) 55%);opacity:0;transition:opacity .2s}
+        .tv-stage:hover .tv-hud,.tv-stage:focus-within .tv-hud,.tv-stage[data-state="pause"] .tv-hud,.tv-stage:fullscreen .tv-hud:hover{opacity:1}
+        @media(hover:none){.tv-hud{opacity:1}}
+        .hud-b{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:rgba(47,128,237,.18);border:1px solid rgba(47,128,237,.7);color:#fff;cursor:pointer;padding:0;border-radius:8px!important;box-shadow:0 0 10px rgba(47,128,237,.35)}
+        .hud-b:hover{background:#2F80ED;box-shadow:0 0 16px rgba(47,128,237,.9)}
+        .hud-t{flex:1;min-width:0;font:700 .78rem 'Inter',sans-serif;color:#E6EEFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .hud-live{font:800 .66rem 'Inter',sans-serif;letter-spacing:.8px;background:#DC2626;color:#fff;padding:.25rem .5rem;border-radius:4px!important;box-shadow:0 0 12px rgba(220,38,38,.7)}
+        .tv-stage[data-state="play"] .i-play,.tv-stage[data-state="pause"] .i-pause{display:none}
+        .tv-stage .i-mute{display:none}.tv-stage[data-mute="1"] .i-vol{display:none}.tv-stage[data-mute="1"] .i-mute{display:inline-flex}
+        .tv-poster{overflow:hidden;position:absolute;inset:0;border:0}
+        .tv-poster::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,11,24,.15),rgba(5,11,24,.15) 40%,rgba(5,11,24,.9));}
+        .tv-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px);pointer-events:none}
+        .tv-playbtn{position:relative;width:86px;height:86px;border-radius:50%!important;background:rgba(5,11,24,.55);border:2px solid #2F80ED;box-shadow:0 0 26px rgba(47,128,237,.85),inset 0 0 20px rgba(47,128,237,.35);display:inline-block;transition:transform .15s,box-shadow .15s}
+        .tv-playbtn::after{content:"";position:absolute;left:33px;top:25px;border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;filter:drop-shadow(0 0 6px rgba(47,128,237,.9))}
+        .tv-poster:hover .tv-playbtn,.tv-poster:focus-visible .tv-playbtn{transform:scale(1.08);box-shadow:0 0 40px rgba(47,128,237,1),inset 0 0 24px rgba(47,128,237,.5)}
+        .tv-cap{position:absolute;left:1rem;right:1rem;bottom:.9rem;text-align:left;display:flex;flex-direction:column;gap:.15rem}
+        .tv-cap b{font:800 1rem 'Inter',sans-serif;color:#fff;text-shadow:0 2px 10px #000;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.tv-cap i{font:600 .7rem 'Inter',sans-serif;font-style:normal;letter-spacing:1px;text-transform:uppercase;color:#8DB8FF}
+        .tv-item{background:linear-gradient(135deg,#0A1630,#071022);border:1px solid rgba(47,128,237,.35);box-shadow:0 0 0 1px rgba(47,128,237,.1),0 0 14px rgba(47,128,237,.25);transition:box-shadow .2s,border-color .2s,transform .15s}
+        .tv-item:hover{border-color:#2F80ED;box-shadow:0 0 0 1px rgba(47,128,237,.5),0 0 22px rgba(47,128,237,.6);transform:translateX(2px)}
+        .tv-item.on{border-color:#5B9BFF;background:linear-gradient(135deg,#0D2250,#091634);box-shadow:0 0 0 1px rgba(91,155,255,.7),0 0 26px rgba(47,128,237,.8)}
+        .tv-item.is-live{border-color:#EF4444;box-shadow:0 0 0 1px rgba(239,68,68,.35),0 0 18px rgba(239,68,68,.5)}
+        .tv-item img{box-shadow:0 0 10px rgba(47,128,237,.35)}
+        .tv-ph{background:#07122A;border-color:rgba(47,128,237,.5);color:#8DB8FF}
+        .tv-cta{background:#08122B;border-color:rgba(47,128,237,.5);box-shadow:0 0 18px rgba(47,128,237,.35)}
+        @media(prefers-reduced-motion:no-preference){.tv-playbtn{animation:tvpulse 2.4s ease-in-out infinite}@keyframes tvpulse{0%,100%{box-shadow:0 0 22px rgba(47,128,237,.7),inset 0 0 18px rgba(47,128,237,.3)}50%{box-shadow:0 0 42px rgba(47,128,237,1),inset 0 0 24px rgba(47,128,237,.5)}}}
+        @media(max-width:860px){.tv-item:hover{transform:none}.tv-playbtn{width:68px;height:68px}.tv-playbtn::after{left:26px;top:19px;border-left-width:20px;border-top-width:12px;border-bottom-width:12px}}
         .ad-box[data-ad="mid"]{grid-column:1/-1;margin:0}
         .sec-title{font-family:'Inter',system-ui,sans-serif;font-size:.85rem;letter-spacing:1px;border-bottom:2px solid #000;padding-bottom:.35rem;margin-bottom:1.2rem;text-transform:uppercase}
         .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.75rem;align-items:stretch}
@@ -238,7 +279,13 @@
                 <span>📝 Há um rascunho não publicado salvo em <strong id="draft-when"></strong>.</span>
                 <span><button type="button" onclick="restoreDraft()">Recuperar</button><button type="button" class="alt" onclick="discardDraft()">Descartar</button></span>
             </div>
-            <form onsubmit="pub(event)" class="f-g" id="art-form">
+            <section class="ed-sec" id="tv-cfg" style="margin-bottom:1rem"><h3 class="ed-sec-h"><i>TV</i>Fuzion TV · vídeos da home</h3>
+                <p class="hint" style="margin:0">Por padrão a home mostra sozinha os últimos vídeos do canal. Preencha só o que quiser mudar: a live aparece em primeiro, depois os vídeos.</p>
+                <div class="form-group"><label for="tv-live">TV ao vivo <span class="hint">(link da transmissão, ou youtube.com/@fuzioninsights/live)</span></label><input type="text" id="tv-live" placeholder="https://youtube.com/live/..." autocomplete="off"></div>
+                <div class="form-group"><label for="tv-vids">Vídeos específicos <span class="hint">(um link por linha; substituem os automáticos)</span></label><textarea id="tv-vids" rows="3" placeholder="https://youtu.be/..." autocomplete="off"></textarea></div>
+                <div class="form-group"><label for="tv-plist">Playlist <span class="hint">(link com list=…, opcional)</span></label><input type="text" id="tv-plist" placeholder="https://youtube.com/playlist?list=..." autocomplete="off"></div>
+                <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center"><button type="button" class="btn gold" onclick="saveTV()">Salvar TV</button><button type="button" class="btn ghost" onclick="saveTV(true)">Voltar ao automático</button><span class="hint" id="tv-msg"></span></div></section>
+                <form onsubmit="pub(event)" class="f-g" id="art-form">
                 <section class="ed-sec"><h3 class="ed-sec-h"><i>1</i>Seção, autor e capa</h3>
                 <div class="form-row">
                     <div class="form-group">
@@ -945,7 +992,7 @@
         }
         function setSec(s, sub) {
             sec = s; subSel = sub || ''; window.FZ_SEC = s; setNav(s, subSel);
-            const ft = $('ft'); ft.style.setProperty('--c', secColor(s)); ft.classList.toggle('colored', s !== 'Home' && s !== 'Exclusivos');
+            const ft = $('ft'); ft.style.cssText = secStyle(s); ft.classList.toggle('colored', s !== 'Home' && s !== 'Exclusivos');
             ft.textContent = s === 'Home' ? 'Todas as Análises' : (s === 'Exclusivos' ? 'Análises exclusivas para assinantes' : (subSel ? `${s} · ${subSel}` : s));
             $('sb').value = ''; searchQ = ''; rnd(db); trending();
         }
@@ -983,7 +1030,7 @@
             const arrow = d => `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
             h.innerHTML = `<div class="slider" role="region" aria-roledescription="carrossel" aria-label="Últimas análises"><div class="sl-track">${keys.map((k, i) => {
                 const a = db[k], d = artDate(a);
-                return `<a class="sl-slide" style="--c:${secColor(a.category)}" href="${artUrl(a)}" aria-label="${i + 1} de ${keys.length}: ${esc(a.title)}">${coverHTML(a, '', !i)}<span class="sl-txt"><span class="sl-kick"><b>${esc(a.category)}</b>${a.sub ? `<span>${esc(a.sub)}</span>` : ''}${d ? `<time datetime="${isoDay(d)}">${fmtDateShort(d)}</time>` : ''}${a.premium ? '<span class="badge-premium">Assinantes</span>' : ''}</span><h2>${esc(a.title)}</h2><p>${esc(a.description || a.excerpt)}</p><span class="sl-more">Ler análise →</span></span></a>`;
+                return `<a class="sl-slide" style="${secStyle(a.category)}" href="${artUrl(a)}" aria-label="${i + 1} de ${keys.length}: ${esc(a.title)}">${coverHTML(a, '', !i)}<span class="sl-txt"><span class="sl-kick"><b>${esc(a.category)}</b>${a.sub ? `<span>${esc(a.sub)}</span>` : ''}${d ? `<time datetime="${isoDay(d)}">${fmtDateShort(d)}</time>` : ''}${a.premium ? '<span class="badge-premium">Assinantes</span>' : ''}</span><h2>${esc(a.title)}</h2><p>${esc(a.description || a.excerpt)}</p><span class="sl-more">Ler análise →</span></span></a>`;
             }).join('')}</div>${keys.length > 1 ? `<div class="sl-nav"><div class="sl-dots">${keys.map((k, i) => `<button type="button" class="sl-dot" aria-label="Ir para a análise ${i + 1}"></button>`).join('')}</div><button type="button" class="sl-btn sl-prev" aria-label="Anterior">${arrow('M15 5l-7 7 7 7')}</button><button type="button" class="sl-btn sl-next" aria-label="Próxima">${arrow('M9 5l7 7-7 7')}</button></div>` : ''}</div>`;
             if (keys.length < 2) return;
             const box = h.querySelector('.slider'), tr = box.querySelector('.sl-track'), dots = [...box.querySelectorAll('.sl-dot')];
@@ -1000,31 +1047,85 @@
             if (!matchMedia('(prefers-reduced-motion:reduce)').matches) slTimer = setInterval(() => { if (!paused && !document.hidden && box.isConnected) go(idx() + 1); }, 6500);
             mark();
         }
-        /* Fuzion TV: player do YouTube na home (últimos vídeos do canal, lista fixa ou playlist — veja SITE.video em site.js) */
-        let tvDone = false;
+        /* Fuzion TV: 1º "TV AO VIVO" (se configurada), depois os vídeos (automáticos do canal ou os escolhidos no painel) e a playlist */
+        let tvSig = null, tvPlayer = null, ytApi = null;
+        const ytReady = () => ytApi || (ytApi = new Promise(res => { if (window.YT && YT.Player) return res(); const prev = window.onYouTubeIframeAPIReady; window.onYouTubeIframeAPIReady = () => { if (prev) prev(); res(); }; const s = document.createElement('script'); s.src = 'https://www.youtube.com/iframe_api'; s.onerror = () => res(); document.head.appendChild(s); setTimeout(res, 6000); }));
         const ytOk = id => /^[\w-]{11}$/.test(id || '');
+        const ytVid = u => { u = String(u || '').trim(); if (ytOk(u)) return u; const m = /(?:[?&]v=|youtu\.be\/|\/live\/|\/embed\/|\/shorts\/)([\w-]{11})/.exec(u); return m ? m[1] : ''; };
+        const ytList = u => { u = String(u || '').trim(); const m = /[?&]list=([\w-]{10,})/.exec(u); return m ? m[1] : (/^(PL|UU|OL|FL|RD)[\w-]{10,}$/.test(u) ? u : ''); };
+        const ytLive = u => { u = String(u || '').trim(); if (!u) return ''; return (u.toLowerCase() === 'canal' || /youtube\.com\/(@[\w.-]+|channel\/UC[\w-]{22}|c\/[\w.-]+|user\/[\w.-]+)\/live/i.test(u)) ? 'canal' : ytVid(u); };
         function renderTV(show) {
             const box = $('tv'); if (!show) { box.style.display = 'none'; return; }
-            if (tvDone) { box.style.display = box.dataset.has ? 'block' : 'none'; return; }
-            tvDone = true; const v = SITE.video || {};
-            const frame = (src, title) => `<iframe src="${src}" title="${esc(title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
-            const poster = (id, title) => `<button type="button" class="tv-poster" style="--bg:url('https://i.ytimg.com/vi/${id}/hqdefault.jpg')" data-id="${id}" data-t="${esc(title)}" aria-label="Reproduzir: ${esc(title)}"><span class="tv-play"></span></button>`;
-            const play = (id, title) => { $('tv-pl').innerHTML = frame(`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`, title); };
-            const shell = inner => { box.dataset.has = '1'; box.style.display = 'block'; box.innerHTML = `<div class="tv-h"><b>Fuzion TV</b><a href="https://youtube.com/${esc(v.handle || '@fuzioninsights')}" target="_blank" rel="noopener">Ver canal no YouTube →</a></div><div class="tv-in">${inner}</div>`; };
-            const draw = list => {
-                list = (list || []).filter(x => x && ytOk(x.id));
-                const pl = v.playlistId || (/^UC[\w-]{22}$/.test(v.channelId || '') ? 'UU' + v.channelId.slice(2) : '');
-                if (pl && !list.length) { shell(`<div class="tv-player" id="tv-pl">${frame('https://www.youtube-nocookie.com/embed/videoseries?list=' + encodeURIComponent(pl) + '&rel=0', 'Vídeos da Fuzion TV')}</div><a class="tv-cta" href="https://youtube.com/${esc(v.handle || '@fuzioninsights')}" target="_blank" rel="noopener"><span class="tv-play"></span><span>Veja todos os vídeos no canal da Fuzion Insights</span></a>`); return; }
-                if (!list.length) { shell(`<a class="tv-cta tv-wide" href="https://youtube.com/${esc(v.handle || '@fuzioninsights')}" target="_blank" rel="noopener"><span class="tv-play"></span><span>Assista aos vídeos da Fuzion Insights no YouTube</span></a>`); return; }
-                shell(`<div class="tv-player" id="tv-pl">${poster(list[0].id, list[0].title || '')}</div><div class="tv-list">${list.map((x, i) => `<button type="button" class="tv-item${i ? '' : ' on'}" data-id="${x.id}" data-t="${esc(x.title || '')}"><img src="https://i.ytimg.com/vi/${x.id}/mqdefault.jpg" alt="" loading="lazy"><span>${esc(x.title || 'Vídeo')}</span></button>`).join('')}</div>`);
+            const cfg = window.FZ_TV || {}, sig = JSON.stringify(cfg);
+            if (tvSig === sig) { box.style.display = box.dataset.has ? 'block' : 'none'; return; }
+            tvSig = sig; box.dataset.has = ''; box.style.display = 'none';
+            const v = SITE.video || {}, cid = /^UC[\w-]{22}$/.test(v.channelId || '') ? v.channelId : '', handle = esc(v.handle || '@fuzioninsights');
+            const N = 'https://www.youtube-nocookie.com/embed/';
+            const Q = 'autoplay=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&disablekb=1&fs=0&cc_load_policy=0&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
+            const embed = it => it.k === 'live' ? (it.id === 'canal' ? `${N}live_stream?channel=${cid}&${Q}` : `${N}${it.id}?${Q}`) : it.k === 'list' ? `${N}videoseries?list=${encodeURIComponent(it.id)}&${Q}` : `${N}${it.id}?${Q}`;
+            const bg = it => it.k === 'video' ? `url('https://i.ytimg.com/vi/${it.id}/hqdefault.jpg')` : 'linear-gradient(135deg,#1C1C24,#0A0A0B)';
+            const thumb = it => it.k === 'video' ? `<img src="https://i.ytimg.com/vi/${it.id}/mqdefault.jpg" alt="" loading="lazy">` : `<span class="tv-ph${it.k === 'live' ? ' live' : ''}">${it.k === 'live' ? '● AO VIVO' : '▶ PLAYLIST'}</span>`;
+            const ic = { play: '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>', pause: '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>', vol: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 010 7M18.5 5.5a9 9 0 010 13"/></svg>', mute: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>', fs: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>' };
+            const playIt = it => {      // o clique no pôster já é o "play" do YouTube; os controles do YouTube ficam ocultos e usamos os nossos
+                const pl = $('tv-pl'); if (tvPlayer && tvPlayer.destroy) { try { tvPlayer.destroy(); } catch (e) {} } tvPlayer = null;
+                pl.innerHTML = `<div class="tv-stage" id="tv-stage" data-state="play"><iframe id="tv-frame" src="${embed(it)}" title="${esc(it.t)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><span class="tv-top"></span><button type="button" class="tv-click" aria-label="Pausar ou continuar" hidden></button><div class="tv-hud"><button type="button" class="hud-b" data-h="pp" aria-label="Pausar ou continuar"><span class="i-pause">${ic.pause}</span><span class="i-play">${ic.play}</span></button><button type="button" class="hud-b" data-h="mu" aria-label="Ligar ou desligar o som"><span class="i-vol">${ic.vol}</span><span class="i-mute">${ic.mute}</span></button><span class="hud-t">${esc(it.t)}</span>${it.k === 'live' ? '<span class="hud-live">● AO VIVO</span>' : ''}<button type="button" class="hud-b" data-h="fs" aria-label="Tela cheia">${ic.fs}</button></div></div>`;
+                const st = $('tv-stage');
+                st.querySelector('[data-h="fs"]').onclick = () => { const f = st.requestFullscreen || st.webkitRequestFullscreen; if (document.fullscreenElement) document.exitFullscreen(); else if (f) f.call(st); };
+                ytReady().then(() => {
+                    if (!window.YT || !YT.Player || !$('tv-frame')) return;
+                    const toggle = () => { if (!tvPlayer) return; (tvPlayer.getPlayerState() === 1) ? tvPlayer.pauseVideo() : tvPlayer.playVideo(); };
+                    tvPlayer = new YT.Player($('tv-frame'), { events: { onReady: () => { st.querySelector('.tv-click').hidden = false; }, onStateChange: e => { st.dataset.state = e.data === 1 ? 'play' : (e.data === 2 || e.data === 0 || e.data === 5 ? 'pause' : st.dataset.state); } } });
+                    st.querySelector('.tv-click').onclick = toggle; st.querySelector('[data-h="pp"]').onclick = toggle;
+                    st.querySelector('[data-h="mu"]').onclick = () => { if (!tvPlayer) return; if (tvPlayer.isMuted()) { tvPlayer.unMute(); st.dataset.mute = ''; } else { tvPlayer.mute(); st.dataset.mute = '1'; } };
+                });
+            };
+            const finish = vids => {
+                const items = [];
+                if (cfg.live && ((cfg.live === 'canal' && cid) || ytOk(cfg.live))) items.push({ k: 'live', id: cfg.live, t: 'TV AO VIVO' });
+                (vids || []).filter(x => x && ytOk(x.id)).forEach(x => items.push({ k: 'video', id: x.id, t: x.title || 'Vídeo' }));
+                const hasVid = items.some(i => i.k === 'video'), pl = cfg.playlist || v.playlistId || (!hasVid && cid ? 'UU' + cid.slice(2) : '');
+                if (pl) items.push({ k: 'list', id: pl, t: (cfg.playlist || v.playlistId) ? 'Playlist' : 'Todos os vídeos do canal' });
+                box.dataset.has = '1'; box.style.display = 'block';
+                const head = `<div class="tv-h"><b>Fuzion TV</b><a href="https://youtube.com/${handle}" target="_blank" rel="noopener">Ver canal no YouTube →</a></div>`;
+                if (!items.length) { box.innerHTML = head + `<a class="tv-cta tv-wide" href="https://youtube.com/${handle}" target="_blank" rel="noopener"><span class="tv-play"></span><span>Assista aos vídeos da Fuzion Insights no YouTube</span></a>`; return; }
+                const f = items[0];
+                box.innerHTML = head + `<div class="tv-in"><div class="tv-player" id="tv-pl"><button type="button" class="tv-poster" data-i="0" style="--bg:${bg(f)}" aria-label="Reproduzir: ${esc(f.t)}"><span class="tv-scan"></span><span class="tv-playbtn"></span>${f.k === 'live' ? '<span class="tv-badge">● AO VIVO</span>' : ''}<span class="tv-cap"><b>${esc(f.t)}</b><i>Toque para assistir</i></span></button></div><div class="tv-list">${items.map((it, i) => `<button type="button" class="tv-item${i ? '' : ' on'}${it.k === 'live' ? ' is-live' : ''}" data-i="${i}">${thumb(it)}<span>${esc(it.t)}</span></button>`).join('')}</div></div>`;
                 box.onclick = e => {
-                    const b = e.target.closest('[data-id]'); if (!b) return;
-                    box.querySelectorAll('.tv-item').forEach(x => x.classList.toggle('on', x === b)); play(b.dataset.id, b.dataset.t);
+                    const b = e.target.closest('[data-i]'); if (!b) return; const it = items[+b.dataset.i]; if (!it) return;
+                    box.querySelectorAll('.tv-item').forEach(x => x.classList.toggle('on', x.dataset.i === b.dataset.i));
+                    playIt(it);
                 };
             };
-            if (v.videos && v.videos.length) draw(v.videos);
-            else if (v.playlistId) draw([]);
-            else fetch(`/api/videos?h=${encodeURIComponent(v.handle || '@fuzioninsights')}${v.channelId ? '&c=' + encodeURIComponent(v.channelId) : ''}`).then(r => r.json()).then(d => { draw(d.videos); if (sec !== 'Home') box.style.display = 'none'; }).catch(() => draw([]));
+            const plain = ids => ids.map(id => ({ id, title: '' }));
+            if (cfg.videos && cfg.videos.length) fetch(`/api/videos?ids=${encodeURIComponent(cfg.videos.join(','))}`).then(r => r.json()).then(d => finish(d.videos && d.videos.length ? d.videos : plain(cfg.videos))).catch(() => finish(plain(cfg.videos)));
+            else if (v.videos && v.videos.length) finish(v.videos);
+            else fetch(`/api/videos?h=${encodeURIComponent(v.handle || '@fuzioninsights')}${cid ? '&c=' + encodeURIComponent(cid) : ''}`).then(r => r.json()).then(d => finish(d.videos)).catch(() => finish([]));
+        }
+        /* painel: escolher a live, vídeos ou playlist da TV (fica em /lista/_tv; vazio = automático) */
+        async function loadTVForm() {
+            try { const c = await (await fetch(`${SITE.db}/lista/_tv.json`)).json(); window.FZ_TV = c && !c.error ? c : null; } catch (e) { return; }
+            const c = window.FZ_TV || {};
+            $('tv-live').value = c.live === 'canal' ? `https://youtube.com/${(SITE.video && SITE.video.handle) || '@fuzioninsights'}/live` : (c.live ? `https://youtu.be/${c.live}` : '');
+            $('tv-vids').value = (c.videos || []).map(id => `https://youtu.be/${id}`).join('\n');
+            $('tv-plist').value = c.playlist ? `https://youtube.com/playlist?list=${c.playlist}` : '';
+            $('tv-msg').textContent = (c.live || (c.videos || []).length || c.playlist) ? 'Modo manual ativo.' : 'Modo automático (últimos vídeos do canal).';
+        }
+        async function saveTV(auto) {
+            const msg = t => { $('tv-msg').textContent = t; };
+            const live = auto ? '' : ytLive($('tv-live').value), pl = auto ? '' : ytList($('tv-plist').value);
+            const lines = auto ? [] : $('tv-vids').value.split(/\n+/).map(ytVid).filter(Boolean).slice(0, 12);
+            if (!auto && $('tv-live').value.trim() && !live) { msg('Não reconheci o link da live. Use o link da transmissão ou youtube.com/@canal/live.'); return; }
+            if (!auto && $('tv-plist').value.trim() && !pl) { msg('Não reconheci o link da playlist (precisa ter list=...).'); return; }
+            const cfg = {}; if (live) cfg.live = live; if (lines.length) cfg.videos = lines; if (pl) cfg.playlist = pl;
+            const empty = !Object.keys(cfg).length; msg('Salvando…');
+            try {
+                const t = await tok(); if (!t) { msg('Entre no painel para salvar.'); return; }
+                const r = await fetch(`${SITE.db}/lista/_tv.json?auth=${t}`, empty ? { method: 'DELETE' } : { method: 'PUT', body: JSON.stringify(cfg) });
+                if (!r.ok) { msg('Não foi possível salvar. Confira se o caminho “lista” está liberado nas regras do Firebase.'); return; }
+                window.FZ_TV = empty ? null : cfg; try { localStorage.setItem('fz_tv', JSON.stringify(window.FZ_TV)); } catch (e) {}
+                if (empty) { $('tv-live').value = ''; $('tv-vids').value = ''; $('tv-plist').value = ''; }
+                msg(empty ? 'Pronto: modo automático.' : 'Salvo! A home já usa esta seleção.'); tvSig = null; renderTV(sec === 'Home' && !tagFilter && !searchQ);
+            } catch (e) { msg('Falha de conexão. Tente de novo.'); }
         }
         function rnd(data) {
             const f = $('feed'); f.innerHTML = ''; if (!data) return;
@@ -1036,7 +1137,7 @@
             keys.forEach(k => {
                 const a = data[k]; n++;
                 const d = artDate(a);
-                const w = document.createElement('div'); w.className = 'card-wrap'; w.id = `l-${a.id}`; w.style.setProperty('--c', secColor(a.category));
+                const w = document.createElement('div'); w.className = 'card-wrap'; w.id = `l-${a.id}`; w.setAttribute('style', secStyle(a.category));
                 const tg = tagList(a).slice(0, 3);
                 w.innerHTML = `<a class="card-link" href="${artUrl(a)}"><article class="card">${coverHTML(a, 'card-img')}<div class="card-body"><div class="card-meta"><b>${esc(a.category)}</b>${a.sub ? ' · ' + esc(a.sub) : ''}${d ? ` · <time datetime="${isoDay(d)}">${fmtDateShort(d)}</time>` : ''}${a.premium ? ' <span class="badge-premium">Assinantes</span>' : ''}</div><h3 class="card-title">${esc(a.title)}</h3><p class="card-ex">${esc(a.description || a.excerpt)}</p>${tg.length ? `<div class="card-chips">${tg.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}<div class="card-footer"><span>Por ${esc(a.author)}</span><button class="btn-share" onclick="sh(event,'${esc(a.id)}')">${ICON.share}Compartilhar</button></div></div></article></a>`;
                 f.appendChild(w);
@@ -1066,13 +1167,14 @@
         function afterData() {
             $('sb').value = ''; searchQ = '';
             tagFilter = slugify(new URLSearchParams(location.search).get('tag') || ''); renderTagBar();
-            applyRoute(); if (isAdmin()) renderManager();
+            applyRoute(); if (isAdmin()) { renderManager(); loadTVForm(); }
         }
         /* mantém /lista (índice leve que os visitantes leem) igual ao /artigos — só o administrador escreve */
         async function syncLista() {
             try {
                 const t = await tok(); if (!t) return; const m = {};
                 Object.keys(db).forEach(k => { m[k] = liteOf(db[k]); });
+                try { const cur = await (await fetch(`${SITE.db}/lista/_tv.json`)).json(); if (cur && !cur.error) m._tv = cur; } catch (e) {}
                 const r = await fetch(`${SITE.db}/lista.json?auth=${t}`, { method: 'PUT', body: JSON.stringify(m) });
                 if ((r.status === 401 || r.status === 403) && !listaWarned) { listaWarned = true; toast('Para o site carregar rápido, libere o caminho “lista” nas regras do Firebase (veja a orientação do Claude).'); }
             } catch (e) {}

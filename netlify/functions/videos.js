@@ -9,6 +9,15 @@ exports.handler = async (event) => {
   let ch = (q.c || '').trim();
   const handle = (q.h || '@fuzioninsights').replace(/[^@\w.-]/g, '');
   const out = (body, cache) => ({ statusCode: 200, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': cache || 'public, max-age=300, s-maxage=900, stale-while-revalidate=86400' }, body: JSON.stringify(body) });
+  // ?ids=ID1,ID2 -> título de cada vídeo escolhido no painel (oEmbed público do YouTube, sem chave)
+  if (q.ids) {
+    const ids = String(q.ids).split(',').map(x => x.trim()).filter(x => /^[\w-]{11}$/.test(x)).slice(0, 12);
+    const videos = await Promise.all(ids.map(async id => {
+      try { const d = await (await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + id)}&format=json`, { headers: H })).json(); return { id, title: d.title || '' }; }
+      catch (e) { return { id, title: '' }; }
+    }));
+    return out({ videos }, 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+  }
   try {
     if (!/^UC[\w-]{22}$/.test(ch)) {
       ch = memo[handle] || '';

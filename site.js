@@ -1,6 +1,7 @@
 /* Fuzion Insights — utilitários compartilhados */
 const SITE = {
   name: 'Fuzion Insights',
+  autoPay: true,   // o botão só aparece quando MP_ACCESS_TOKEN (Mercado Pago) estiver configurado no Netlify
   firebaseKey: 'AIzaSyCwWE9YtckCT--utTkRJAqxk1_HWu0EJlM',
   db: 'https://fuzion-insights-default-rtdb.firebaseio.com',
   adClient: 'ca-pub-6909799094388328',
@@ -44,6 +45,12 @@ const Member = {
       const d = await r.json().catch(() => ({})); d.status = r.status; return d;
     } catch (e) { return { ok: false, erro: 'rede', status: 0 }; }
   }
+};
+Member.checkToken = async (token, id) => {   // acesso pelo login (Google/e-mail): o servidor confere o e-mail em /ativos
+  try {
+    const r = await fetch('/.netlify/functions/premium', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token, id: id || '' }) });
+    const d = await r.json().catch(() => ({})); d.status = r.status; return d;
+  } catch (e) { return { ok: false, erro: 'rede', status: 0 }; }
 };
 const makeCode = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), b => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 32]).join('');
 const fmtCode = c => String(c || '').replace(/(.{4})(?=.)/g, '$1-');
@@ -417,6 +424,7 @@ function openSubscribe(plano) {
         <label class="plan"><input type="radio" name="plano" value="mensal"><span class="pn">Mensal</span><span class="pp">R$ ${P.mensal.preco}<small>/mês</small></span><span class="ps">Cancele quando quiser</span></label>
         <label class="plan sel"><input type="radio" name="plano" value="anual" checked><span class="tag">Melhor valor</span><span class="pn">Anual</span><span class="pp">R$ ${P.anual.preco}<small>/ano</small></span><span class="ps">R$ ${mes}/mês · economize R$ ${eco}</span></label>
       </div>
+      ${SITE.autoPay ? '<div class="auto-box" hidden><button type="button" class="btn auto-pay">Pagar com cartão ou Pix · ativação automática</button><p class="auto-note">Você entra com sua conta e o acesso é liberado sozinho quando o pagamento é aprovado.</p><div class="fz-or"><span>ou pague por Pix manual</span></div></div>' : ''}
       <input type="email" placeholder="Seu melhor e-mail" required aria-label="E-mail">
       <button class="btn" type="submit">Continuar para o pagamento</button>
     </form>
@@ -429,6 +437,24 @@ function openSubscribe(plano) {
       const plano = form.plano.value, email = mail().value.trim(), ref = makeRef(), btn = form.querySelector('button'); btn.disabled = true;
       saveSubscriber(email, plano, { ref, status: 'aguardando pagamento' }).then(() => step2(plano, email, ref))
         .catch(() => { btn.disabled = false; toast('Não foi possível concluir agora. Tente novamente.'); });
+    };
+    const ap = m.querySelector('.auto-pay');
+    if (ap) {   // só mostra o pagamento automático se o Mercado Pago já estiver configurado no Netlify
+      (window.FZ_AUTOPAY = window.FZ_AUTOPAY || fetch('/api/checkout').then(r => r.json()).then(d => !!d.ativo).catch(() => false)).then(on => {
+        if (!on) return; m.querySelector('.auto-box').hidden = false;
+        const sb = m.querySelector('form button[type="submit"]'); if (sb) { sb.classList.add('ghost'); sb.textContent = 'Continuar para o pagamento por Pix manual'; }
+      });
+    }
+    if (ap) ap.onclick = async () => {
+      ap.disabled = true;
+      let tk = await FZAuth.token(); if (!tk) { const u = await FZAuth.open(); if (!u) { ap.disabled = false; return; } tk = await FZAuth.token(); }
+      try {
+        const r = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plano: form.plano.value, token: tk }) });
+        const d = await r.json().catch(() => ({}));
+        if (d.ok && d.url) { location.href = d.url; return; }
+        toast(d.erro === 'verificar' ? 'Confirme seu e-mail (enviamos um link) e tente de novo.' : d.erro === 'configuracao' ? 'O pagamento automático ainda não está disponível. Use o Pix manual.' : 'Não foi possível iniciar o pagamento agora.');
+      } catch (e) { toast('Sem conexão. Tente novamente.'); }
+      ap.disabled = false;
     };
     m.querySelector('.sub-free').onclick = () => {
       if (!mail().reportValidity()) return;
@@ -491,15 +517,99 @@ document.addEventListener('DOMContentLoaded', () => {
   cookieBanner(); trackHeader(); initAds(); fMkt(); setInterval(fMkt, 60000);
 });
 
+
+/* ===== Área de membro: entrar com Google ou e-mail (Firebase Authentication) =====
+   A conta gratuita é só o login. O plano PAGO fica em /ativos (por e-mail); quem entra com o e-mail da assinatura
+   recebe o conteúdo exclusivo pela função /premium, que confere o login no servidor. O SDK só é baixado quando precisa. */
+const FZAuth = (() => {
+  const V = '10.14.1', CFG = { apiKey: SITE.firebaseKey, authDomain: 'fuzion-insights.firebaseapp.com', projectId: 'fuzion-insights' };
+  let auth = null, loading = null, user = null, plan = null; const subs = [];
+  const flag = v => { try { v === undefined ? (v = localStorage.getItem('fz_auth')) : (v ? localStorage.setItem('fz_auth', '1') : localStorage.removeItem('fz_auth')); return v; } catch (e) {} };
+  const js = src => new Promise((ok, no) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+  function sdk() {   // uma única carga: quem chama depois espera o login ser restaurado (evita ler "sem usuário" cedo demais)
+    return loading || (loading = (async () => {
+      await js(`https://www.gstatic.com/firebasejs/${V}/firebase-app-compat.js`); await js(`https://www.gstatic.com/firebasejs/${V}/firebase-auth-compat.js`);
+      auth = firebase.initializeApp(CFG, 'fz-membro').auth(); auth.languageCode = 'pt-BR';
+      await new Promise(res => { let first = true; auth.onAuthStateChanged(u => { user = u; plan = null; if (u) flag(true); paint(); subs.forEach(f => f(u)); if (first) { first = false; res(); } }); });
+      return auth;
+    })().catch(e => { loading = null; throw e; }));
+  }
+  const ready = () => (flag() ? sdk().catch(() => null) : Promise.resolve(null));
+  async function token() {
+    await ready(); if (!user) return null;
+    if (!user.emailVerified) { try { await user.reload(); } catch (e) {} if (user.emailVerified) return user.getIdToken(true); }
+    return user.getIdToken();
+  }
+  async function status() {           // { ok, plano, ate } se for assinante; { ok:false, erro } se não
+    if (plan) return plan; const t = await token(); if (!t) return { ok: false, erro: 'login' };
+    plan = await Member.checkToken(t, ''); return plan;
+  }
+  function paint() {
+    const b = document.getElementById('hd-user'); if (!b) return;
+    const ini = ((user && (user.displayName || user.email)) || '?').trim().charAt(0).toUpperCase();
+    b.classList.toggle('on', !!user); b.title = user ? 'Minha conta' : 'Entrar / criar conta';
+    b.innerHTML = user ? (user.photoURL ? `<img src="${esc(user.photoURL)}" alt="" referrerpolicy="no-referrer">` : `<b>${esc(ini)}</b>`) : '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>';
+    if (user) status().then(p => { b.classList.toggle('paid', !!p.ok); });
+  }
+  const ERR = { 'auth/invalid-credential': 'E-mail ou senha incorretos.', 'auth/wrong-password': 'E-mail ou senha incorretos.', 'auth/user-not-found': 'E-mail ou senha incorretos.', 'auth/invalid-email': 'Digite um e-mail válido.', 'auth/email-already-in-use': 'Este e-mail já tem conta. Use “Entrar”.', 'auth/weak-password': 'Use uma senha com pelo menos 6 caracteres.', 'auth/too-many-requests': 'Muitas tentativas. Aguarde alguns minutos.', 'auth/network-request-failed': 'Sem conexão. Tente novamente.', 'auth/popup-blocked': 'O navegador bloqueou a janela do Google. Libere pop-ups para este site.', 'auth/unauthorized-domain': 'Este endereço ainda não foi liberado no Firebase (Authentication → Configurações → Domínios autorizados).', 'auth/operation-not-allowed': 'Este método de login ainda não foi ativado no Firebase (Authentication → Método de login).' };
+  const G = '<svg viewBox="0 0 48 48" width="20" height="20" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 010-9.4l-7.9-6.1a24 24 0 000 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>';
+  function open() {
+    return new Promise(done => {
+      if (document.getElementById('fz-login')) return done(null);
+      const m = document.createElement('div'); m.className = 'sub-modal'; m.id = 'fz-login';
+      m.innerHTML = `<div class="sub-card fz-card" role="dialog" aria-modal="true" aria-labelledby="fz-t"><button class="sub-x" aria-label="Fechar" type="button">×</button>
+        <h3 id="fz-t">Entre na Fuzion Insights</h3><p>Crie sua conta gratuita ou entre para ler o conteúdo exclusivo de assinante.</p>
+        <button type="button" class="fz-google">${G}<span>Continuar com Google</span></button>
+        <div class="fz-or"><span>ou com e-mail</span></div>
+        <form novalidate><input type="email" id="fz-e" placeholder="Seu e-mail" autocomplete="email" required><input type="password" id="fz-p" placeholder="Senha (mínimo 6 caracteres)" autocomplete="current-password" minlength="6" required>
+          <div class="fz-row"><button class="btn" type="submit">Entrar</button><button class="btn ghost fz-new" type="button">Criar conta gratuita</button></div><a class="fz-forgot" tabindex="0" role="button">Esqueci minha senha</a></form>
+        <p class="fz-msg" role="status"></p>
+        <p class="fz-note">Conta gratuita: comente e acompanhe as análises abertas. Conteúdo exclusivo: só para assinantes. Ao continuar você concorda com os <a href="/termos.html">Termos</a> e a <a href="/privacidade.html">Privacidade</a>.</p></div>`;
+      const msg = (t, ok) => { const e = m.querySelector('.fz-msg'); e.style.color = ok ? '#166534' : '#B91C1C'; e.textContent = t || ''; };
+      let finished = false; const end = u => { if (finished) return; finished = true; m.remove(); document.removeEventListener('keydown', key); done(u); };
+      const key = e => { if (e.key === 'Escape') end(null); }; document.addEventListener('keydown', key);
+      m.addEventListener('click', e => { if (e.target === m) end(null); }); m.querySelector('.sub-x').onclick = () => end(null);
+      const run = async fn => { msg('Aguarde…', true); m.querySelectorAll('button').forEach(b => b.disabled = true);
+        try { const a = await sdk(); const u = await fn(a); if (u) { toast('Bem-vindo(a)' + (u.displayName ? ', ' + u.displayName.split(' ')[0] : '') + '!'); end(u); return; } }
+        catch (e) { if (e && e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') msg(ERR[e && e.code] || 'Não foi possível entrar agora. Tente novamente.'); else msg(''); }
+        m.querySelectorAll('button').forEach(b => b.disabled = false); };
+      const cred = () => [m.querySelector('#fz-e').value.trim(), m.querySelector('#fz-p').value];
+      m.querySelector('.fz-google').onclick = () => run(async a => (await a.signInWithPopup(new firebase.auth.GoogleAuthProvider())).user);
+      m.querySelector('form').onsubmit = e => { e.preventDefault(); run(async a => (await a.signInWithEmailAndPassword(...cred())).user); };
+      m.querySelector('.fz-new').onclick = () => run(async a => { const c = await a.createUserWithEmailAndPassword(...cred()); try { await c.user.sendEmailVerification(); } catch (e) {} toast('Conta criada! Enviamos um link de confirmação para o seu e-mail.'); return c.user; });
+      m.querySelector('.fz-forgot').onclick = async () => { const [e] = cred(); if (!e) { msg('Digite o e-mail e clique de novo.'); return; } try { await (await sdk()).sendPasswordResetEmail(e); msg('Enviamos o link para redefinir a senha.', true); } catch (x) { msg(ERR[x && x.code] || 'Não foi possível enviar agora.'); } };
+      document.body.appendChild(m); m.querySelector('#fz-e').focus();
+    });
+  }
+  function menu() {
+    const old = document.getElementById('umenu'); if (old) { old.remove(); return; }
+    const h = document.querySelector('.site-header'); if (!h) return;
+    const d = document.createElement('div'); d.id = 'umenu'; d.className = 'umenu';
+    d.innerHTML = `<div class="um-who"><b>${esc(user.displayName || 'Minha conta')}</b><span>${esc(user.email || '')}</span></div><div class="um-plan" id="um-plan">Verificando plano…</div><nav><a href="/?secao=exclusivos">🔒 Conteúdo exclusivo</a><a href="/acesso.html">Área do assinante</a><button type="button" id="um-sub">Assinar / renovar</button><button type="button" id="um-out">Sair</button></nav>`;
+    h.appendChild(d);
+    status().then(p => { const e = d.querySelector('#um-plan'); if (!e) return;
+      e.className = 'um-plan ' + (p.ok ? 'paid' : '');
+      e.innerHTML = p.ok ? `Assinante · acesso até ${esc(String(p.ate || '').split('-').reverse().join('/'))}` : (p.erro === 'verificar' ? 'Confirme seu e-mail para liberar o acesso. <a id="um-re">Reenviar link</a>' : 'Plano gratuito'); const re = d.querySelector('#um-re'); if (re) re.onclick = async () => { try { await user.sendEmailVerification(); toast('Link de confirmação enviado.'); } catch (x) { toast('Aguarde um pouco para pedir de novo.'); } }; });
+    d.querySelector('#um-sub').onclick = () => { d.remove(); openSubscribe(); };
+    d.querySelector('#um-out').onclick = async () => { d.remove(); await signOut(); toast('Você saiu da conta.'); if (/^\/(artigo\/|acesso)/.test(location.pathname)) location.reload(); };
+    setTimeout(() => document.addEventListener('click', function f(e) { if (!d.contains(e.target)) { d.remove(); document.removeEventListener('click', f); } }), 0);
+  }
+  function click() { if (user) { menu(); return; } ready().then(() => user ? menu() : open().then(u => { if (u && /^\/(artigo\/|acesso)/.test(location.pathname)) location.reload(); })); }
+  function init() { const b = document.getElementById('hd-user'); if (!b) return; b.addEventListener('click', e => { e.stopPropagation(); click(); }); paint(); if (flag()) sdk().catch(() => {}); }
+  async function signOut() { if (auth) await auth.signOut(); flag(false); plan = null; paint(); }
+  return { open, token, status, ready, init, signOut, onChange: f => { subs.push(f); if (auth) f(user); }, get user() { return user; } };
+})();
+
 /* ===== Seções, subcategorias e cores (cabeçalho, filtros, painel e cards usam esta lista) ===== */
 const SECTIONS = [
-  { n: 'Economia', c: '#15803D', s: ['Câmbio e Juros', 'Inflação', 'Indicadores', 'Contas Públicas', 'Comércio Exterior'] },
+  { n: 'Economia', c: '#EAB308', d: '#A16207', t: '#111', s: ['Câmbio e Juros', 'Inflação', 'Indicadores', 'Contas Públicas', 'Comércio Exterior'] },
   { n: 'Mercado', c: '#D97706', s: ['Bolsa e Ações', 'Renda Fixa', 'Fundos e ETFs', 'Criptomoedas', 'Commodities'] },
   { n: 'Negócios', c: '#1D4ED8', s: ['Empreendedorismo', 'Finanças da Empresa', 'Marketing e Vendas', 'Carreira', 'Setores'] },
   { n: 'Estratégia', c: '#4338CA', s: ['Planejamento', 'Inovação', 'Tendências', 'Concorrência'] },
   { n: 'Liderança', c: '#7C3AED', s: ['Gestão de Pessoas', 'Cultura', 'Tomada de Decisão', 'Produtividade'] },
   { n: 'Tecnologia', c: '#0891B2', s: ['Inteligência Artificial', 'Cibersegurança', 'Startups', 'Software e Nuvem', 'Gadgets'] },
-  { n: 'Ciência', c: '#0D9488', s: ['Saúde', 'Espaço', 'Meio Ambiente', 'Pesquisa e Descobertas', 'Energia'] },
+  { n: 'Ciência', c: '#0D9488', s: ['Saúde', 'Espaço', 'Pesquisa e Descobertas', 'Física e Química'] },
+  { n: 'Meio Ambiente', c: '#16A34A', d: '#15803D', s: ['Clima', 'Sustentabilidade', 'Energia Limpa', 'Biodiversidade', 'Água e Saneamento'] },
   { n: 'Política', c: '#B91C1C', s: ['Eleições', 'Governo', 'Congresso', 'Mundo'] },
   { n: 'Cidade', c: '#475569', s: ['Brasília e DF', 'Mobilidade', 'Serviços', 'Meio Ambiente Urbano', 'Segurança'] },
   { n: 'Entretenimento', c: '#E11D48', s: ['Cinema e TV', 'Música', 'Games', 'Celebridades', 'Esportes'] },
@@ -507,19 +617,22 @@ const SECTIONS = [
   { n: 'Social', c: '#4D7C0F', s: ['Educação', 'Comportamento', 'Trabalho e Renda', 'Direitos e Cidadania', 'Consumo'] }
 ];
 // abas que aparecem sempre na barra; as demais ficam no menu ☰ (todas as seções)
-const PRIMARY = ['Economia', 'Mercado', 'Negócios', 'Tecnologia', 'Ciência', 'Liderança', 'Cidade', 'Entretenimento', 'Arte e Cultura', 'Social'];
-const secColor = n => (SECTIONS.find(x => x.n === n) || {}).c || '#2F80ED';
+const PRIMARY = ['Economia', 'Mercado', 'Negócios', 'Tecnologia', 'Ciência', 'Meio Ambiente', 'Liderança', 'Cidade', 'Entretenimento', 'Arte e Cultura', 'Social'];
+const secOf = n => SECTIONS.find(x => x.n === n) || {};
+const secColor = n => secOf(n).c || '#2F80ED', secText = n => secOf(n).d || secColor(n);
+const secStyle = n => `--c:${secColor(n)};--cd:${secText(n)};--tc:${secOf(n).t || '#fff'}`;
 const secLink = (n, sub) => '/?secao=' + slugify(n) + (sub ? '&sub=' + slugify(sub) : '');
 
 function mountHeader() {
   const h = document.querySelector('.site-header'); if (!h || h.dataset.v3) return; h.dataset.v3 = '1';
-  const tab = (n, c) => `<a href="${secLink(n)}" data-sec="${esc(n)}" style="--c:${c || secColor(n)}">${esc(n)}</a>`;
-  const mega = SECTIONS.map(s => `<div class="mg-col" style="--c:${s.c}"><a class="mg-h" href="${secLink(s.n)}" data-sec="${esc(s.n)}">${esc(s.n)}</a>${s.s.map(x => `<a href="${secLink(s.n, x)}" data-sec="${esc(s.n)}" data-sub="${esc(x)}">${esc(x)}</a>`).join('')}</div>`).join('');
+  const tab = n => `<a href="${secLink(n)}" data-sec="${esc(n)}" style="${secStyle(n)}">${esc(n)}</a>`;
+  const mega = SECTIONS.map(s => `<div class="mg-col" style="${secStyle(s.n)}"><a class="mg-h" href="${secLink(s.n)}" data-sec="${esc(s.n)}">${esc(s.n)}</a>${s.s.map(x => `<a href="${secLink(s.n, x)}" data-sec="${esc(s.n)}" data-sub="${esc(x)}">${esc(x)}</a>`).join('')}</div>`).join('');
   h.innerHTML = `<div class="hd-bar"><a class="logo-sq" href="/" aria-label="Fuzion Insights — página inicial"><img src="/logo-quadrado.png" alt="Fuzion Insights" width="56" height="56"></a>`
-    + `<button type="button" class="hd-burger" aria-label="Todas as seções" aria-expanded="false" aria-controls="mega"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>`
-    + `<nav class="hd-tabs" aria-label="Seções">${PRIMARY.map(n => tab(n)).join('')}<a href="/?secao=exclusivos" data-sec="Exclusivos" style="--c:#2F80ED">🔒 Exclusivos</a></nav><span class="hd-sp"></span><button type="button" class="btn-sub" data-subscribe>Assine</button></div>`
+    + `<nav class="hd-tabs" aria-label="Seções">${PRIMARY.map(n => tab(n)).join('')}</nav>`
+    + `<div class="hd-right"><button type="button" class="btn-sub" data-subscribe>Assine</button><button type="button" class="hd-user" id="hd-user" aria-label="Área de membro" aria-haspopup="true"></button>`
+    + `<button type="button" class="hd-burger" aria-label="Todas as seções" aria-expanded="false" aria-controls="mega"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div></div>`
     + `<div class="hd-sub" id="subbar" hidden></div>`
-    + `<div class="mega" id="mega" hidden><div class="wrap mg-in">${mega}<div class="mg-col" style="--c:#2F80ED"><a class="mg-h" href="/?secao=exclusivos" data-sec="Exclusivos">🔒 Exclusivos</a><a href="/assine.html">Planos de assinatura</a><a href="/sobre.html">Sobre</a><a href="/contato.html">Contato</a></div></div></div>`;
+    + `<div class="mega" id="mega" hidden><div class="wrap mg-in">${mega}<div class="mg-col" style="--c:#2F80ED;--cd:#1D4ED8"><a class="mg-h" href="/?secao=exclusivos" data-sec="Exclusivos">🔒 Exclusivos</a><a href="/assine.html">Planos de assinatura</a><a href="/acesso.html">Área do assinante</a><a href="/sobre.html">Sobre</a><a href="/contato.html">Contato</a></div></div></div>`;
   const burger = h.querySelector('.hd-burger'), mg = h.querySelector('#mega');
   const close = () => { mg.hidden = true; burger.setAttribute('aria-expanded', 'false'); };
   burger.addEventListener('click', e => { e.stopPropagation(); const open = mg.hidden; mg.hidden = !open; burger.setAttribute('aria-expanded', String(open)); });
@@ -530,6 +643,7 @@ function mountHeader() {
     if (window.FZ_HOME && window.st) { e.preventDefault(); window.st(a.dataset.sec, a.dataset.sub || ''); }
   });
   setNav(window.FZ_SEC || 'Home', '');
+  FZAuth.init();
 }
 /* marca a aba ativa e mostra as subcategorias da seção */
 function setNav(name, sub) {
@@ -537,7 +651,7 @@ function setNav(name, sub) {
   const bar = document.getElementById('subbar'); if (!bar) return;
   const s = SECTIONS.find(x => x.n === name);
   if (!s) { bar.hidden = true; bar.innerHTML = ''; return; }
-  bar.style.setProperty('--c', s.c); bar.hidden = false;
+  bar.style.cssText = secStyle(s.n); bar.hidden = false;
   bar.innerHTML = `<div class="wrap hd-sub-in"><span class="sb-t">${esc(s.n)}</span><a href="${secLink(s.n)}" data-sec="${esc(s.n)}" class="${sub ? '' : 'on'}">Todas</a>${s.s.map(x => `<a href="${secLink(s.n, x)}" data-sec="${esc(s.n)}" data-sub="${esc(x)}" class="${sub === x ? 'on' : ''}">${esc(x)}</a>`).join('')}</div>`;
 }
 
@@ -552,6 +666,7 @@ function coverHTML(a, cls, eager) {
    /artigos guarda o texto completo e a capa em base64 de CADA matéria; baixar tudo a cada visita estoura a cota do
    Firebase e a home fica vazia. /lista tem só título, resumo, tags etc. (poucos KB) e a capa vem de /img/ID (cache do Netlify). */
 const LKEY = 'fz_lista_v2';
+window.FZ_TV = (() => { try { return JSON.parse(localStorage.getItem('fz_tv') || 'null'); } catch (e) { return null; } })();
 const plainTxt = h => String(h || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 function liteOf(a) { const { content, image, og, ...r } = a; r.hasImg = !!image; r.iv = image ? image.length : 0; r.txt = plainTxt(content).slice(0, 500); return r; }
 function normLite(map) {
@@ -571,6 +686,7 @@ async function loadLista() {
     const f = await get(`${SITE.db}/artigos.json`); if (!f || f.error) throw 0;
     d = {}; Object.keys(f).forEach(k => { d[k] = liteOf(f[k]); });
   }
+  window.FZ_TV = d._tv || null; try { localStorage.setItem('fz_tv', JSON.stringify(window.FZ_TV)); } catch (e) {}
   const m = normLite(d); try { localStorage.setItem(LKEY, JSON.stringify(m)); } catch (e) {}
   return m;
 }

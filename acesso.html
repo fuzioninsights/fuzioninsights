@@ -32,6 +32,8 @@
         <p class="updated" id="ac-sub">Entre com o e-mail da assinatura e o código de acesso enviado depois da confirmação do pagamento.</p>
 
         <section id="ac-login" hidden>
+            <div class="acc-card" id="ac-conta"><p style="margin:0 0 .8rem"><b>Entre com a sua conta</b> (Google ou e-mail e senha). É o jeito mais simples: o acesso de assinante é liberado pelo e-mail da assinatura.</p><button class="btn" type="button" id="ac-conta-btn">Entrar / criar conta</button></div>
+            <p style="text-align:center;font-size:.8rem;color:var(--muted)">ou use o código de acesso recebido por e-mail:</p>
             <form class="acc-card" id="ac-form" novalidate>
                 <div class="row"><label for="ac-email">E-mail da assinatura</label><input type="email" id="ac-email" required autocomplete="email" maxlength="200"></div>
                 <div class="row"><label for="ac-code">Código de acesso</label><input class="code" type="text" id="ac-code" required maxlength="12" placeholder="XXXX-XXXX" autocomplete="off" autocapitalize="characters"></div>
@@ -103,10 +105,21 @@
             if (backTo) { location.href = backTo; return; }
             showArea(m); toast('Bem-vindo(a)!');
         });
-        $('ac-out').onclick = () => { Member.clear(); location.href = '/acesso.html'; };
+        $('ac-out').onclick = async () => { Member.clear(); await FZAuth.signOut(); location.href = '/acesso.html'; };
+        $('ac-conta-btn').onclick = () => FZAuth.open().then(u => u && location.reload());
         $('ac-renew').onclick = () => openSubscribe();
 
         (async () => {
+            if (params.get('pago')) toast(params.get('pago') === '1' ? 'Pagamento recebido! Seu acesso é liberado em instantes.' : 'Pagamento pendente. Assim que for aprovado, o acesso é liberado sozinho.');
+            const tk = await FZAuth.token();
+            if (tk) {
+                const d = await Member.checkToken(tk, ''), U = FZAuth.user;
+                if (d.ok) { showArea({ email: U.email, plano: d.plano, ate: d.ate }); return; }
+                showLogin();
+                $('ac-conta').innerHTML = `<p><b>Conta gratuita ativa:</b> ${esc(U.email)}.</p><p style="margin:.4rem 0 .8rem">${d.erro === 'verificar' ? 'Confirme seu e-mail (enviamos um link) para liberar o acesso de assinante.' : d.erro === 'expirado' ? 'Sua assinatura venceu. Renove para voltar a ler o conteúdo exclusivo.' : 'O conteúdo exclusivo é só para assinantes. Se você já pagou, o acesso é liberado assim que o pagamento for confirmado.'}</p><div style="display:flex;gap:.6rem;flex-wrap:wrap"><button class="btn" type="button" id="ac-sub-btn">Assinar / renovar</button><button class="btn ghost" type="button" id="ac-conta-out">Sair da conta</button></div>`;
+                $('ac-sub-btn').onclick = () => openSubscribe(); $('ac-conta-out').onclick = async () => { await FZAuth.signOut(); location.reload(); };
+                return;
+            }
             const m = Member.get(); if (!m) { showLogin(); return; }
             const d = await Member.check(m.email, m.codigo);
             if (d.ok) { Member.set({ email: m.email, codigo: m.codigo, ate: d.ate, plano: d.plano }); showArea({ email: m.email, plano: d.plano, ate: d.ate }); }

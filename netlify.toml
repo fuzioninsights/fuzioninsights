@@ -62,3 +62,16 @@
   to = "/.netlify/functions/videos"
   status = 200
   force = true
+
+# Pagamento automático (Mercado Pago)
+[[redirects]]
+  from = "/api/checkout"
+  to = "/.netlify/functions/checkout"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/mp"
+  to = "/.netlify/functions/mp-webhook"
+  status = 200
+  force = true
