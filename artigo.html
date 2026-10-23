@@ -79,10 +79,10 @@
                     <a id="btn-edit" class="btn-edit" href="#">✎ Editar artigo</a>
                 </div>
                 <figure class="art-fig" id="art-fig" style="display:none"><img id="art-cover" class="art-cover" alt=""><figcaption id="art-cap"></figcaption></figure>
-                <div class="topics" id="art-topics"><span class="topics-h">Tópicos</span><div class="chips" id="art-tags"></div></div>
                 <div class="share-bar" id="share-top"></div>
             </header>
             <div class="art-content" id="art-body"></div>
+            <div class="topics" id="art-topics"><span class="topics-h">Tópicos</span><div class="chips" id="art-tags"></div></div>
             <div class="share-bar" id="share-bottom" style="border-top:1px solid var(--border);padding-top:1.2rem"></div>
         </article>
 
@@ -165,7 +165,7 @@
                 let full = null; try { full = await (await fetch(`${SITE.db}/artigos/${key}.json`)).json(); } catch (e) {}
                 if (!full || full.error) return notFound();
                 const data = Object.assign({}, list, { [key]: full });
-                const a = full; curArt = a; artId = a.id;
+                const a = fixCat(full); curArt = a; artId = a.id;
                 const pub = artDate(a), upd = a.updatedAt ? new Date(a.updatedAt) : null;
                 const pretty = artUrl(a), fullUrl = location.origin + pretty;
                 if (location.pathname !== pretty) { try { history.replaceState(null, '', pretty); } catch (e) {} }   // link antigo (?id=) vira /artigo/nome-da-materia

@@ -364,3 +364,18 @@ a.chip:hover,a.chip:focus-visible{background:#fff;border-color:var(--gold-d);col
 .tv-list::-webkit-scrollbar-thumb{background:#3A3A42;border-radius:3px}.mega::-webkit-scrollbar-thumb,.hm-body::-webkit-scrollbar-thumb,.pv-body::-webkit-scrollbar-thumb,#sub-list::-webkit-scrollbar-thumb,.sub-card::-webkit-scrollbar-thumb{background:#C4C4CB;border-radius:3px}
 .tv-list::-webkit-scrollbar-track,.mega::-webkit-scrollbar-track,.hm-body::-webkit-scrollbar-track,.pv-body::-webkit-scrollbar-track,#sub-list::-webkit-scrollbar-track,.sub-card::-webkit-scrollbar-track{background:transparent}
 @media(max-width:680px){.hd-bar{gap:.4rem}.hd-right{gap:.35rem}.hd-user,.hd-burger{width:38px;height:38px}.hd-bar .btn-sub{padding:.5rem .7rem;font-size:.68rem}}
+
+/* ícones no estilo high-tech (neon azul) */
+.f-socials{gap:1.1rem;flex-wrap:wrap}
+.f-socials a{width:auto;height:auto;padding:.3rem;background:none!important;border:0!important;box-shadow:none!important;color:#8A8A94;border-radius:0!important;transform:none}
+.f-socials a svg{width:19px;height:19px;transition:filter .2s,transform .2s}
+.f-socials a:hover,.f-socials a:focus-visible{background:none!important;box-shadow:none!important;color:#2F80ED;transform:none}
+.f-socials a:hover svg,.f-socials a:focus-visible svg{filter:drop-shadow(0 0 3px #2F80ED) drop-shadow(0 0 9px rgba(47,128,237,.85));transform:translateY(-1px) scale(1.12)}
+.sh-btn{width:42px;height:42px;border:1px solid rgba(47,128,237,.35);background:linear-gradient(180deg,#F8FBFF,#EEF5FF);color:#1D4ED8;border-radius:10px!important;transition:box-shadow .2s,border-color .2s,color .2s,background .2s}
+.sh-btn:hover,.sh-btn:focus-visible{background:#fff;border-color:#2F80ED;color:#2F80ED;box-shadow:0 0 0 1px rgba(47,128,237,.3),0 0 16px rgba(47,128,237,.55)}
+.sh-btn.pill{background:linear-gradient(180deg,#F8FBFF,#EEF5FF);border-radius:10px!important}
+.sh-btn.pill.main{background:linear-gradient(135deg,#0A1630,#0D2250);border-color:#2F80ED;color:#fff;box-shadow:0 0 14px rgba(47,128,237,.45)}
+.sh-btn.pill.main:hover,.sh-btn.pill.main:focus-visible{background:#0D2250;color:#fff;box-shadow:0 0 24px rgba(47,128,237,.9)}
+.hd-burger:hover,.hd-user:hover,.hd-burger[aria-expanded="true"]{box-shadow:0 0 16px rgba(47,128,237,.7)}
+.hd-bar .btn-sub{box-shadow:0 0 0 rgba(47,128,237,0);transition:box-shadow .2s}.hd-bar .btn-sub:hover{box-shadow:0 0 18px rgba(47,128,237,.8)}
+@media(prefers-reduced-motion:reduce){.f-socials a svg{transition:none}}

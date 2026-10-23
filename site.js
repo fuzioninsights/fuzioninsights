@@ -602,22 +602,21 @@ const FZAuth = (() => {
 
 /* ===== Seções, subcategorias e cores (cabeçalho, filtros, painel e cards usam esta lista) ===== */
 const SECTIONS = [
-  { n: 'Economia', c: '#EAB308', d: '#A16207', t: '#111', s: ['Câmbio e Juros', 'Inflação', 'Indicadores', 'Contas Públicas', 'Comércio Exterior'] },
-  { n: 'Mercado', c: '#D97706', s: ['Bolsa e Ações', 'Renda Fixa', 'Fundos e ETFs', 'Criptomoedas', 'Commodities'] },
-  { n: 'Negócios', c: '#1D4ED8', s: ['Empreendedorismo', 'Finanças da Empresa', 'Marketing e Vendas', 'Carreira', 'Setores'] },
-  { n: 'Estratégia', c: '#4338CA', s: ['Planejamento', 'Inovação', 'Tendências', 'Concorrência'] },
-  { n: 'Liderança', c: '#7C3AED', s: ['Gestão de Pessoas', 'Cultura', 'Tomada de Decisão', 'Produtividade'] },
+  { n: 'Mercado', c: '#EAB308', d: '#A16207', t: '#111', s: ['Economia', 'Negócios', 'Liderança', 'Bolsa e Ações', 'Renda Fixa', 'Criptomoedas', 'Commodities'] },
   { n: 'Tecnologia', c: '#0891B2', s: ['Inteligência Artificial', 'Cibersegurança', 'Startups', 'Software e Nuvem', 'Gadgets'] },
   { n: 'Ciência', c: '#0D9488', s: ['Saúde', 'Espaço', 'Pesquisa e Descobertas', 'Física e Química'] },
   { n: 'Meio Ambiente', c: '#16A34A', d: '#15803D', s: ['Clima', 'Sustentabilidade', 'Energia Limpa', 'Biodiversidade', 'Água e Saneamento'] },
-  { n: 'Política', c: '#B91C1C', s: ['Eleições', 'Governo', 'Congresso', 'Mundo'] },
   { n: 'Cidade', c: '#475569', s: ['Brasília e DF', 'Mobilidade', 'Serviços', 'Meio Ambiente Urbano', 'Segurança'] },
-  { n: 'Entretenimento', c: '#E11D48', s: ['Cinema e TV', 'Música', 'Games', 'Celebridades', 'Esportes'] },
-  { n: 'Arte e Cultura', c: '#A21CAF', s: ['Artes Visuais', 'Livros', 'Teatro e Dança', 'Design e Arquitetura', 'Patrimônio'] },
-  { n: 'Social', c: '#4D7C0F', s: ['Educação', 'Comportamento', 'Trabalho e Renda', 'Direitos e Cidadania', 'Consumo'] }
+  { n: 'Arte e Cultura', c: '#A21CAF', s: ['Artes Visuais', 'Livros', 'Teatro e Dança', 'Design e Arquitetura', 'Entretenimento', 'Lazer', 'Redes Sociais', 'Trends'] },
+  { n: 'Social', c: '#F97316', d: '#C2410C', t: '#111', s: ['Educação', 'Comportamento', 'Trabalho e Renda', 'Direitos e Cidadania', 'Consumo'] },
+  { n: 'Política', c: '#B91C1C', s: ['Eleições', 'Governo', 'Congresso', 'Mundo'] },
+  { n: 'Estratégia', c: '#4338CA', s: ['Planejamento', 'Inovação', 'Tendências', 'Concorrência'] }
 ];
+// matérias antigas, de seções que viraram subcategorias, continuam aparecendo no lugar certo
+const LEGACY = { 'Economia': { c: 'Mercado', s: 'Economia' }, 'Negócios': { c: 'Mercado', s: 'Negócios' }, 'Liderança': { c: 'Mercado', s: 'Liderança' }, 'Entretenimento': { c: 'Arte e Cultura', s: 'Entretenimento' } };
+const fixCat = a => { const m = a && LEGACY[a.category]; if (m) { const S = SECTIONS.find(x => x.n === m.c); if (!a.sub || !(S && S.s.includes(a.sub))) a.sub = m.s; a.category = m.c; } return a; };
 // abas que aparecem sempre na barra; as demais ficam no menu ☰ (todas as seções)
-const PRIMARY = ['Economia', 'Mercado', 'Negócios', 'Tecnologia', 'Ciência', 'Meio Ambiente', 'Liderança', 'Cidade', 'Entretenimento', 'Arte e Cultura', 'Social'];
+const PRIMARY = ['Mercado', 'Tecnologia', 'Ciência', 'Meio Ambiente', 'Cidade', 'Arte e Cultura', 'Social'];
 const secOf = n => SECTIONS.find(x => x.n === n) || {};
 const secColor = n => secOf(n).c || '#2F80ED', secText = n => secOf(n).d || secColor(n);
 const secStyle = n => `--c:${secColor(n)};--cd:${secText(n)};--tc:${secOf(n).t || '#fff'}`;
@@ -673,7 +672,7 @@ function normLite(map) {
   const o = {};
   Object.keys(map || {}).forEach(k => {
     const x = map[k]; if (!x || typeof x !== 'object' || !x.title) return;
-    const y = Object.assign({}, x);
+    const y = fixCat(Object.assign({}, x));
     if ('hasImg' in y) y.image = y.hasImg ? `/img/${encodeURIComponent(y.id)}?c=1&v=${y.iv || 0}` : '';
     o[k] = y;
   });
@@ -690,7 +689,7 @@ async function loadLista() {
   const m = normLite(d); try { localStorage.setItem(LKEY, JSON.stringify(m)); } catch (e) {}
   return m;
 }
-const cachedLista = () => { try { return JSON.parse(localStorage.getItem(LKEY) || 'null') || {}; } catch (e) { return {}; } };
+const cachedLista = () => { try { const m = JSON.parse(localStorage.getItem(LKEY) || 'null') || {}; Object.values(m).forEach(fixCat); return m; } catch (e) { return {}; } };
 
 /* ===== Blocos HTML incorporados (gráficos, quadros, linhas do tempo…) =====
    O código fica guardado em base64 num <figure class="fz-embed"> e só é executado dentro de um
