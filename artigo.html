@@ -185,7 +185,7 @@
                 if (desc) document.querySelector('meta[name="description"]').setAttribute('content', desc);
                 if (tags.length) setMeta('name', 'keywords', tags.join(', '));
                 setMeta('property', 'og:type', 'article'); setMeta('property', 'og:title', a.title); setMeta('property', 'og:description', desc); setMeta('property', 'og:url', fullUrl);
-                $('art-category').style.color = secText(a.category); setNav(a.category, a.sub || '');
+                $('art-category').style.color = secText(a.category); setNav(a.category, a.sub || '', true);
                 $('art-category').innerHTML = esc(a.category || '') + (a.sub ? ' · ' + esc(a.sub) : '') + (a.premium ? ' <span class="badge-premium">Assinantes</span>' : '');
                 $('art-title').textContent = a.title;
                 if (a.description) { const d = $('art-desc'); d.textContent = a.description; d.style.display = 'block'; }

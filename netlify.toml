@@ -75,3 +75,10 @@
   to = "/.netlify/functions/mp-webhook"
   status = 200
   force = true
+
+# atalho para o painel do editor (também funciona no celular)
+[[redirects]]
+  from = "/editor"
+  to = "/?editor=1"
+  status = 302
+  force = true

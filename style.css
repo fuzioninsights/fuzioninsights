@@ -379,3 +379,9 @@ a.chip:hover,a.chip:focus-visible{background:#fff;border-color:var(--gold-d);col
 .hd-burger:hover,.hd-user:hover,.hd-burger[aria-expanded="true"]{box-shadow:0 0 16px rgba(47,128,237,.7)}
 .hd-bar .btn-sub{box-shadow:0 0 0 rgba(47,128,237,0);transition:box-shadow .2s}.hd-bar .btn-sub:hover{box-shadow:0 0 18px rgba(47,128,237,.8)}
 @media(prefers-reduced-motion:reduce){.f-socials a svg{transition:none}}
+
+/* logo quadrada estilo portal: fundo branco, marca azul e FUZION embaixo */
+.logo-sq{background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-decoration:none}
+.logo-sq svg{width:30px;height:30px;display:block}
+.logo-sq span{font:900 9.5px/1 'Inter',sans-serif;letter-spacing:.7px;color:#1D5FD6}
+.logo-sq:hover{box-shadow:0 0 18px rgba(47,128,237,.7)}

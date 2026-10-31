@@ -626,7 +626,7 @@ function mountHeader() {
   const h = document.querySelector('.site-header'); if (!h || h.dataset.v3) return; h.dataset.v3 = '1';
   const tab = n => `<a href="${secLink(n)}" data-sec="${esc(n)}" style="${secStyle(n)}">${esc(n)}</a>`;
   const mega = SECTIONS.map(s => `<div class="mg-col" style="${secStyle(s.n)}"><a class="mg-h" href="${secLink(s.n)}" data-sec="${esc(s.n)}">${esc(s.n)}</a>${s.s.map(x => `<a href="${secLink(s.n, x)}" data-sec="${esc(s.n)}" data-sub="${esc(x)}">${esc(x)}</a>`).join('')}</div>`).join('');
-  h.innerHTML = `<div class="hd-bar"><a class="logo-sq" href="/" aria-label="Fuzion Insights — página inicial"><img src="/logo-quadrado.png" alt="Fuzion Insights" width="56" height="56"></a>`
+  h.innerHTML = `<div class="hd-bar"><a class="logo-sq" href="/" aria-label="Fuzion Insights — página inicial"><svg viewBox="17 12 163 164" aria-hidden="true"><path fill="#2F80ED" d="M25 18H64A6 6 0 0 1 70 24V110A8 8 0 0 0 78 118H99V89A4 4 0 0 1 103 85H140A4 4 0 0 1 144 89V118H173A4 4 0 0 1 177 122V162A12 12 0 0 1 165 174H31A12 12 0 0 1 19 162V24A6 6 0 0 1 25 18Z"/><circle cx="158" cy="34" r="19.6" fill="#0B3D91"/><circle cx="125" cy="60" r="15.6" fill="#0B3D91"/></svg><span>FUZION</span></a>`
     + `<nav class="hd-tabs" aria-label="Seções">${PRIMARY.map(n => tab(n)).join('')}</nav>`
     + `<div class="hd-right"><button type="button" class="btn-sub" data-subscribe>Assine</button><button type="button" class="hd-user" id="hd-user" aria-label="Área de membro" aria-haspopup="true"></button>`
     + `<button type="button" class="hd-burger" aria-label="Todas as seções" aria-expanded="false" aria-controls="mega"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div></div>`
@@ -645,11 +645,11 @@ function mountHeader() {
   FZAuth.init();
 }
 /* marca a aba ativa e mostra as subcategorias da seção */
-function setNav(name, sub) {
+function setNav(name, sub, noBar) {   // noBar: nas matérias não mostra a barra de subcategorias (economiza espaço no celular)
   document.querySelectorAll('.hd-tabs a').forEach(a => a.classList.toggle('active', a.dataset.sec === name));
   const bar = document.getElementById('subbar'); if (!bar) return;
   const s = SECTIONS.find(x => x.n === name);
-  if (!s) { bar.hidden = true; bar.innerHTML = ''; return; }
+  if (!s || noBar) { bar.hidden = true; bar.innerHTML = ''; return; }
   bar.style.cssText = secStyle(s.n); bar.hidden = false;
   bar.innerHTML = `<div class="wrap hd-sub-in"><span class="sb-t">${esc(s.n)}</span><a href="${secLink(s.n)}" data-sec="${esc(s.n)}" class="${sub ? '' : 'on'}">Todas</a>${s.s.map(x => `<a href="${secLink(s.n, x)}" data-sec="${esc(s.n)}" data-sub="${esc(x)}" class="${sub === x ? 'on' : ''}">${esc(x)}</a>`).join('')}</div>`;
 }

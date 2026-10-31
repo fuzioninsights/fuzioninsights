@@ -31,7 +31,11 @@ exports.handler = async (event) => {
   try {
     const p = await (await fetch(`https://api.mercadopago.com/v1/payments/${id}`, { headers: { Authorization: `Bearer ${MPT}` } })).json();
     if (!p || p.status !== 'approved') return ok({ ok: true, status: p && p.status });
-    const [email0, plano] = String(p.external_reference || '').split('|'), pl = PLANOS()[plano], email = String(email0 || '').trim().toLowerCase();
+    // pagamento iniciado pelo botão do site traz "e-mail|plano"; link/QR/Pix do Mercado Pago pago por fora: usa o e-mail do pagador e o valor
+    let email0, plano; const ref = String(p.external_reference || '');
+    if (ref.includes('|')) [email0, plano] = ref.split('|');
+    else { email0 = p.payer && p.payer.email; const v = Number(p.transaction_amount), P = PLANOS(); plano = v + 0.001 >= P.anual.preco ? 'anual' : v + 0.001 >= P.mensal.preco ? 'mensal' : ''; }
+    const pl = PLANOS()[plano], email = String(email0 || '').trim().toLowerCase();
     if (!pl || !email || Number(p.transaction_amount) + 0.001 < pl.preco) return ok({ ok: true, ignorado: 'dados' });
     const t = await adminToken(), url = `${DB}/ativos/${encodeURIComponent(emailKey(email))}.json?auth=${t}`;
     const cur = await (await fetch(url)).json().catch(() => null);
