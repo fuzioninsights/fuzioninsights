@@ -173,6 +173,49 @@
         .tv-soon::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#bdbdbd 0 14.3%,#bdbd00 0 28.6%,#00bdbd 0 42.9%,#00bd00 0 57.2%,#bd00bd 0 71.5%,#bd0000 0 85.8%,#0000bd 0);opacity:.2}
         .tv-soon::after{content:"";position:absolute;inset:0;background:radial-gradient(closest-side,rgba(5,11,24,.92) 40%,rgba(5,11,24,.55));}
         .tv-soon>*{position:relative;z-index:1}
+
+        /* ===== v4: só 2 bolinhas piscando (AO VIVO do player + LIVE do canal); botões CH estilo TV; mobile ===== */
+        .tv-h b::before{display:none}
+        .tv-air::before{display:none}
+        .hud-live em{display:none}
+        .tv-item .tv-ch{width:54px;height:50px;gap:3px;border-radius:9px!important;position:relative;color:#DCEBFF;
+            background:linear-gradient(180deg,#2A3652 0%,#18213A 46%,#0B1224 100%);
+            border:1px solid #3E4E72;border-bottom:3px solid #04070E;
+            box-shadow:0 2px 0 #02050B,0 5px 10px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.25),inset 0 0 0 1px rgba(0,0,0,.35);
+            text-shadow:0 0 6px var(--c,#2F80ED),0 0 12px var(--c,#2F80ED);
+            font:800 1.2rem/1 ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;letter-spacing:2px;transition:transform .08s,box-shadow .12s,border-color .12s}
+        .tv-item .tv-ch::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:42%;border-radius:6px 6px 14px 14px!important;background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,0));pointer-events:none}
+        .tv-item .tv-ch::after{content:"";position:absolute;left:50%;bottom:3px;width:16px;height:2px;margin-left:-8px;border-radius:2px!important;background:var(--c,#2F80ED);opacity:.35}
+        .tv-item .tv-ch small{font:800 .5rem/1 'Inter',sans-serif;letter-spacing:2px;color:#9DB8E6;text-shadow:none}
+        .tv-item:hover .tv-ch{border-color:var(--c,#2F80ED);box-shadow:0 2px 0 #02050B,0 5px 12px rgba(0,0,0,.6),0 0 14px color-mix(in srgb,var(--c,#2F80ED) 60%,transparent),inset 0 1px 0 rgba(255,255,255,.3)}
+        .tv-item:active .tv-ch,.tv-item.on .tv-ch{transform:translateY(2px);border-bottom-width:1px;
+            background:linear-gradient(180deg,#0B1224,#16203A);color:#fff;border-color:var(--c,#2F80ED);
+            box-shadow:0 0 0 #000,inset 0 3px 7px rgba(0,0,0,.75),0 0 16px color-mix(in srgb,var(--c,#2F80ED) 75%,transparent)}
+        .tv-item.on .tv-ch::after{opacity:1;box-shadow:0 0 8px var(--c,#2F80ED)}
+        .tv-item.on .tv-ch::before{opacity:.35}
+        .tv-item.is-live .tv-ch{background:linear-gradient(180deg,#8E2430 0%,#5C1119 50%,#33080D 100%);border-color:#E0525E;border-bottom-color:#1A0407;color:#fff}
+        .tv-item.is-live .tv-ch small{color:#FFC2C7}
+        .tv-item.is-live .tv-ch::after{background:#EF4444}
+        .tv-item.is-live:active .tv-ch,.tv-item.is-live.on .tv-ch{background:linear-gradient(180deg,#33080D,#6A141D);border-color:#EF4444}
+        .tv-item.soon .tv-ch{background:linear-gradient(180deg,#1A2236,#0C1222);color:#6F86B3;text-shadow:none;box-shadow:0 2px 0 #02050B,inset 0 1px 0 rgba(255,255,255,.1)}
+        .tv-item.soon .tv-ch::after{opacity:.15}
+        .tv-item{grid-template-columns:54px minmax(0,1fr) auto}
+
+        /* painel: lista de vídeos do Canal 01 com "+" */
+        .tv-vrow{display:flex;gap:.4rem;margin-bottom:.45rem}.tv-vrow input{flex:1;min-width:0}
+        .tv-rm{flex:0 0 auto;width:38px;border:1px solid #D4D4D8;background:#fff;color:#71717A;font:700 1.1rem/1 'Inter',sans-serif;cursor:pointer;border-radius:6px!important}
+        .tv-rm:hover{border-color:#DC2626;color:#DC2626}
+        .tv-vrow:only-child .tv-rm{visibility:hidden}
+        .tv-add{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px dashed #2F80ED;background:#fff;color:#2F80ED;font:800 1.3rem/1 'Inter',sans-serif;cursor:pointer;border-radius:6px!important;padding:0}
+        .tv-add:hover{background:#2F80ED;color:#fff}.tv-add[hidden]{display:none}
+
+        /* mobile: slider e canais com cards inteiros, sem corte */
+        @media(max-width:860px){
+            .sl-slide{min-height:0}.sl-slide .cv{min-height:0;aspect-ratio:1.91/1;height:auto}
+            .tv-list{flex-direction:column;overflow:visible;height:auto;min-height:0;max-height:none;padding:0}
+            .tv-item{flex:none;width:100%}
+        }
+        @media(max-width:680px){.grid{grid-template-columns:minmax(0,1fr)}}
         @media(prefers-reduced-motion:reduce){.tv-h b::before,.tv-ch em,.tv-air::before,.tv-bug em,.hud-live em{animation:none}}
         @media(max-width:860px){.tv-guide{display:none}}
         /* painel: bloco da TV recolhido */
@@ -351,7 +394,7 @@
                         <div class="form-group"><label for="tv-live">TV ao vivo <span class="hint">(link da live ou youtube.com/@canal/live)</span></label><input type="text" id="tv-live" placeholder="https://youtube.com/live/..." autocomplete="off"></div>
                         <div class="form-group"><label for="tv-plist">Destaques · playlist <span class="hint">(opcional)</span></label><input type="text" id="tv-plist" placeholder="https://youtube.com/playlist?list=..." autocomplete="off"></div>
                     </div>
-                    <div class="form-group"><label for="tv-vids">Destaques · vídeos específicos <span class="hint">(um link por linha; substituem os últimos vídeos do canal)</span></label><textarea id="tv-vids" rows="2" placeholder="https://youtu.be/..." autocomplete="off"></textarea></div>
+                    <div class="form-group"><label>Canal 01 · Destaques · vídeos específicos <span class="hint">(um link por linha; clique em + para acrescentar mais; substituem os últimos vídeos do canal)</span></label><div id="tv-vids-list"></div><button type="button" class="tv-add" id="tv-add" onclick="addVidRow()" aria-label="Adicionar outro vídeo" title="Adicionar outro vídeo">+</button></div>
                     <details class="tv-sub"><summary>Canais por seção <small>cada seção do site é um canal da TV; vazio = “Em breve”</small></summary><div id="tv-chans" class="tv-grid2"></div></details>
                     <div class="tv-actions"><button type="button" class="btn gold" onclick="saveTV()">Salvar TV</button><button type="button" class="btn ghost" onclick="saveTV(true)">Voltar ao automático</button><span class="hint" id="tv-msg"></span></div>
                 </div></details>
@@ -1145,7 +1188,7 @@
                 const pl = $('tv-pl'); if (tvPlayer && tvPlayer.destroy) { try { tvPlayer.destroy(); } catch (e) {} } tvPlayer = null;
                 if (it.soon) { pl.innerHTML = soonView(it); return; }
                 const multi = !!(it.list || (it.vids && it.vids.length > 1));
-                pl.innerHTML = `<div class="tv-stage" id="tv-stage" data-state="play"><iframe id="tv-frame" src="${embed(it)}" title="${esc(it.t)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><span class="tv-top"></span>${it.num ? `<span class="tv-bug">${it.k === 'live' ? '<em></em>AO VIVO' : `<b>CH ${it.num}</b>${esc(it.t)}`}<u>HD</u></span>` : ''}<button type="button" class="tv-click" aria-label="Pausar ou continuar" hidden></button><div class="tv-hud">${multi ? `<button type="button" class="hud-b" data-h="pv" aria-label="Vídeo anterior">${ic.prev}</button>` : ''}<button type="button" class="hud-b" data-h="pp" aria-label="Pausar ou continuar"><span class="i-pause">${ic.pause}</span><span class="i-play">${ic.play}</span></button>${multi ? `<button type="button" class="hud-b" data-h="nx" aria-label="Próximo vídeo">${ic.next}</button>` : ''}<button type="button" class="hud-b" data-h="mu" aria-label="Ligar ou desligar o som"><span class="i-vol">${ic.vol}</span><span class="i-mute">${ic.mute}</span></button><span class="hud-t">${esc(it.t)}</span>${it.k === 'live' ? '<span class="hud-live"><em></em>AO VIVO</span>' : ''}<button type="button" class="hud-b" data-h="fs" aria-label="Tela cheia">${ic.fs}</button></div></div>`;
+                pl.innerHTML = `<div class="tv-stage" id="tv-stage" data-state="play"><iframe id="tv-frame" src="${embed(it)}" title="${esc(it.t)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><span class="tv-top"></span>${it.num ? `<span class="tv-bug">${it.k === 'live' ? '<em></em>AO VIVO' : `<b>CH ${it.num}</b>${esc(it.t)}`}<u>HD</u></span>` : ''}<button type="button" class="tv-click" aria-label="Pausar ou continuar" hidden></button><div class="tv-hud">${multi ? `<button type="button" class="hud-b" data-h="pv" aria-label="Vídeo anterior">${ic.prev}</button>` : ''}<button type="button" class="hud-b" data-h="pp" aria-label="Pausar ou continuar"><span class="i-pause">${ic.pause}</span><span class="i-play">${ic.play}</span></button>${multi ? `<button type="button" class="hud-b" data-h="nx" aria-label="Próximo vídeo">${ic.next}</button>` : ''}<button type="button" class="hud-b" data-h="mu" aria-label="Ligar ou desligar o som"><span class="i-vol">${ic.vol}</span><span class="i-mute">${ic.mute}</span></button><span class="hud-t">${esc(it.t)}</span>${it.k === 'live' ? '<span class="hud-live">AO VIVO</span>' : ''}<button type="button" class="hud-b" data-h="fs" aria-label="Tela cheia">${ic.fs}</button></div></div>`;
                 const st = $('tv-stage');
                 st.querySelector('[data-h="fs"]').onclick = () => { const f = st.requestFullscreen || st.webkitRequestFullscreen; if (document.fullscreenElement) document.exitFullscreen(); else if (f) f.call(st); };
                 ytReady().then(() => {
@@ -1180,17 +1223,30 @@
             else fetch(`/api/videos?h=${encodeURIComponent(v.handle || '@fuzioninsights')}${cid ? '&c=' + encodeURIComponent(cid) : ''}`).then(r => r.json()).then(d => finish(d.videos)).catch(() => finish([]));
         }
         /* painel: live, destaques e um canal por seção (fica em /lista/_tv; vazio = automático) */
+        const TV_MAX = 12;
+        const vidRows = () => [...document.querySelectorAll('#tv-vids-list .tvv')];
+        function addVidRow(v) {
+            const w = $('tv-vids-list'); if (!w || vidRows().length >= TV_MAX) return;
+            const d = document.createElement('div'); d.className = 'tv-vrow';
+            d.innerHTML = '<input type="text" class="tvv" placeholder="https://youtu.be/..." autocomplete="off"><button type="button" class="tv-rm" aria-label="Remover vídeo" onclick="rmVidRow(this)">×</button>';
+            w.appendChild(d); const inp = d.querySelector('input');
+            if (typeof v === 'string') inp.value = v; else inp.focus();
+            $('tv-add').hidden = vidRows().length >= TV_MAX;
+        }
+        function rmVidRow(b) { b.parentNode.remove(); if (!vidRows().length) addVidRow(''); $('tv-add').hidden = vidRows().length >= TV_MAX; }
+        function setVidRows(list) { const w = $('tv-vids-list'); if (!w) return; w.innerHTML = ''; (list && list.length ? list : ['']).forEach(x => addVidRow(x)); }
+        const getVidText = () => vidRows().map(i => i.value.trim()).filter(Boolean).join('\n');
         const chanSlugs = () => SECTIONS.map(s => ({ slug: slugify(s.n), n: s.n }));
         function buildTVChans() {
             const w = $('tv-chans'); if (!w || w.dataset.ok) return; w.dataset.ok = '1';
             w.innerHTML = chanSlugs().map((c, i) => `<div class="form-group"><label for="tvc-${c.slug}">Canal ${String(i + 2).padStart(2, '0')} · ${esc(c.n)} <span class="hint">(links de vídeos ou de uma playlist)</span></label><input type="text" class="tvc" id="tvc-${c.slug}" data-slug="${c.slug}" data-n="${esc(c.n)}" placeholder="https://youtu.be/... ou playlist" autocomplete="off"></div>`).join('');
         }
         async function loadTVForm() {
-            buildTVChans();
+            buildTVChans(); if (!vidRows().length) setVidRows([]);
             try { const c = await (await fetch(`${SITE.db}/lista/_tv.json`)).json(); window.FZ_TV = c && !c.error ? c : null; } catch (e) { return; }
             const c = window.FZ_TV || {};
             $('tv-live').value = c.live === 'canal' ? `https://youtube.com/${(SITE.video && SITE.video.handle) || '@fuzioninsights'}/live` : (c.live ? `https://youtu.be/${c.live}` : '');
-            $('tv-vids').value = (c.videos || []).map(id => `https://youtu.be/${id}`).join('\n');
+            setVidRows((c.videos || []).map(id => `https://youtu.be/${id}`));
             $('tv-plist').value = c.playlist ? `https://youtube.com/playlist?list=${c.playlist}` : '';
             document.querySelectorAll('.tvc').forEach(i => { const x = (c.canais || {})[i.dataset.slug] || {}; i.value = x.playlist ? `https://youtube.com/playlist?list=${x.playlist}` : (x.videos || []).map(id => `https://youtu.be/${id}`).join(' '); });
             const man = !!(c.live || (c.videos || []).length || c.playlist || Object.keys(c.canais || {}).length); $('tv-msg').textContent = ''; $('tv-sum').textContent = man ? 'Modo manual ativo' : 'Modo automático (últimos vídeos do canal)';
@@ -1198,7 +1254,7 @@
         async function saveTV(auto) {
             const msg = t => { $('tv-msg').textContent = t; };
             const live = auto ? '' : ytLive($('tv-live').value), pl = auto ? '' : ytList($('tv-plist').value);
-            const lines = auto ? [] : $('tv-vids').value.split(/\n+/).map(ytVid).filter(Boolean).slice(0, 12);
+            const lines = auto ? [] : getVidText().split(/[\s,;]+/).map(ytVid).filter(Boolean).slice(0, 12);
             if (!auto && $('tv-live').value.trim() && !live) { msg('Não reconheci o link da live. Use o link da transmissão ou youtube.com/@canal/live.'); return; }
             if (!auto && $('tv-plist').value.trim() && !pl) { msg('Não reconheci o link da playlist (precisa ter list=...).'); return; }
             const cfg = {}; if (live) cfg.live = live; if (lines.length) cfg.videos = lines; if (pl) cfg.playlist = pl;
@@ -1209,7 +1265,7 @@
                 const r = await fetch(`${SITE.db}/lista/_tv.json?auth=${t}`, empty ? { method: 'DELETE' } : { method: 'PUT', body: JSON.stringify(cfg) });
                 if (!r.ok) { msg('Não foi possível salvar. Confira se o caminho “lista” está liberado nas regras do Firebase.'); return; }
                 window.FZ_TV = empty ? null : cfg; try { localStorage.setItem('fz_tv', JSON.stringify(window.FZ_TV)); } catch (e) {}
-                if (empty) { ['tv-live', 'tv-vids', 'tv-plist'].forEach(id => { $(id).value = ''; }); document.querySelectorAll('.tvc').forEach(i => { i.value = ''; }); }
+                if (empty) { ['tv-live', 'tv-plist'].forEach(id => { $(id).value = ''; }); setVidRows([]); document.querySelectorAll('.tvc').forEach(i => { i.value = ''; }); }
                 msg(empty ? 'Pronto: modo automático.' : 'Salvo! A home já usa esta seleção.'); $('tv-sum').textContent = empty ? 'Modo automático (últimos vídeos do canal)' : 'Modo manual ativo'; tvSig = null; renderTV(sec === 'Home' && !tagFilter && !searchQ);
             } catch (e) { msg('Falha de conexão. Tente de novo.'); }
         }

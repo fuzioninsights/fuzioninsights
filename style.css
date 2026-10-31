@@ -333,8 +333,9 @@ a.chip:hover,a.chip:focus-visible{background:#fff;border-color:var(--gold-d);col
 @media(max-width:680px){.hd-bar{padding:0 .6rem;gap:.5rem}}
 /* capas inteiras: nunca cortadas (imagem contida sobre fundo desfocado da própria capa) */
 .cv{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:#0A0A0B}
-.cv::before{content:"";position:absolute;inset:-14%;background:var(--bg) center/cover no-repeat;filter:blur(18px) brightness(.55) saturate(1.1)}
-.cv img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain}
+.cv::before{display:none}
+.cv img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.card .cv,.rel-card .cv{aspect-ratio:1.91/1}
 .cv-none{display:flex;align-items:center;justify-content:center;color:#2F80ED;font:800 .8rem 'Inter',sans-serif;letter-spacing:1px;text-transform:uppercase}.cv-none::before{display:none}
 /* redes sociais */
 .f-socials{gap:.5rem;flex-wrap:wrap}
@@ -380,8 +381,7 @@ a.chip:hover,a.chip:focus-visible{background:#fff;border-color:var(--gold-d);col
 .hd-bar .btn-sub{box-shadow:0 0 0 rgba(47,128,237,0);transition:box-shadow .2s}.hd-bar .btn-sub:hover{box-shadow:0 0 18px rgba(47,128,237,.8)}
 @media(prefers-reduced-motion:reduce){.f-socials a svg{transition:none}}
 
-/* logo quadrada estilo portal: fundo branco, marca azul e FUZION embaixo */
-.logo-sq{background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-decoration:none}
-.logo-sq svg{width:30px;height:30px;display:block}
-.logo-sq span{font:900 9.5px/1 'Inter',sans-serif;letter-spacing:.7px;color:#1D5FD6}
-.logo-sq:hover{box-shadow:0 0 18px rgba(47,128,237,.7)}
+/* logo quadrada: igual ao favicon (fundo cinza claro, marca cinza, bolinhas azul-ciano), com margem interna */
+.logo-sq{background:#C3C3C3;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.logo-sq svg{width:40px;height:40px;display:block}
+.logo-sq:hover{box-shadow:0 0 18px rgba(0,162,232,.75)}
