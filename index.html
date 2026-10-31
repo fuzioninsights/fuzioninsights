@@ -211,11 +211,56 @@
 
         /* mobile: slider e canais com cards inteiros, sem corte */
         @media(max-width:860px){
-            .sl-slide{min-height:0}.sl-slide .cv{min-height:0;aspect-ratio:1.91/1;height:auto}
-            .tv-list{flex-direction:column;overflow:visible;height:auto;min-height:0;max-height:none;padding:0}
+            .tv-list{flex-direction:column;height:auto;min-height:0}
             .tv-item{flex:none;width:100%}
         }
         @media(max-width:680px){.grid{grid-template-columns:minmax(0,1fr)}}
+
+        /* ===== v5: capa inteira no slider; TV com controles fora do vídeo ===== */
+        .sl-slide{min-height:0;grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+        .sl-slide .cv{aspect-ratio:var(--ar,16/9);height:auto;min-height:0}
+        .sl-txt{padding:1.3rem 1.4rem 3.6rem;gap:.65rem}
+        .sl-txt h2{font-size:1.35rem}
+        .sl-txt p{font-size:.86rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+        @media(max-width:860px){
+            .sl-slide{grid-template-columns:minmax(0,1fr)}
+            .sl-slide .cv{aspect-ratio:var(--ar,16/9);height:auto;min-height:0}
+            .sl-txt{padding:.9rem 1rem 3.3rem;gap:.5rem}.sl-txt h2{font-size:1.08rem;line-height:1.25}
+            .sl-txt p{font-size:.8rem;-webkit-line-clamp:3}.sl-kick{font-size:.6rem}
+        }
+        /* player: controles numa barra própria, abaixo do vídeo (nada por cima da imagem) */
+        .tv-top{display:none}
+        .tv-player{border:1px solid rgba(47,128,237,.45);box-shadow:0 0 28px rgba(47,128,237,.25);background:#050B18}
+        .tv-player.is-play{aspect-ratio:auto}
+        .tv-stage{position:relative;inset:auto;display:flex;flex-direction:column;background:#050B18}
+        .tv-vid{position:relative;aspect-ratio:16/9;background:#000;width:100%}
+        .tv-vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+        .tv-stage .tv-click{inset:0}
+        .tv-stage .tv-hud{position:relative;left:auto;right:auto;bottom:auto;opacity:1;gap:.45rem;padding:.5rem .7rem;background:linear-gradient(180deg,#0B1530,#070E22);border-top:1px solid rgba(47,128,237,.45)}
+        .tv-stage .hud-b{width:34px;height:34px;border-radius:50%!important;background:linear-gradient(180deg,#22305A,#101A38);border:1px solid rgba(141,184,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 2px 4px rgba(0,0,0,.5)}
+        .tv-stage .hud-b:hover{background:#2F80ED;border-color:#8DB8FF;box-shadow:0 0 14px rgba(47,128,237,.8)}
+        .tv-stage:fullscreen{background:#000}.tv-stage:fullscreen .tv-vid{flex:1;aspect-ratio:auto}
+        .tv-poster::before{background:linear-gradient(180deg,rgba(5,11,24,0) 55%,rgba(5,11,24,.75))}
+        .tv-scan{display:none}
+        .tv-bug{top:.6rem;right:.6rem}
+
+        /* botões dos canais: tecla de vidro mais limpa */
+        .tv-item{padding:.4rem .6rem .4rem .4rem;background:linear-gradient(90deg,#0B1733,#071022);border-radius:10px!important}
+        .tv-item .tv-ch{width:50px;height:46px;border-radius:12px!important;border:1px solid color-mix(in srgb,var(--c,#2F80ED) 55%,#1B2848);border-bottom-width:1px;
+            background:linear-gradient(160deg,#1E2B4D,#0C1530);
+            box-shadow:0 3px 0 #040815,0 6px 10px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.2)}
+        .tv-item .tv-ch::before{display:none}
+        .tv-item .tv-ch::after{width:18px;height:3px;margin-left:-9px;bottom:4px;border-radius:3px!important;opacity:.55;box-shadow:0 0 6px var(--c,#2F80ED)}
+        .tv-item:active .tv-ch,.tv-item.on .tv-ch{transform:translateY(3px);box-shadow:0 0 0 #000,inset 0 2px 6px rgba(0,0,0,.7),0 0 14px color-mix(in srgb,var(--c,#2F80ED) 60%,transparent)}
+        .tv-item.is-live .tv-ch{background:linear-gradient(160deg,#7A1D28,#3A0A10);border-color:#E0525E}
+        .tv-item.soon .tv-ch{background:linear-gradient(160deg,#18213A,#0B1124)}
+        /* mobile: lista de canais com rolagem própria */
+        @media(max-width:860px){
+            .tv-list{max-height:248px;overflow-y:auto;overflow-x:hidden;padding:0 4px 0 0;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scroll-snap-type:y proximity;scrollbar-width:thin;scrollbar-color:#2F80ED #0A1630;
+                -webkit-mask-image:linear-gradient(180deg,#000 82%,transparent);mask-image:linear-gradient(180deg,#000 82%,transparent)}
+            .tv-list::-webkit-scrollbar{width:5px}.tv-list::-webkit-scrollbar-thumb{background:#2F80ED;border-radius:3px}.tv-list::-webkit-scrollbar-track{background:#0A1630;border-radius:3px}
+            .tv-item{scroll-snap-align:start}
+        }
         @media(prefers-reduced-motion:reduce){.tv-h b::before,.tv-ch em,.tv-air::before,.tv-bug em,.hud-live em{animation:none}}
         @media(max-width:860px){.tv-guide{display:none}}
         /* painel: bloco da TV recolhido */
@@ -1186,9 +1231,9 @@
             const soonView = it => `<div class="tv-soon" style="--c:${it.color || '#2F80ED'}"><span class="tv-playbtn soonbtn"></span><b>${esc(it.t)}</b><i>Sem sinal · canal em breve</i><p>Estamos preparando a programação desta seção. Enquanto isso, sintonize os Destaques ou a TV ao vivo.</p></div>`;
             const playIt = it => {
                 const pl = $('tv-pl'); if (tvPlayer && tvPlayer.destroy) { try { tvPlayer.destroy(); } catch (e) {} } tvPlayer = null;
-                if (it.soon) { pl.innerHTML = soonView(it); return; }
+                pl.classList.toggle('is-play', !it.soon); if (it.soon) { pl.innerHTML = soonView(it); return; }
                 const multi = !!(it.list || (it.vids && it.vids.length > 1));
-                pl.innerHTML = `<div class="tv-stage" id="tv-stage" data-state="play"><iframe id="tv-frame" src="${embed(it)}" title="${esc(it.t)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><span class="tv-top"></span>${it.num ? `<span class="tv-bug">${it.k === 'live' ? '<em></em>AO VIVO' : `<b>CH ${it.num}</b>${esc(it.t)}`}<u>HD</u></span>` : ''}<button type="button" class="tv-click" aria-label="Pausar ou continuar" hidden></button><div class="tv-hud">${multi ? `<button type="button" class="hud-b" data-h="pv" aria-label="Vídeo anterior">${ic.prev}</button>` : ''}<button type="button" class="hud-b" data-h="pp" aria-label="Pausar ou continuar"><span class="i-pause">${ic.pause}</span><span class="i-play">${ic.play}</span></button>${multi ? `<button type="button" class="hud-b" data-h="nx" aria-label="Próximo vídeo">${ic.next}</button>` : ''}<button type="button" class="hud-b" data-h="mu" aria-label="Ligar ou desligar o som"><span class="i-vol">${ic.vol}</span><span class="i-mute">${ic.mute}</span></button><span class="hud-t">${esc(it.t)}</span>${it.k === 'live' ? '<span class="hud-live">AO VIVO</span>' : ''}<button type="button" class="hud-b" data-h="fs" aria-label="Tela cheia">${ic.fs}</button></div></div>`;
+                pl.innerHTML = `<div class="tv-stage" id="tv-stage" data-state="play"><div class="tv-vid"><iframe id="tv-frame" src="${embed(it)}" title="${esc(it.t)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><span class="tv-top"></span>${it.num ? `<span class="tv-bug">${it.k === 'live' ? '<em></em>AO VIVO' : `<b>CH ${it.num}</b>${esc(it.t)}`}<u>HD</u></span>` : ''}<button type="button" class="tv-click" aria-label="Pausar ou continuar" hidden></button></div><div class="tv-hud">${multi ? `<button type="button" class="hud-b" data-h="pv" aria-label="Vídeo anterior">${ic.prev}</button>` : ''}<button type="button" class="hud-b" data-h="pp" aria-label="Pausar ou continuar"><span class="i-pause">${ic.pause}</span><span class="i-play">${ic.play}</span></button>${multi ? `<button type="button" class="hud-b" data-h="nx" aria-label="Próximo vídeo">${ic.next}</button>` : ''}<button type="button" class="hud-b" data-h="mu" aria-label="Ligar ou desligar o som"><span class="i-vol">${ic.vol}</span><span class="i-mute">${ic.mute}</span></button><span class="hud-t">${esc(it.t)}</span>${it.k === 'live' ? '<span class="hud-live">AO VIVO</span>' : ''}<button type="button" class="hud-b" data-h="fs" aria-label="Tela cheia">${ic.fs}</button></div></div>`;
                 const st = $('tv-stage');
                 st.querySelector('[data-h="fs"]').onclick = () => { const f = st.requestFullscreen || st.webkitRequestFullscreen; if (document.fullscreenElement) document.exitFullscreen(); else if (f) f.call(st); };
                 ytReady().then(() => {

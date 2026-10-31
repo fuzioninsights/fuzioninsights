@@ -734,3 +734,17 @@ window.addEventListener('message', e => {
   if (!f || f.contentWindow !== e.source || f.dataset.fixed) return;
   f.style.height = Math.min(2000, Math.max(60, d.h)) + 'px';
 });
+
+
+/* capa inteira: o quadro assume a proporção real da imagem (sem cortar e sem faixas) */
+(function () {
+  const fit = img => {
+    const p = img.parentNode; if (!p || !img.naturalWidth || !img.naturalHeight) return;
+    const r = Math.min(2.6, Math.max(1.1, img.naturalWidth / img.naturalHeight));
+    p.style.setProperty('--ar', r.toFixed(4));
+  };
+  const scan = root => (root.querySelectorAll ? root.querySelectorAll('.cv img') : []).forEach(i => { if (i.complete) fit(i); });
+  document.addEventListener('load', e => { const t = e.target; if (t && t.tagName === 'IMG' && t.parentNode && t.parentNode.classList.contains('cv')) fit(t); }, true);
+  const start = () => { scan(document); new MutationObserver(m => m.forEach(x => x.addedNodes.forEach(n => { if (n.nodeType === 1) scan(n); }))).observe(document.body, { childList: true, subtree: true }); };
+  if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+})();
