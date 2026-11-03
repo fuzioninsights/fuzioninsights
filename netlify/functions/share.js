@@ -44,7 +44,7 @@ exports.handler = async (event) => {
   const alt = a.imageCaption || a.title;
   const tags = (Array.isArray(a.tags) ? a.tags : Object.values(a.tags || {})).slice(0, 8);
   const shareUrl = `${site}/s/${encodeURIComponent(id)}`;
-  const img = a.image || a.og ? `${site}/img/${encodeURIComponent(id)}.jpg` : '';
+  const img = a.image || a.og ? `${site}/img/${encodeURIComponent(id)}.jpg?v=${a.ogv || 1}` : '';
   const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
