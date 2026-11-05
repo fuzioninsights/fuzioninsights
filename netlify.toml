@@ -15,6 +15,12 @@
   to = "/.netlify/functions/share?id=:id"
   status = 200
 
+# Link compartilhável de petições, votações e publicações da comunidade
+[[redirects]]
+  from = "/c/:tipo/:id"
+  to = "/.netlify/functions/comunidade-share?tipo=:tipo&id=:id"
+  status = 200
+
 # Imagem de capa servida como JPEG (para og:image)
 [[redirects]]
   from = "/img/:id"

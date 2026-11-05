@@ -512,7 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (b.classList.contains('btn-sub')) b.textContent = membro ? 'Minha área' : SITE.botao;
     b.addEventListener('click', () => membro && b.classList.contains('btn-sub') ? (location.href = '/acesso.html') : openSubscribe());
   });
-  document.querySelectorAll('.f-links').forEach(n => { if (!n.querySelector('[href$="acesso.html"]')) n.insertAdjacentHTML('beforeend', '<a href="/assine.html">Assinar</a><a href="/acesso.html">Área do assinante</a>'); });
+  document.querySelectorAll('.f-links').forEach(n => { if (!n.querySelector('[href$="acesso.html"]')) n.insertAdjacentHTML('beforeend', '<a href="/comunidade.html">Comunidade</a><a href="/assine.html">Assinar</a><a href="/acesso.html">Área do assinante</a>'); });
   if (Admin.token) setInterval(() => Admin.fresh(), 5 * 60 * 1000);
   cookieBanner(); trackHeader(); initAds(); fMkt(); setInterval(fMkt, 60000);
 });
@@ -585,7 +585,7 @@ const FZAuth = (() => {
     const old = document.getElementById('umenu'); if (old) { old.remove(); return; }
     const h = document.querySelector('.site-header'); if (!h) return;
     const d = document.createElement('div'); d.id = 'umenu'; d.className = 'umenu';
-    d.innerHTML = `<div class="um-who"><b>${esc(user.displayName || 'Minha conta')}</b><span>${esc(user.email || '')}</span></div><div class="um-plan" id="um-plan">Verificando plano…</div><nav><a href="/?secao=exclusivos">🔒 Conteúdo exclusivo</a><a href="/acesso.html">Área do assinante</a><button type="button" id="um-sub">Assinar / renovar</button><button type="button" id="um-out">Sair</button></nav>`;
+    d.innerHTML = `<div class="um-who"><b>${esc(user.displayName || 'Minha conta')}</b><span>${esc(user.email || '')}</span></div><div class="um-plan" id="um-plan">Verificando plano…</div><nav><a href="/?secao=exclusivos">🔒 Conteúdo exclusivo</a><a href="/comunidade.html#minha">💬 Comunidade</a><a href="/acesso.html">Área do assinante</a><button type="button" id="um-sub">Assinar / renovar</button><button type="button" id="um-out">Sair</button></nav>`;
     h.appendChild(d);
     status().then(p => { const e = d.querySelector('#um-plan'); if (!e) return;
       e.className = 'um-plan ' + (p.ok ? 'paid' : '');
@@ -631,7 +631,7 @@ function mountHeader() {
     + `<div class="hd-right"><button type="button" class="btn-sub" data-subscribe>Assine</button><button type="button" class="hd-user" id="hd-user" aria-label="Área de membro" aria-haspopup="true"></button>`
     + `<button type="button" class="hd-burger" aria-label="Todas as seções" aria-expanded="false" aria-controls="mega"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div></div>`
     + `<div class="hd-sub" id="subbar" hidden></div>`
-    + `<div class="mega" id="mega" hidden><div class="wrap mg-in">${mega}<div class="mg-col" style="--c:#2F80ED;--cd:#1D4ED8"><a class="mg-h" href="/?secao=exclusivos" data-sec="Exclusivos">🔒 Exclusivos</a><a href="/assine.html">Planos de assinatura</a><a href="/acesso.html">Área do assinante</a><a href="/sobre.html">Sobre</a><a href="/contato.html">Contato</a></div></div></div>`;
+    + `<div class="mega" id="mega" hidden><div class="wrap mg-in">${mega}<div class="mg-col" style="--c:#2F80ED;--cd:#1D4ED8"><a class="mg-h" href="/?secao=exclusivos" data-sec="Exclusivos">🔒 Exclusivos</a><a href="/comunidade.html">💬 Comunidade</a><a href="/assine.html">Planos de assinatura</a><a href="/acesso.html">Área do assinante</a><a href="/sobre.html">Sobre</a><a href="/contato.html">Contato</a></div></div></div>`;
   const burger = h.querySelector('.hd-burger'), mg = h.querySelector('#mega');
   const close = () => { mg.hidden = true; burger.setAttribute('aria-expanded', 'false'); };
   burger.addEventListener('click', e => { e.stopPropagation(); const open = mg.hidden; mg.hidden = !open; burger.setAttribute('aria-expanded', String(open)); });
