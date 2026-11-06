@@ -470,9 +470,14 @@
         .cmty-card strong{font:800 .92rem/1.3 'Inter',sans-serif;color:#000;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
         .cmty-bar{height:6px;background:#E3EBFA;border-radius:99px!important;overflow:hidden}.cmty-bar i{display:block;height:100%;background:linear-gradient(90deg,#2F80ED,#6FA8FF)}
         .cmty-n{font:600 .72rem 'Inter',sans-serif;color:var(--muted)}.cmty-n b{color:#000}
+        .cmty-th{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:7px!important;background:#E3EBFA}
+        .cmty-tp{font-style:normal;font:800 .56rem 'Inter',sans-serif;letter-spacing:.8px;text-transform:uppercase;background:#E3EBFA;color:#1D4ED8;padding:.12rem .4rem;border-radius:4px!important;margin-right:.25rem}.cmty-tp.v{background:#E7F7EC;color:#166534}
         .cmty-empty{grid-column:1/-1;text-align:center;padding:1.2rem .5rem;color:var(--muted);font-size:.88rem}
         .cmty-cta{display:inline-block;margin-top:.7rem;background:#0A0A0B;color:#fff;padding:.65rem 1.2rem;font:700 .72rem 'Inter',sans-serif;letter-spacing:.5px;text-transform:uppercase;text-decoration:none;border-radius:8px!important}
         .cmty-cta:hover{background:var(--gold-d)}
+        .cmty-th{display:block;height:110px;margin:-.1rem 0 .1rem;border-radius:7px!important;background:#E3EBFA center/cover no-repeat}
+        .cmty-tag{font-style:normal;font:800 .6rem 'Inter',sans-serif;letter-spacing:.5px;text-transform:uppercase;padding:.12rem .4rem;border-radius:4px!important;margin-right:.2rem;background:#DCE8FF;color:#1D4ED8}.cmty-tag.v{background:#FDE9C8;color:#92580A}
+        .cmty-card .cmty-th+small{margin-top:.1rem}
         @media(max-width:680px){.cmty{padding:.9rem .9rem 1rem}.cmty-grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:.2rem}.cmty-grid::-webkit-scrollbar{display:none}.cmty-card{scroll-snap-align:start}.cmty-empty{grid-column:auto;min-width:100%}}
     </style>
 </head>
@@ -1322,28 +1327,39 @@
         const ytLive = u => { u = String(u || '').trim(); if (!u) return ''; return (u.toLowerCase() === 'canal' || /youtube\.com\/(@[\w.-]+|channel\/UC[\w-]{22}|c\/[\w.-]+|user\/[\w.-]+)\/live/i.test(u)) ? 'canal' : ytVid(u); };
         const tvParse = s => { const t = String(s || '').split(/[\s,;]+/).filter(Boolean), pl = t.map(ytList).find(Boolean) || ''; return { pl, vids: pl ? [] : t.map(ytVid).filter(Boolean).slice(0, 12), raw: t.length }; };
 
-        /* ---------- Comunidade na home: petições recentes e mais votadas ---------- */
+        /* ---------- Comunidade na home: petições e votações recentes / mais votadas ---------- */
         const CM = { tab: 'rec', data: {}, tried: false, bad: false };
         async function cmLoad(tab) {
             if (CM.data[tab]) return CM.data[tab];
-            try { const r = await fetch('/.netlify/functions/comunidade?tipo=peticao' + (tab === 'top' ? '&top=1' : '')); const d = await r.json(); if (!d.ok) { CM.bad = true; return null; } return CM.data[tab] = d.itens.slice(0, 6); }
-            catch (e) { CM.bad = true; return null; }
+            try {
+                const q = tab === 'top' ? '&top=1' : '';
+                const rs = await Promise.all(['peticao', 'votacao'].map(t => fetch(`/.netlify/functions/comunidade?tipo=${t}${q}`).then(r => r.json()).catch(() => ({ ok: false }))));
+                if (!rs.some(d => d && d.ok)) { CM.bad = true; return null; }
+                const all = rs.flatMap(d => d && d.ok ? d.itens : []);
+                all.sort(tab === 'top' ? (x, y) => ((y.n || 0) - (x.n || 0)) || (y.t - x.t) : (x, y) => y.t - x.t);
+                return CM.data[tab] = all.slice(0, 6);
+            } catch (e) { CM.bad = true; return null; }
         }
         function cmDraw() {
             const box = $('cmty'), it = CM.data[CM.tab] || [];
             const when = t => { const m = Math.floor((Date.now() - t) / 6e4); if (m < 60) return `há ${Math.max(m, 1)} min`; const hr = Math.floor(m / 60); return hr < 24 ? `há ${hr} h` : hr < 24 * 8 ? `há ${Math.floor(hr / 24)} d` : new Date(t).toLocaleDateString('pt-BR'); };
-            const cards = it.length ? it.map(x => { const pct = Math.min(100, Math.round((x.n || 0) / (x.meta || 100) * 100)); return `<a class="cmty-card" href="/comunidade.html#peticao/${esc(x.id)}"><small>${esc(x.autor || 'Assinante')} · ${when(x.t)}</small><strong>${esc(x.titulo)}</strong><span class="cmty-bar" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="cmty-n"><b>${(x.n || 0).toLocaleString('pt-BR')}</b> de ${(x.meta || 100).toLocaleString('pt-BR')} assinaturas</span></a>`; }).join('')
-                : `<div class="cmty-empty">Ainda não há petições. Seja o primeiro a abrir uma causa!<br><a class="cmty-cta" href="/comunidade.html#peticao">Ir para a Comunidade</a></div>`;
-            box.innerHTML = `<div class="cmty-h"><b>💬 Comunidade · Petições</b><div class="cmty-tabs" role="tablist"><button type="button" class="cmty-tab" role="tab" data-t="rec" aria-selected="${CM.tab === 'rec'}">Recentes</button><button type="button" class="cmty-tab" role="tab" data-t="top" aria-selected="${CM.tab === 'top'}">Mais votadas</button></div><a class="all" href="/comunidade.html#peticao">Ver tudo →</a></div><div class="cmty-grid">${cards}</div>`;
+            const num = n => (n || 0).toLocaleString('pt-BR');
+            const card = x => {
+                const pet = x.tipo === 'peticao', pct = Math.min(100, Math.round((x.n || 0) / (x.meta || 100) * 100)), enc = x.fim && x.fim < new Date().toISOString().slice(0, 10);
+                return `<a class="cmty-card" href="/comunidade.html#${x.tipo}/${esc(x.id)}">${x.img ? `<span class="cmty-th" style="background-image:url(/ci/${esc(x.id)}.jpg)"></span>` : ''}<small><em class="cmty-tag ${pet ? 'p' : 'v'}">${pet ? '✍ Petição' : '🗳 Votação'}</em> ${esc(x.autor || 'Assinante')} · ${when(x.t)}</small><strong>${esc(x.titulo)}</strong>`
+                    + (pet ? `<span class="cmty-bar" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="cmty-n"><b>${num(x.n)}</b> de ${num(x.meta || 100)} assinaturas</span>` : `<span class="cmty-n"><b>${num(x.n)}</b> ${x.n === 1 ? 'voto' : 'votos'} · ${enc ? 'encerrada' : 'encerra em ' + String(x.fim || '').split('-').reverse().join('/')}</span>`) + `</a>`;
+            };
+            const cta = (txt) => `<div class="cmty-empty">${txt}<br><a class="cmty-cta" href="/comunidade.html">Ir para a Comunidade</a></div>`;
+            const cards = CM.bad ? cta('Petições, votações e publicações dos assinantes da Fuzion Insights. Participe e dê voz à sua opinião.')
+                : it.length ? it.map(card).join('') : cta('Ainda não há petições nem votações. Seja o primeiro a criar!');
+            box.innerHTML = `<div class="cmty-h"><b>💬 Comunidade</b>${CM.bad ? '' : `<div class="cmty-tabs" role="tablist"><button type="button" class="cmty-tab" role="tab" data-t="rec" aria-selected="${CM.tab === 'rec'}">Recentes</button><button type="button" class="cmty-tab" role="tab" data-t="top" aria-selected="${CM.tab === 'top'}">Mais votadas</button></div>`}<a class="all" href="/comunidade.html">Ver tudo →</a></div><div class="cmty-grid">${cards}</div>`;
             box.querySelectorAll('.cmty-tab').forEach(b => b.onclick = async () => { CM.tab = b.dataset.t; await cmLoad(CM.tab); cmDraw(); });
         }
         async function renderCmty(show) {
             const box = $('cmty'); if (!show) { box.style.display = 'none'; return; }
-            if (CM.bad) { box.style.display = 'none'; return; }
             if (box.dataset.ok) { box.style.display = 'block'; return; }
             if (CM.tried) return; CM.tried = true;
             await cmLoad(CM.tab);
-            if (CM.bad || !CM.data[CM.tab]) { box.style.display = 'none'; CM.tried = false; return; }
             cmDraw(); box.dataset.ok = '1'; box.style.display = 'block';
         }
         function renderTV(show) {

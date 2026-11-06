@@ -385,3 +385,13 @@ a.chip:hover,a.chip:focus-visible{background:#fff;border-color:var(--gold-d);col
 .logo-sq{background:#C3C3C3;display:flex;align-items:center;justify-content:center;text-decoration:none}
 .logo-sq svg{width:40px;height:40px;display:block}
 .logo-sq:hover{box-shadow:0 0 18px rgba(0,162,232,.75)}
+
+/* destaque da Comunidade no cabeçalho */
+.hd-tabs a.hd-cm-tab{flex:0 0 auto;gap:.4rem;margin-right:.5rem;padding:0 .9rem;color:#fff;border-top-color:#6FA8FF;background:linear-gradient(180deg,#2F80ED,#1D5FD1);box-shadow:0 0 16px rgba(47,128,237,.45)}
+.hd-tabs a.hd-cm-tab:hover,.hd-tabs a.hd-cm-tab:focus-visible{background:linear-gradient(180deg,#4A93F5,#2A6FE6);color:#fff}
+.hd-cm-tab em{font:800 .52rem 'Inter',sans-serif;font-style:normal;letter-spacing:.6px;background:#fff;color:#1D4ED8;padding:.1rem .3rem;border-radius:4px}
+.hd-cm{display:none;align-items:center;gap:.35rem;height:38px;padding:0 .7rem;border-radius:999px;background:linear-gradient(180deg,#2F80ED,#1D5FD1);color:#fff;text-decoration:none;font:800 .66rem 'Inter',sans-serif;letter-spacing:.5px;text-transform:uppercase;box-shadow:0 0 14px rgba(47,128,237,.5);position:relative}
+.hd-cm:hover{background:linear-gradient(180deg,#4A93F5,#2A6FE6)}
+.hd-cm::after{content:"";position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:#FACC15;border:2px solid #0A0A0B}
+@media(max-width:1300px){.hd-cm{display:inline-flex}}
+@media(max-width:520px){.hd-cm b{display:none}.hd-cm{width:38px;padding:0;justify-content:center}}

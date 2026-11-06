@@ -81,7 +81,7 @@ async function apelido(uid, fallback, email) {
 
 const pub = (tipo, id, it) => ({
   id, tipo, t: it.t, u: it.u, autor: it.autor || '', titulo: it.titulo || '', texto: it.texto || '',
-  n: it.n || 0, meta: it.meta || 0, opcoes: it.opcoes ? Object.values(it.opcoes) : undefined,
+  n: it.n || 0, meta: it.meta || 0, img: !!it.img, opcoes: it.opcoes ? Object.values(it.opcoes) : undefined,
   v: it.opcoes ? Object.keys(it.opcoes).map(k => (it.v && it.v[k]) || 0) : undefined, fim: it.fim || ''
 });
 
@@ -164,6 +164,14 @@ exports.handler = async (event) => {
         }
       }
       const id = newId();
+      // imagem opcional (JPEG já reduzido pelo navegador, até ~190 KB); fica em /imagens para não pesar nas listas
+      let foto = '';
+      if (b.img) {
+        foto = String(b.img);
+        if (!/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(foto) || foto.length > 260000) return out(400, { ok: false, erro: 'imagem' });
+        it.img = 1;
+      }
+      if (foto) await fbw(`imagens/${id}`, 'PUT', foto);
       await fbw(`${tipo}/${id}`, 'PUT', it);
       await fbw(`porautor/${me.uid}/${id}`, 'PUT', { tp: tipo, ti: (it.titulo || it.texto).slice(0, 80), t: it.t });
       if (!me.adm) await fbw(`limite/${me.uid}`, 'PUT', { [dia]: ((await fbq(`limite/${me.uid}/${dia}`, 'x=1')) || 0) + 1 });
@@ -208,6 +216,7 @@ exports.handler = async (event) => {
       if (!it) return out(200, { ok: true });
       if (!me.adm && it.u !== me.uid) return out(403, { ok: false, erro: 'proibido' });
       await fbw(`${tipo}/${id}`, 'DELETE');
+      if (it.img) await fbw(`imagens/${id}`, 'DELETE');
       if (it.u) await fbw(`porautor/${it.u}/${id}`, 'DELETE');
       return out(200, { ok: true });
     }

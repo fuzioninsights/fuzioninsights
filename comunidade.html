@@ -69,6 +69,7 @@
 .cm-foot a:hover,.cm-foot button.lk:hover{color:#B91C1C}
 .cm-end{font:800 .62rem 'Inter',sans-serif;letter-spacing:.8px;text-transform:uppercase;background:#F4F4F5;color:#52525B;padding:.15rem .45rem;border-radius:4px!important}
 .share-bar{margin:.7rem 0 .2rem}.cm-focus{background:#EEF4FF;border:1px solid #BBD3FF;padding:.6rem .9rem;font-size:.8rem;margin-bottom:.9rem;display:flex;justify-content:space-between;gap:.8rem;align-items:center;flex-wrap:wrap;border-radius:8px!important}.cm-focus a{font-weight:700;color:var(--gold-d)}
+.cm-img{display:block;width:100%;max-height:320px;object-fit:cover;border-radius:8px!important;margin:.2rem 0 .8rem;background:#F1F5FF}.cm-pick{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}.cm-pick img{width:90px;height:60px;object-fit:cover;border-radius:6px!important;border:1px solid #D4D4D8}.cm-pick input[type=file]{padding:.5rem;font-size:.8rem}
 .cm-empty{text-align:center;padding:2rem 1rem;color:var(--muted);border:1px dashed #D4D4D8;border-radius:10px!important;font-size:.9rem}
 .cm-note{background:#FFF8E6;border:1px solid #F5D98B;color:#6B4E00;padding:.8rem 1rem;font-size:.82rem;margin-bottom:1rem;border-radius:8px!important}
 .cm-me{display:grid;gap:1rem}
@@ -121,7 +122,7 @@ const TXT = {
   votacao: { nome: 'Votações', novo: '+ Nova votação', dica: 'Pergunte à comunidade. Cada pessoa vota uma vez; o resultado aparece depois do voto.' },
   post: { nome: 'Publicações', novo: '+ Nova publicação', dica: 'Textos curtos para a comunidade. Seja respeitoso: o conteúdo é moderado.' }
 };
-const ERR = { login: 'Entre na sua conta para continuar.', verificar: 'Confirme o e-mail da sua conta (enviamos um link) para participar.', sem_assinatura: 'Criar é um benefício de assinante.', limite: 'Você atingiu o limite de 3 criações por dia. Volte amanhã.', curto: 'Texto muito curto. Escreva um pouco mais.', opcoes: 'Informe pelo menos 2 opções.', ja_votou: 'Você já participou desta.', encerrada: 'Esta votação já foi encerrada.', proibido: 'Você não pode excluir isto.', nome: 'Use de 3 a 30 caracteres.', regras: 'A comunidade ainda não foi ativada no servidor. Avise a redação.', configuracao: 'O serviço ainda não foi configurado.', rede: 'Sem conexão agora. Tente de novo.', servidor: 'Não foi possível concluir agora. Tente em instantes.' };
+const ERR = { login: 'Entre na sua conta para continuar.', verificar: 'Confirme o e-mail da sua conta (enviamos um link) para participar.', sem_assinatura: 'Criar é um benefício de assinante.', limite: 'Você atingiu o limite de 3 criações por dia. Volte amanhã.', curto: 'Texto muito curto. Escreva um pouco mais.', opcoes: 'Informe pelo menos 2 opções.', ja_votou: 'Você já participou desta.', encerrada: 'Esta votação já foi encerrada.', proibido: 'Você não pode excluir isto.', nome: 'Use de 3 a 30 caracteres.', imagem: 'Não foi possível usar essa imagem. Tente outra (JPG ou PNG).', regras: 'A comunidade ainda não foi ativada no servidor. Avise a redação.', configuracao: 'O serviço ainda não foi configurado.', rede: 'Sem conexão agora. Tente de novo.', servidor: 'Não foi possível concluir agora. Tente em instantes.' };
 const S = { tab: 'peticao', lists: {}, me: null, plano: null, uid: null };
 const $c = id => document.getElementById(id);
 const fmt = t => { const d = Date.now() - t, m = Math.floor(d / 6e4); if (m < 1) return 'agora'; if (m < 60) return `há ${m} min`; const h = Math.floor(m / 60); if (h < 24) return `há ${h} h`; const dd = Math.floor(h / 24); return dd < 8 ? `há ${dd} d` : new Date(t).toLocaleDateString('pt-BR'); };
@@ -187,23 +188,24 @@ async function loadFocus(tipo, id) {
 }
 
 /* ---------- cartões ---------- */
+const imgOf = it => it.img ? `<img class="cm-img" src="/ci/${it.id}.jpg" alt="" loading="lazy">` : '';
 const mark = id => S.me && S.me.meus && S.me.meus[id];
 function card(it) {
   const mine = mark(it.id), own = S.uid && it.u === S.uid, adm = S.me && S.me.adm, ini = esc((it.autor || '?').trim().charAt(0).toUpperCase());
   let body = '';
   if (it.tipo === 'peticao') {
     const pct = Math.min(100, Math.round(((it.n || 0) / (it.meta || 100)) * 100));
-    body = `<h3>${esc(it.titulo)}</h3><p>${esc(it.texto)}</p><div class="cm-prog" aria-hidden="true"><i style="width:${pct}%"></i></div><div class="cm-cnt"><b>${num(it.n)}</b> de ${num(it.meta || 100)} assinaturas</div>
+    body = `<h3>${esc(it.titulo)}</h3>${imgOf(it)}<p>${esc(it.texto)}</p><div class="cm-prog" aria-hidden="true"><i style="width:${pct}%"></i></div><div class="cm-cnt"><b>${num(it.n)}</b> de ${num(it.meta || 100)} assinaturas</div>
       <button type="button" class="cm-btn${mine ? ' done' : ''}" data-a="${mine ? 'des' : 'sign'}" data-id="${it.id}">${mine ? '✓ Você assinou' : 'Assinar petição'}</button>`;
   } else if (it.tipo === 'votacao') {
     const enc = it.fim && it.fim < hoje(), total = (it.v || []).reduce((a, b) => a + b, 0), showRes = !!mine || enc || own;
-    body = `<h3>${esc(it.titulo)}</h3>${it.texto ? `<p>${esc(it.texto)}</p>` : ''}` + (it.opcoes || []).map((o, i) => {
+    body = `<h3>${esc(it.titulo)}</h3>${imgOf(it)}${it.texto ? `<p>${esc(it.texto)}</p>` : ''}` + (it.opcoes || []).map((o, i) => {
       const v = (it.v || [])[i] || 0, pct = total ? Math.round(v * 100 / total) : 0;
       return showRes ? `<div class="cm-opt res${mine && mine.v === i ? ' mine' : ''}"><i class="bar" style="width:${pct}%"></i><span><em style="font-style:normal">${esc(o)}${mine && mine.v === i ? ' ✓' : ''}</em><b>${pct}% · ${num(v)}</b></span></div>`
         : `<button type="button" class="cm-opt" data-a="vote" data-id="${it.id}" data-op="${i}"><span>${esc(o)}</span></button>`;
     }).join('') + `<div class="cm-cnt">${num(total)} ${total === 1 ? 'voto' : 'votos'} · ${enc ? '<span class="cm-end">Encerrada</span>' : 'encerra em ' + dmy(it.fim)}</div>`;
   } else {
-    body = `<p style="font-size:.95rem;margin-bottom:.6rem">${esc(it.texto)}</p><button type="button" class="cm-btn ghost${mine ? ' done' : ''}" data-a="${mine ? 'des' : 'like'}" data-id="${it.id}">♥ ${mine ? 'Curtido' : 'Curtir'} · ${num(it.n)}</button>`;
+    body = `${imgOf(it)}<p style="font-size:.95rem;margin-bottom:.6rem">${esc(it.texto)}</p><button type="button" class="cm-btn ghost${mine ? ' done' : ''}" data-a="${mine ? 'des' : 'like'}" data-id="${it.id}">♥ ${mine ? 'Curtido' : 'Curtir'} · ${num(it.n)}</button>`;
   }
   const sub = `mailto:fuzioninsights@gmail.com?subject=${encodeURIComponent('Denúncia de conteúdo da comunidade')}&body=${encodeURIComponent('Tipo: ' + it.tipo + '\nCódigo: ' + it.id + '\n\nMotivo:')}`;
   return `<article class="cm-card" id="i-${it.id}" data-t="${it.tipo}"><div class="cm-meta"><span class="cm-av">${ini}</span><span><b>${esc(it.autor || 'Assinante')}</b> · ${fmt(it.t)}</span></div>${body}
@@ -220,14 +222,34 @@ function paintList() {
 }
 
 /* ---------- formulário de criação ---------- */
+let FOTO = '';
+const pick = '<label for="f-i">Imagem (opcional)</label><div class="cm-pick"><input id="f-i" type="file" accept="image/jpeg,image/png,image/webp"><img id="f-ip" alt="" hidden></div><small>Reduzimos a imagem automaticamente. Use só imagens que você tem direito de publicar.</small>';
+async function toJpeg(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    let max = 1000, q = .8, out = '';
+    for (let k = 0; k < 7; k++) {
+      const s = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+      out = c.toDataURL('image/jpeg', q); if (out.length <= 250000) return out; q = Math.max(.4, q - .1); max -= 130;
+    }
+    return '';
+  } finally { URL.revokeObjectURL(url); }
+}
 function formHTML(tab) {
-  if (tab === 'peticao') return `<label for="f-t">Título da petição</label><input id="f-t" maxlength="120" placeholder="Ex.: Mais clareza nos dados do mercado"><label for="f-x">Por que isso importa?</label><textarea id="f-x" maxlength="1500" placeholder="Explique a causa (mínimo 30 caracteres)"></textarea><div class="row2"><div><label for="f-m">Meta de assinaturas</label><input id="f-m" type="number" min="10" max="100000" value="100"></div></div>`;
-  if (tab === 'votacao') return `<label for="f-t">Pergunta</label><input id="f-t" maxlength="120" placeholder="Ex.: Qual tema vocês querem ver na próxima análise?"><label for="f-x">Contexto (opcional)</label><textarea id="f-x" maxlength="400" style="min-height:70px"></textarea><label>Opções (2 a 6)</label><div class="cm-opts" id="f-ops"><input maxlength="60" placeholder="Opção 1"><input maxlength="60" placeholder="Opção 2"></div><div style="margin-top:.4rem"><button type="button" class="cm-btn ghost" id="f-addop">+ opção</button></div><div class="row2"><div><label for="f-d">Duração</label><select id="f-d"><option value="3">3 dias</option><option value="7" selected>7 dias</option><option value="14">14 dias</option><option value="30">30 dias</option></select></div></div>`;
-  return `<label for="f-x">Sua publicação</label><textarea id="f-x" maxlength="600" placeholder="Compartilhe uma ideia, pergunta ou aviso (até 600 caracteres)"></textarea>`;
+  if (tab === 'peticao') return `<label for="f-t">Título da petição</label><input id="f-t" maxlength="120" placeholder="Ex.: Mais clareza nos dados do mercado"><label for="f-x">Por que isso importa?</label><textarea id="f-x" maxlength="1500" placeholder="Explique a causa (mínimo 30 caracteres)"></textarea>${pick}<div class="row2"><div><label for="f-m">Meta de assinaturas</label><input id="f-m" type="number" min="10" max="100000" value="100"></div></div>`;
+  if (tab === 'votacao') return `<label for="f-t">Pergunta</label><input id="f-t" maxlength="120" placeholder="Ex.: Qual tema vocês querem ver na próxima análise?"><label for="f-x">Contexto (opcional)</label><textarea id="f-x" maxlength="400" style="min-height:70px"></textarea><label>Opções (2 a 6)</label><div class="cm-opts" id="f-ops"><input maxlength="60" placeholder="Opção 1"><input maxlength="60" placeholder="Opção 2"></div><div style="margin-top:.4rem"><button type="button" class="cm-btn ghost" id="f-addop">+ opção</button></div>${pick}<div class="row2"><div><label for="f-d">Duração</label><select id="f-d"><option value="3">3 dias</option><option value="7" selected>7 dias</option><option value="14">14 dias</option><option value="30">30 dias</option></select></div></div>`;
+  return `<label for="f-x">Sua publicação</label><textarea id="f-x" maxlength="600" placeholder="Compartilhe uma ideia, pergunta ou aviso (até 600 caracteres)"></textarea>${pick}`;
 }
 function openForm() {
   const f = $c('cm-form'); f.innerHTML = formHTML(S.tab) + `<div class="cm-act"><button class="cm-btn" type="submit" id="f-go">Publicar</button><button class="cm-btn ghost" type="button" id="f-cancel">Cancelar</button><small>Sem links suspeitos, ofensas ou dados pessoais. Limite de 3 criações por dia.</small></div>`;
-  f.classList.add('on');
+  f.classList.add('on'); FOTO = '';
+  const fi = $c('f-i'); if (fi) fi.onchange = async () => {
+    const pv = $c('f-ip'); FOTO = ''; pv.hidden = true; const file = fi.files[0]; if (!file) return;
+    const j = await toJpeg(file).catch(() => ''); if (!j) { fi.value = ''; return say('imagem'); }
+    FOTO = j; pv.src = j; pv.hidden = false;
+  };
   const add = $c('f-addop'); if (add) add.onclick = () => { const w = $c('f-ops'); if (w.children.length < 6) { const i = document.createElement('input'); i.maxLength = 60; i.placeholder = 'Opção ' + (w.children.length + 1); w.appendChild(i); } if (w.children.length >= 6) add.hidden = true; };
   $c('f-cancel').onclick = () => f.classList.remove('on');
   (f.querySelector('input,textarea') || f).focus();
@@ -238,6 +260,7 @@ $c('cm-form').addEventListener('submit', async e => {
   if (tab !== 'post') b.titulo = g('f-t'); b.texto = g('f-x');
   if (tab === 'peticao') b.meta = g('f-m');
   if (tab === 'votacao') { b.opcoes = [...document.querySelectorAll('#f-ops input')].map(i => i.value); b.dias = g('f-d'); }
+  if (FOTO) b.img = FOTO;
   const btn = $c('f-go'); btn.disabled = true;
   const r = await api(b); btn.disabled = false;
   if (!r.ok) return say(r.erro);

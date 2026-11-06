@@ -34,14 +34,14 @@ exports.handler = async (event) => {
   else if (tipo === 'votacao') { title = `Votação: ${it.titulo}`; desc = `Participe e vote${it.opcoes ? ': ' + Object.values(it.opcoes).join(' · ') : ''}`; }
   else { title = `Publicação${por}`; desc = cut(it.texto, 200); }
   const full = `${title} | Fuzion Insights`;
-  const img = `${site}/favicon-512x512.png`;
+  const img = it.img ? `${site}/ci/${id}.jpg` : `${site}/favicon-512x512.png`, grande = !!it.img;
   const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">
 <title>${esc(full)}</title><meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${esc(url)}">
 <meta property="og:site_name" content="Fuzion Insights"><meta property="og:locale" content="pt_BR"><meta property="og:type" content="article">
 <meta property="og:url" content="${esc(url)}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}">
-<meta property="og:image" content="${esc(img)}"><meta property="og:image:width" content="512"><meta property="og:image:height" content="512">
-<meta name="twitter:card" content="summary"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(desc)}"><meta name="twitter:image" content="${esc(img)}">
+<meta property="og:image" content="${esc(img)}">${grande ? '' : '<meta property="og:image:width" content="512"><meta property="og:image:height" content="512">'}
+<meta name="twitter:card" content="${grande ? 'summary_large_image' : 'summary'}"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(desc)}"><meta name="twitter:image" content="${esc(img)}">
 <noscript><meta http-equiv="refresh" content="0;url=${esc(alvo)}"></noscript>
 <script>location.replace(${JSON.stringify(alvo)});</script></head>
 <body><p><a href="${esc(alvo)}">Abrir na Comunidade Fuzion Insights</a></p></body></html>`;
