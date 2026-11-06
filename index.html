@@ -642,6 +642,11 @@
             <div style="margin-top:2.5rem;border-top:2px solid #000;padding-top:1.2rem">
                 <h3 style="font-family:'Inter',system-ui,sans-serif;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem">Assinantes e Newsletter (<span id="sub-count">0</span>)</h3>
                 <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.9rem"><button type="button" class="editor-btn" onclick="copyEmails('newsletter')" title="E-mails da newsletter gratuita">Copiar e-mails da newsletter</button><button type="button" class="editor-btn" onclick="copyEmails('ativos')" title="Assinantes pagos com acesso ativo">Copiar e-mails dos assinantes ativos</button><button type="button" class="editor-btn" onclick="copyEmails('todos')" title="Todos, exceto cancelados">Copiar todos</button></div>
+                <div style="background:#F4F4F5;border:1px solid var(--border);padding:.8rem;margin-bottom:.9rem">
+                    <div style="font-weight:800;font-size:.72rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:.5rem">Acesso VIP (editores e colaboradores)</div>
+                    <div style="display:flex;gap:.5rem;flex-wrap:wrap"><input type="email" id="vip-em" placeholder="e-mail do editor VIP" style="flex:1;min-width:200px"><button type="button" class="editor-btn" onclick="grantVip()">Conceder VIP</button></div>
+                    <p style="font-size:.68rem;color:var(--muted);margin:.5rem 0 0">Libera o conteúdo exclusivo e a criação de petições, votações e publicações na Comunidade, sem pagamento e sem vencimento. Para retirar, use “Revogar” na lista abaixo.</p>
+                </div>
                 <div id="sub-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:280px;overflow-y:auto"></div>
             </div>
         </section>
@@ -710,6 +715,9 @@
             <div style="display:flex;flex-direction:column;gap:.3rem"><label for="em">E-mail Administrativo</label><input type="email" id="em" placeholder="nome@exemplo.com"></div>
             <div style="display:flex;flex-direction:column;gap:.3rem"><label for="pw">Senha de Segurança</label><input type="password" id="pw" placeholder="••••••••••••" onkeydown="if(event.key==='Enter')log()"></div>
             <button class="btn" style="width:100%" onclick="log()">Entrar no Terminal</button>
+            <button type="button" class="btn ghost" style="width:100%" onclick="mailLink()">Receber link de acesso por e-mail</button>
+            <span onclick="forgotPw()" style="text-align:center;font-size:.72rem;color:#1D4ED8;cursor:pointer;font-weight:700">Esqueci minha senha</span>
+            <p id="lm-msg" role="status" style="text-align:center;font-size:.76rem;min-height:1.2em;margin:0;color:#B91C1C"></p>
             <span onclick="$('lm').style.display='none'" style="text-align:center;font-size:.7rem;color:#71717A;cursor:pointer;text-transform:uppercase;font-weight:700">Cancelar</span>
         </div>
     </div>
@@ -958,17 +966,60 @@
         function discardDraft() { dropDraft(editingKey); $('draft-banner').style.display = 'none'; }
 
         /* ---------- LOGIN / PAINEL ---------- */
-        function log() {
-            fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${SITE.firebaseKey}`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: $('em').value.trim(), password: $('pw').value, returnSecureToken: true })
-            }).then(r => r.json()).then(d => {
-                if (d.idToken) {
-                    adminToken = Admin.save(d);
-                    $('lm').style.display = 'none'; $('pw').value = ''; showP(); rnd(db);
-                } else alert('Acesso Negado.');
-            }).catch(() => alert('Erro ao autenticar. Verifique sua conexão.'));
+        const LM_ERR = {
+            TOO_MANY_ATTEMPTS_TRY_LATER: 'Muitas tentativas seguidas. Aguarde alguns minutos ou use o link de acesso por e-mail.',
+            INVALID_LOGIN_CREDENTIALS: 'E-mail ou senha incorretos.', INVALID_PASSWORD: 'E-mail ou senha incorretos.', EMAIL_NOT_FOUND: 'E-mail ou senha incorretos.',
+            USER_DISABLED: 'Esta conta foi desativada.', INVALID_EMAIL: 'Digite um e-mail válido.', MISSING_PASSWORD: 'Digite a senha.',
+            OPERATION_NOT_ALLOWED: 'Este tipo de login não está ativado no Firebase (Authentication > Sign-in method).',
+            INVALID_OOB_CODE: 'Link inválido ou já usado. Peça um novo.', EXPIRED_OOB_CODE: 'O link expirou. Peça um novo.',
+            UNAUTHORIZED_DOMAIN: 'Este endereço do site não está autorizado no Firebase (Authentication > Settings > Authorized domains).'
+        };
+        const lmMsg = (t, ok) => { const e = $('lm-msg'); if (!e) return; e.style.color = ok ? '#166534' : '#B91C1C'; e.textContent = t || ''; };
+        const fbErr = d => { const m = String((d && d.error && d.error.message) || ''), k = Object.keys(LM_ERR).find(x => m.indexOf(x) === 0); return LM_ERR[k] || (m ? 'Não foi possível entrar (' + m + ').' : 'Erro ao autenticar.'); };
+        const idt = (fn, body) => fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${fn}?key=${SITE.firebaseKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(r => r.json());
+        // só abre o painel se a conta for mesmo de editor (só o administrador consegue ler /assinantes)
+        async function enterPanel(d) {
+            try {
+                const j = await (await fetch(`${SITE.db}/assinantes.json?auth=${d.idToken}&shallow=true`)).json();
+                if (j && j.error) { lmMsg('Esta conta não tem permissão de editor. Assinantes e VIPs entram pela Área do assinante.'); return; }
+            } catch (e) {}
+            adminToken = Admin.save(d);
+            $('lm').style.display = 'none'; $('pw').value = ''; lmMsg(''); showP(); rnd(db);
         }
+        function log() {
+            lmMsg('Entrando…', true);
+            idt('signInWithPassword', { email: $('em').value.trim(), password: $('pw').value, returnSecureToken: true })
+                .then(d => { if (d.idToken) enterPanel(d); else lmMsg(fbErr(d)); })
+                .catch(() => lmMsg('Erro ao autenticar. Verifique sua conexão.'));
+        }
+        // entrar sem senha: o Firebase manda um link para o e-mail; ao clicar, o painel abre
+        function mailLink() {
+            const email = $('em').value.trim(); if (!email) { lmMsg('Digite o e-mail e clique de novo.'); return; }
+            lmMsg('Enviando…', true);
+            idt('sendOobCode', { requestType: 'EMAIL_SIGNIN', email, continueUrl: location.origin + '/?editor=1', canHandleCodeInApp: true })
+                .then(d => { if (d.error) { lmMsg(fbErr(d)); return; } try { localStorage.setItem('fz_mail_link', email); } catch (e) {} lmMsg('Link enviado. Abra o e-mail (veja também o spam) e clique no link.', true); })
+                .catch(() => lmMsg('Erro de conexão. Tente de novo.'));
+        }
+        function forgotPw() {
+            const email = $('em').value.trim(); if (!email) { lmMsg('Digite o e-mail e clique em “Esqueci minha senha”.'); return; }
+            lmMsg('Enviando…', true);
+            idt('sendOobCode', { requestType: 'PASSWORD_RESET', email })
+                .then(d => lmMsg(d.error ? fbErr(d) : 'Enviamos o link para redefinir a senha. Veja também o spam.', !d.error))
+                .catch(() => lmMsg('Erro de conexão. Tente de novo.'));
+        }
+        // volta do link do e-mail: conclui o login sem senha
+        window.addEventListener('DOMContentLoaded', () => {
+            const q = new URLSearchParams(location.search), code = q.get('oobCode');
+            if (q.get('mode') !== 'signIn' || !code) return;
+            let email = ''; try { email = localStorage.getItem('fz_mail_link') || ''; } catch (e) {}
+            if (!email) email = (prompt('Confirme o e-mail em que você recebeu o link:') || '').trim();
+            $('lm').style.display = 'flex';
+            if (!email) { lmMsg('Informe o e-mail para concluir o acesso.'); return; }
+            lmMsg('Concluindo o acesso…', true);
+            idt('signInWithEmailLink', { email, oobCode: code })
+                .then(d => { history.replaceState(null, '', location.pathname); if (d.idToken) { try { localStorage.removeItem('fz_mail_link'); } catch (e) {} enterPanel(d); } else lmMsg(fbErr(d)); })
+                .catch(() => lmMsg('Erro de conexão. Tente de novo.'));
+        });
         function showP() { $('panel').style.display = 'block'; loadSubs(); renderManager(); if (!editingKey) offerDraft(); }
         function out() { Admin.clear(); adminToken = null; cancelEdit(true); dirty = false; $('panel').style.display = 'none'; rnd(db); }
         function sessionExpired() { alert('Sua sessão de edição expirou. O texto que você estava escrevendo foi salvo como rascunho: entre novamente (Ctrl+Shift+E) e clique em “Recuperar”.'); out(); }
@@ -1000,7 +1051,7 @@
             const t = await tok(); if (!t) return sessionExpired();
             const hoje = isoDay(new Date()), renova = s.status === 'ativo' && s.ate && s.ate > hoje;
             const base = renova ? new Date(s.ate + 'T12:00:00') : new Date(); base.setDate(base.getDate() + (s.plano === 'anual' ? 366 : 31));
-            const ate = isoDay(base), id = encodeURIComponent(emailKey(s.email)), url = `${SITE.db}/ativos/${id}.json?auth=${t}`;
+            const ate = s.plano === 'vip' ? '2099-12-31' : isoDay(base), id = encodeURIComponent(emailKey(s.email)), url = `${SITE.db}/ativos/${id}.json?auth=${t}`;
             let codigo; try { const old = await (await fetch(url)).json(); codigo = old && old.codigo; } catch (e) {}
             codigo = codigo || makeCode();
             const r = await fetch(url, { method: 'PUT', body: JSON.stringify({ email: s.email.trim().toLowerCase(), plano: s.plano, codigo, ate, ativadoEm: new Date().toISOString() }) });
@@ -1009,6 +1060,23 @@
             await fetch(`${SITE.db}/assinantes/${key}.json?auth=${t}`, { method: 'PATCH', body: JSON.stringify({ status: 'ativo', ate }) });
             subsDb[key] = Object.assign(s, { status: 'ativo', ate }); loadSubs();
             mailCode(s.email, codigo, ate);
+        }
+        /* Acesso VIP (editores/colaboradores): assinatura paga liberada sem pagamento, sem vencimento.
+           Dá acesso ao conteúdo exclusivo e a criar petições, votações e publicações na Comunidade. Não dá acesso ao painel do editor. */
+        async function grantVip() {
+            const em = ($('vip-em').value || '').trim().toLowerCase();
+            if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) { toast('Digite um e-mail válido.'); return; }
+            const t = await tok(); if (!t) return sessionExpired();
+            const ate = '2099-12-31', url = `${SITE.db}/ativos/${encodeURIComponent(emailKey(em))}.json?auth=${t}`;
+            let codigo; try { const old = await (await fetch(url)).json(); codigo = old && old.codigo; } catch (e) {}
+            codigo = codigo || makeCode();
+            const r = await fetch(url, { method: 'PUT', body: JSON.stringify({ email: em, plano: 'vip', codigo, ate, ativadoEm: new Date().toISOString() }) });
+            if (r.status === 401 || r.status === 403) { alert('O Firebase recusou gravar em “ativos”. Falta liberar esse caminho nas regras.'); return; }
+            if (!r.ok) { alert('Não foi possível conceder agora. Tente de novo.'); return; }
+            const ex = Object.keys(subsDb).find(k => String(subsDb[k].email || '').trim().toLowerCase() === em);
+            if (ex) await fetch(`${SITE.db}/assinantes/${ex}.json?auth=${t}`, { method: 'PATCH', body: JSON.stringify({ plano: 'vip', status: 'ativo', ate }) });
+            else await fetch(`${SITE.db}/assinantes.json?auth=${t}`, { method: 'POST', body: JSON.stringify({ email: em, plano: 'vip', status: 'ativo', ate, date: new Date().toLocaleDateString('pt-BR') }) });
+            $('vip-em').value = ''; toast('VIP concedido a ' + em + '. Peça para entrar em Área do assinante com esse e-mail.'); loadSubs();
         }
         async function sendCode(key) {
             const s = subsDb[key]; if (!s) return; const t = await tok(); if (!t) return sessionExpired();
