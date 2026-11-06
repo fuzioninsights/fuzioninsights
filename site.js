@@ -585,7 +585,7 @@ const FZAuth = (() => {
     const old = document.getElementById('umenu'); if (old) { old.remove(); return; }
     const h = document.querySelector('.site-header'); if (!h) return;
     const d = document.createElement('div'); d.id = 'umenu'; d.className = 'umenu';
-    d.innerHTML = `<div class="um-who"><b>${esc(user.displayName || 'Minha conta')}</b><span>${esc(user.email || '')}</span></div><div class="um-plan" id="um-plan">Verificando plano…</div><nav><a href="/?secao=exclusivos">🔒 Conteúdo exclusivo</a><a href="/comunidade.html#minha">💬 Comunidade</a><a href="/acesso.html">Área do assinante</a><button type="button" id="um-sub">Assinar / renovar</button><button type="button" id="um-out">Sair</button></nav>`;
+    d.innerHTML = `<div class="um-who"><b>${esc(user.displayName || 'Minha conta')}</b><span>${esc(user.email || '')}</span></div><div class="um-plan" id="um-plan">Verificando plano…</div><nav><a href="/?secao=exclusivos">🔒 Conteúdo exclusivo</a><a href="/comunidade.html#minha">Comunidade</a><a href="/acesso.html">Área do assinante</a><button type="button" id="um-sub">Assinar / renovar</button><button type="button" id="um-out">Sair</button></nav>`;
     h.appendChild(d);
     status().then(p => { const e = d.querySelector('#um-plan'); if (!e) return;
       e.className = 'um-plan ' + (p.ok ? 'paid' : '');
@@ -607,7 +607,7 @@ const SECTIONS = [
   { n: 'Ciência', c: '#0D9488', s: ['Saúde', 'Espaço', 'Pesquisa e Descobertas', 'Física e Química'] },
   { n: 'Meio Ambiente', c: '#16A34A', d: '#15803D', s: ['Clima', 'Sustentabilidade', 'Energia Limpa', 'Biodiversidade', 'Água e Saneamento'] },
   { n: 'Cidade', c: '#475569', s: ['Brasília e DF', 'Mobilidade', 'Serviços', 'Meio Ambiente Urbano', 'Segurança'] },
-  { n: 'Arte e Cultura', c: '#A21CAF', s: ['Artes Visuais', 'Livros', 'Teatro e Dança', 'Design e Arquitetura', 'Entretenimento', 'Lazer', 'Redes Sociais', 'Trends'] },
+  { n: 'Arte e Cultura', c: '#A21CAF', s: ['Artes Visuais', 'Livros', 'Cinema', 'Animação', 'Teatro e Dança', 'Design e Arquitetura', 'Entretenimento', 'Lazer', 'Redes Sociais', 'Trends'] },
   { n: 'Social', c: '#F97316', d: '#C2410C', t: '#111', s: ['Educação', 'Comportamento', 'Trabalho e Renda', 'Direitos e Cidadania', 'Consumo'] },
   { n: 'Política', c: '#B91C1C', s: ['Eleições', 'Governo', 'Congresso', 'Mundo'] },
   { n: 'Estratégia', c: '#4338CA', s: ['Planejamento', 'Inovação', 'Tendências', 'Concorrência'] }
@@ -622,16 +622,41 @@ const secColor = n => secOf(n).c || '#2F80ED', secText = n => secOf(n).d || secC
 const secStyle = n => `--c:${secColor(n)};--cd:${secText(n)};--tc:${secOf(n).t || '#fff'}`;
 const secLink = (n, sub) => '/?secao=' + slugify(n) + (sub ? '&sub=' + slugify(sub) : '');
 
+
+
+/* ===== ícones de traço fino (estilo tech) ===== */
+const FZ_IC = {
+  peticao: '<path d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21H15"/><path d="M14 3l5 5v2.5"/><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M8.5 12.5h4M8.5 16h2.5"/><path d="M13.2 20.4l.5-2.2 5.6-5.6a1.4 1.4 0 0 1 2 2l-5.6 5.6z"/>',
+  votacao: '<rect x="3" y="3.5" width="18" height="17" rx="4"/><path d="M8 16.5v-4.2M12 16.5V8M16 16.5v-6"/><circle cx="8" cy="12.3" r=".6" fill="currentColor"/><circle cx="12" cy="8" r=".6" fill="currentColor"/><circle cx="16" cy="10.5" r=".6" fill="currentColor"/>',
+  post: '<path d="M4.5 4.5h15A1.5 1.5 0 0 1 21 6v10a1.5 1.5 0 0 1-1.5 1.5H13L8.5 21v-3.5h-4A1.5 1.5 0 0 1 3 16V6a1.5 1.5 0 0 1 1.5-1.5z"/><path d="M7.5 9.2h9M7.5 12.6h5.5"/>',
+  user: '<circle cx="12" cy="8.2" r="3.7"/><path d="M4.6 20.2a7.4 7.4 0 0 1 14.8 0"/><path d="M19.5 4v3M18 5.5h3" opacity=".7"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  arrow: '<path d="M4.5 12h15M13.5 6l6 6-6 6"/>',
+  share: '<circle cx="18" cy="5.5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="18.5" r="2.6"/><path d="M8.3 10.7l7.4-4M8.3 13.3l7.4 4"/>',
+  heart: '<path d="M12 20.3S4 15.6 4 9.6A4.3 4.3 0 0 1 8.3 5.3c1.5 0 2.9.8 3.7 2 .8-1.2 2.2-2 3.7-2A4.3 4.3 0 0 1 20 9.6c0 6-8 10.7-8 10.7z"/>',
+  flag: '<path d="M5 21V4M5 4.5h11l-2 3.5 2 3.5H5"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  community: '<path d="M4.5 4.5h15A1.5 1.5 0 0 1 21 6v10a1.5 1.5 0 0 1-1.5 1.5H13L8.5 21v-3.5h-4A1.5 1.5 0 0 1 3 16V6a1.5 1.5 0 0 1 1.5-1.5z"/><circle cx="8" cy="11" r=".9" fill="currentColor"/><circle cx="12" cy="11" r=".9" fill="currentColor"/><circle cx="16" cy="11" r=".9" fill="currentColor"/>'
+};
+function fzIcon(n) { return `<svg class="fz-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${FZ_IC[n] || ''}</svg>`; }
+document.querySelectorAll('[data-ic]').forEach(el => { el.innerHTML = fzIcon(el.dataset.ic); });
+
+/* ===== identidade: marca do site + marca da Comunidade (usadas no menu e nas páginas) ===== */
+function fzSiteMark(fill) { return `<svg viewBox="12 8 172 172" aria-hidden="true"><path fill="${fill || '#C9D3E6'}" d="M25 18H64A6 6 0 0 1 70 24V110A8 8 0 0 0 78 118H99V89A4 4 0 0 1 103 85H140A4 4 0 0 1 144 89V118H173A4 4 0 0 1 177 122V162A12 12 0 0 1 165 174H31A12 12 0 0 1 19 162V24A6 6 0 0 1 25 18Z"/><circle cx="158" cy="34" r="19.6" fill="#00A2E8"/><circle cx="125" cy="60" r="15.6" fill="#00A2E8"/></svg>`; }
+function fzCmMark() { return `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 4h28a7 7 0 0 1 7 7v19a7 7 0 0 1-7 7H25l-9.5 8.4a.8.8 0 0 1-1.3-.6V37H10a7 7 0 0 1-7-7V11a7 7 0 0 1 7-7z" fill="#2F80ED"/><path d="M10 4h28a7 7 0 0 1 7 7v4H3v-4a7 7 0 0 1 7-7z" fill="#6FA8FF" opacity=".55"/><circle cx="15" cy="21" r="3.3" fill="#fff"/><circle cx="24" cy="21" r="3.3" fill="#fff" opacity=".88"/><circle cx="33" cy="21" r="3.3" fill="#fff" opacity=".72"/></svg>`; }
+function fzLockup() { return `<span class="fz-lock"><span class="m1">${fzSiteMark()}</span><i></i><span class="m2">${fzCmMark()}</span><span class="t"><b>Comunidade</b><small>Fuzion Insights</small></span></span>`; }
+document.querySelectorAll('[data-lockup]').forEach(el => { el.innerHTML = fzLockup(); });
+
 function mountHeader() {
   const h = document.querySelector('.site-header'); if (!h || h.dataset.v3) return; h.dataset.v3 = '1';
   const tab = n => `<a href="${secLink(n)}" data-sec="${esc(n)}" style="${secStyle(n)}">${esc(n)}</a>`;
   const mega = SECTIONS.map(s => `<div class="mg-col" style="${secStyle(s.n)}"><a class="mg-h" href="${secLink(s.n)}" data-sec="${esc(s.n)}">${esc(s.n)}</a>${s.s.map(x => `<a href="${secLink(s.n, x)}" data-sec="${esc(s.n)}" data-sub="${esc(x)}">${esc(x)}</a>`).join('')}</div>`).join('');
   h.innerHTML = `<div class="hd-bar"><a class="logo-sq" href="/" aria-label="Fuzion Insights — página inicial"><svg viewBox="12 8 172 172" aria-hidden="true"><path fill="#7F7F7F" d="M25 18H64A6 6 0 0 1 70 24V110A8 8 0 0 0 78 118H99V89A4 4 0 0 1 103 85H140A4 4 0 0 1 144 89V118H173A4 4 0 0 1 177 122V162A12 12 0 0 1 165 174H31A12 12 0 0 1 19 162V24A6 6 0 0 1 25 18Z"/><circle cx="158" cy="34" r="19.6" fill="#00A2E8"/><circle cx="125" cy="60" r="15.6" fill="#00A2E8"/></svg></a>`
-    + `<nav class="hd-tabs" aria-label="Seções"><a class="hd-cm-tab" href="/comunidade.html">💬 Comunidade<em>Novo</em></a>${PRIMARY.map(n => tab(n)).join('')}</nav>`
-    + `<div class="hd-right"><a class="hd-cm" href="/comunidade.html" aria-label="Comunidade: petições, votações e publicações"><span aria-hidden="true">💬</span><b>Comunidade</b></a><button type="button" class="btn-sub" data-subscribe>Assine</button><button type="button" class="hd-user" id="hd-user" aria-label="Área de membro" aria-haspopup="true"></button>`
+    + `<nav class="hd-tabs" aria-label="Seções">${PRIMARY.map(n => tab(n)).join('')}</nav>`
+    + `<div class="hd-right"><button type="button" class="btn-sub" data-subscribe>Assine</button><button type="button" class="hd-user" id="hd-user" aria-label="Área de membro" aria-haspopup="true"></button>`
     + `<button type="button" class="hd-burger" aria-label="Todas as seções" aria-expanded="false" aria-controls="mega"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div></div>`
     + `<div class="hd-sub" id="subbar" hidden></div>`
-    + `<div class="mega" id="mega" hidden><div class="wrap mg-in">${mega}<div class="mg-col" style="--c:#2F80ED;--cd:#1D4ED8"><a class="mg-h" href="/comunidade.html">💬 Comunidade</a><a href="/comunidade.html#peticao">Petições</a><a href="/comunidade.html#votacao">Votações</a><a href="/comunidade.html#post">Publicações</a><a href="/comunidade.html#minha">Minha área</a></div><div class="mg-col" style="--c:#2F80ED;--cd:#1D4ED8"><a class="mg-h" href="/?secao=exclusivos" data-sec="Exclusivos">🔒 Exclusivos</a><a href="/assine.html">Planos de assinatura</a><a href="/acesso.html">Área do assinante</a><a href="/sobre.html">Sobre</a><a href="/contato.html">Contato</a></div></div></div>`;
+    + `<div class="mega" id="mega" hidden><div class="wrap mg-in"><div class="mg-cm"><a class="mg-cm-top" href="/comunidade.html" aria-label="Comunidade Fuzion Insights">${fzLockup()}</a><nav><a href="/comunidade.html#peticao">${fzIcon('peticao')}<span>Petições</span></a><a href="/comunidade.html#votacao">${fzIcon('votacao')}<span>Votações e enquetes</span></a><a href="/comunidade.html#post">${fzIcon('post')}<span>Publicações</span></a><a href="/comunidade.html#minha">${fzIcon('user')}<span>Minha área</span></a></nav><a class="mg-cm-go" href="/comunidade.html"><span>Entrar na Comunidade</span>${fzIcon('arrow')}</a></div>${mega}<div class="mg-col" style="--c:#2F80ED;--cd:#1D4ED8"><a class="mg-h" href="/?secao=exclusivos" data-sec="Exclusivos">🔒 Exclusivos</a><a href="/assine.html">Planos de assinatura</a><a href="/acesso.html">Área do assinante</a><a href="/sobre.html">Sobre</a><a href="/contato.html">Contato</a></div></div></div>`;
   const burger = h.querySelector('.hd-burger'), mg = h.querySelector('#mega');
   const close = () => { mg.hidden = true; burger.setAttribute('aria-expanded', 'false'); };
   burger.addEventListener('click', e => { e.stopPropagation(); const open = mg.hidden; mg.hidden = !open; burger.setAttribute('aria-expanded', String(open)); });

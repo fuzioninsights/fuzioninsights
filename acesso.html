@@ -27,9 +27,22 @@
         </div>
     </header>
     </div>
-    <main class="page" style="max-width:900px">
+    <section class="fz-hero"><div class="fz-hero-in">
+        <span class="fz-lock"><span class="m1">__SITE__</span><i></i><span class="t"><b>Fuzion Insights</b><small>Área do assinante</small></span></span>
         <h1>Área do assinante</h1>
-        <p class="updated" id="ac-sub">Entre com o e-mail da assinatura e o código de acesso enviado depois da confirmação do pagamento.</p>
+        <p id="ac-sub">Entre com o e-mail da assinatura e o código de acesso enviado depois da confirmação do pagamento.</p>
+        <span class="fz-badge">Acesso exclusivo</span>
+    </div></section>
+    <style>
+body{background:#F2F6FC}
+.ac-cm{display:flex;flex-direction:column;gap:.7rem;margin:0 0 2rem;padding:1.2rem 1.3rem;border-radius:14px;color:#fff;text-decoration:none;background:radial-gradient(circle,rgba(255,255,255,.1) 0 .8px,transparent 1.1px) 0 0/5px 5px,linear-gradient(150deg,#2F80ED 0%,#1D4ED8 55%,#0B2F7A 100%);box-shadow:0 16px 34px -18px rgba(29,78,216,.85);transition:transform .15s,box-shadow .15s}
+.ac-cm:hover{transform:translateY(-2px);box-shadow:0 22px 40px -18px rgba(29,78,216,.95);color:#fff}
+.ac-cm p{margin:0;font-size:.92rem;line-height:1.5;color:rgba(255,255,255,.9)}
+.ac-cm .go{align-self:flex-start;background:#fff;color:#1D4ED8;font:800 .72rem 'Inter',sans-serif;letter-spacing:.4px;text-transform:uppercase;padding:.55rem 1rem;border-radius:999px}
+.ac-h{font:800 1.1rem 'Inter',sans-serif;margin:0 0 1rem;padding-left:.7rem;border-left:4px solid #2F80ED}
+.rel-card{overflow:hidden}.ac-cm,.ac-cm .go,.rel-card{border-radius:0!important}.ac-cm{border-top:3px solid #8DB8FF}.ac-cm .go{border-bottom:3px solid #9CBBEB}
+</style>
+<main class="page" style="max-width:900px">
 
         <section id="ac-login" hidden>
             <div class="acc-card" id="ac-conta"><p style="margin:0 0 .8rem"><b>Entre com a sua conta</b> (Google ou e-mail e senha). É o jeito mais simples: o acesso de assinante é liberado pelo e-mail da assinatura.</p><button class="btn" type="button" id="ac-conta-btn">Entrar / criar conta</button></div>
@@ -49,7 +62,12 @@
                 <div class="acc-status"><span>Conta: <b id="ac-who"></b></span><span>Plano: <b id="ac-plano"></b></span><span>Acesso até: <b id="ac-ate"></b></span></div>
                 <div style="display:flex;gap:.6rem;flex-wrap:wrap"><button class="btn" type="button" id="ac-renew">Renovar acesso</button><button class="btn ghost" type="button" id="ac-out">Sair</button></div>
             </div>
-            <h2>Análises exclusivas</h2>
+            <a class="ac-cm" href="/comunidade.html" aria-label="Abrir a Comunidade">
+                <span data-lockup></span>
+                <p>Como assinante você pode abrir <b>petições</b>, criar <b>votações e enquetes</b> e fazer <b>publicações</b> para a comunidade.</p>
+                <span class="go">Abrir a Comunidade →</span>
+            </a>
+            <h2 class="ac-h">Análises exclusivas</h2>
             <div class="rel-grid" id="ac-list"><p>Carregando…</p></div>
         </section>
     </main>
@@ -127,5 +145,6 @@
             else { showLogin(); msg(erroTexto(d)); }
         })();
     </script>
+<script>document.querySelectorAll(".fz-lock .m1").forEach(e=>{if(e.textContent.includes("__SITE__"))e.innerHTML=fzSiteMark();});</script>
 </body>
 </html>

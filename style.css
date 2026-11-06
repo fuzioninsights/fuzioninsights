@@ -386,12 +386,62 @@ a.chip:hover,a.chip:focus-visible{background:#fff;border-color:var(--gold-d);col
 .logo-sq svg{width:40px;height:40px;display:block}
 .logo-sq:hover{box-shadow:0 0 18px rgba(0,162,232,.75)}
 
-/* destaque da Comunidade no cabeçalho */
-.hd-tabs a.hd-cm-tab{flex:0 0 auto;gap:.4rem;margin-right:.5rem;padding:0 .9rem;color:#fff;border-top-color:#6FA8FF;background:linear-gradient(180deg,#2F80ED,#1D5FD1);box-shadow:0 0 16px rgba(47,128,237,.45)}
-.hd-tabs a.hd-cm-tab:hover,.hd-tabs a.hd-cm-tab:focus-visible{background:linear-gradient(180deg,#4A93F5,#2A6FE6);color:#fff}
-.hd-cm-tab em{font:800 .52rem 'Inter',sans-serif;font-style:normal;letter-spacing:.6px;background:#fff;color:#1D4ED8;padding:.1rem .3rem;border-radius:4px}
-.hd-cm{display:none;align-items:center;gap:.35rem;height:38px;padding:0 .7rem;border-radius:999px;background:linear-gradient(180deg,#2F80ED,#1D5FD1);color:#fff;text-decoration:none;font:800 .66rem 'Inter',sans-serif;letter-spacing:.5px;text-transform:uppercase;box-shadow:0 0 14px rgba(47,128,237,.5);position:relative}
-.hd-cm:hover{background:linear-gradient(180deg,#4A93F5,#2A6FE6)}
-.hd-cm::after{content:"";position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:#FACC15;border:2px solid #0A0A0B}
-@media(max-width:1300px){.hd-cm{display:inline-flex}}
-@media(max-width:520px){.hd-cm b{display:none}.hd-cm{width:38px;padding:0;justify-content:center}}
+/* ===== identidade da Comunidade ===== */
+.fz-lock{display:inline-flex;align-items:center;gap:.65rem;color:#fff}
+.fz-lock .m1 svg,.fz-lock .m2 svg{width:36px;height:36px;display:block}
+.fz-lock i{width:1px;height:28px;background:rgba(255,255,255,.28)}
+.fz-lock .t{display:flex;flex-direction:column;line-height:1.1}
+.fz-lock .t b{font:800 .95rem 'Inter',sans-serif;letter-spacing:.16em;text-transform:uppercase}
+.fz-lock .t small{font:600 .56rem 'Inter',sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.7;margin-top:.2rem}
+/* painel azul no menu ☰ */
+.mg-cm{grid-column:span 2;display:flex;flex-direction:column;gap:.7rem;padding:1.1rem 1.1rem 1.15rem;border-radius:14px;color:#fff;background:radial-gradient(circle,rgba(255,255,255,.1) 0 .8px,transparent 1.1px) 0 0/5px 5px,linear-gradient(150deg,#2F80ED 0%,#1D4ED8 55%,#0B2F7A 100%);box-shadow:0 14px 30px -14px rgba(29,78,216,.8)}
+.mg-cm .mg-cm-top{padding:0;display:block;text-decoration:none}
+.mg-cm p{margin:0;font:500 .8rem/1.45 'Inter',sans-serif;color:rgba(255,255,255,.88)}
+.mg-cm nav{display:grid;grid-template-columns:1fr 1fr;gap:.35rem}
+.mg-cm nav a{display:flex;align-items:center;gap:.5rem;padding:.5rem .65rem;border-radius:9px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;font:700 .76rem 'Inter',sans-serif;text-decoration:none;transition:background .15s}
+.mg-cm nav a:hover{background:rgba(255,255,255,.24);color:#fff}
+.mg-cm nav a span{font-size:.95rem}
+.mg-cm .mg-cm-go{align-self:flex-start;margin-top:.1rem;padding:.6rem 1.1rem;border-radius:999px;background:#fff;color:#1D4ED8;font:800 .72rem 'Inter',sans-serif;letter-spacing:.4px;text-transform:uppercase;text-decoration:none}
+.mg-cm .mg-cm-go:hover{background:#EAF2FF;color:#1D4ED8}
+@media(max-width:560px){.mg-cm{grid-column:1/-1}.mg-cm nav{grid-template-columns:1fr}}
+/* faixa de abertura (Comunidade e Área do assinante) */
+.fz-hero{position:relative;color:#fff;overflow:hidden;background:radial-gradient(circle,rgba(141,184,255,.11) 0 .8px,transparent 1.1px) 0 0/5px 5px,linear-gradient(125deg,#050A16 0%,#0A1B45 55%,#123C96 100%);border-bottom:3px solid #2F80ED}
+.fz-hero::after{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(47,128,237,.45),transparent 65%);pointer-events:none}
+.fz-hero-in{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:2rem var(--gutter,1.2rem) 2.1rem;display:flex;flex-direction:column;gap:.9rem}
+.fz-hero h1{font:800 clamp(1.5rem,4.2vw,2.3rem)/1.15 'Inter',sans-serif;margin:0;letter-spacing:-.01em;color:#fff}
+.fz-hero p{margin:0;max-width:62ch;font:500 .95rem/1.55 'Inter',sans-serif;color:rgba(255,255,255,.82)}
+.fz-chips{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.2rem}
+.fz-chips span{font:700 .68rem 'Inter',sans-serif;letter-spacing:.5px;text-transform:uppercase;padding:.35rem .7rem;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2)}
+.fz-badge{align-self:flex-start;font:800 .6rem 'Inter',sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:.28rem .6rem;border-radius:999px;background:linear-gradient(180deg,#4A93F5,#2A6FE6);box-shadow:0 0 14px rgba(47,128,237,.6)}
+/* área do assinante: cartões mais limpos */
+.acc-card{background:#fff;border:1px solid #DDE5F3;border-top:1px solid #DDE5F3;border-radius:14px;padding:1.4rem;box-shadow:0 1px 2px rgba(15,35,80,.05),0 14px 30px -22px rgba(15,35,80,.45)}
+.acc-card input{border-radius:9px}
+.acc-card .btn{border-radius:9px}
+.acc-status span{background:#F1F5FD;border:1px solid #DDE5F3;border-radius:999px;padding:.35rem .8rem}
+.acc-card .btn:not(.ghost){background:linear-gradient(180deg,#3B8CFF,#1D5FD1);border-color:#1D5FD1;color:#fff;box-shadow:0 6px 14px -8px rgba(29,95,209,.9)}
+.acc-card .btn:not(.ghost):hover{background:linear-gradient(180deg,#5AA0FF,#2A6FE6)}
+.acc-card .btn.ghost{background:#fff;color:#1D4ED8;border-color:#BBD3FF}
+
+.fz-i{width:1.15em;height:1.15em;flex:none;vertical-align:-.2em}
+/* painel da Comunidade no topo do menu ☰ (faixa) */
+.mg-cm{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;align-items:center;gap:.9rem 1.6rem;padding:1rem 1.3rem;border:1px solid rgba(140,190,255,.45)}
+.mg-cm nav{display:flex;flex-wrap:wrap;gap:.45rem;flex:1 1 360px}
+.mg-cm nav a{padding:.55rem .85rem;border-radius:10px;background:rgba(255,255,255,.1);border:1px solid rgba(190,215,255,.4);box-shadow:0 1px 0 rgba(255,255,255,.18) inset;font-size:.74rem;letter-spacing:.2px}
+.mg-cm nav a .fz-i{width:1.25em;height:1.25em;color:#CFE3FF}
+.mg-cm nav a:hover{background:rgba(255,255,255,.22);box-shadow:0 0 16px -3px rgba(180,215,255,.7)}
+.mg-cm .mg-cm-go{display:inline-flex;align-items:center;gap:.5rem;margin:0;align-self:center;padding:.7rem 1.2rem;border-radius:10px;background:linear-gradient(180deg,#fff,#E3EEFF);box-shadow:0 0 20px -2px rgba(190,220,255,.8)}
+.mg-cm .mg-cm-go .fz-i{width:1.1em;height:1.1em}
+@media(max-width:700px){.mg-cm nav{flex:1 1 100%}.mg-cm nav a{flex:1 1 45%}}
+.mg-cm nav a span{font:700 .74rem 'Inter',sans-serif!important;letter-spacing:.2px}
+.mg-cm nav a{font-size:.74rem}
+
+/* v9: cantos retos nos componentes da Comunidade/assinante */
+.acc-card,.acc-card input,.acc-card .btn,.acc-status span,.mg-cm,.mg-cm nav a,.mg-cm .mg-cm-go,.fz-badge{border-radius:0!important}
+.acc-card{border:1px solid #CFD9EA;border-top:3px solid #1D5FD1;box-shadow:0 1px 0 rgba(15,35,80,.05)}
+.acc-status span{background:#F5F8FD;border:1px solid #D5DDEB}
+.acc-card .btn:not(.ghost){border:1px solid #0F3A93;border-bottom-width:3px;background:linear-gradient(180deg,#2A6FE6,#1650C4);box-shadow:0 8px 18px -12px rgba(22,80,196,.9)}
+.mg-cm{border:1px solid rgba(160,200,255,.5);border-top:3px solid #8DB8FF}
+.mg-cm nav a{border:1px solid rgba(190,215,255,.45)}
+.mg-cm .mg-cm-go{border-bottom:3px solid #9CBBEB}
+
+.sh-btn,.sh-btn.pill{border-radius:0!important}

@@ -79,15 +79,123 @@
 .cm-li{display:flex;justify-content:space-between;align-items:center;gap:.8rem;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.85rem}
 .cm-li small{color:var(--muted);text-transform:uppercase;font-weight:700;font-size:.62rem;letter-spacing:.6px;margin-right:.4rem}
 @media(max-width:560px){.cm-form .row2{grid-template-columns:1fr}.cm-stats{grid-template-columns:1fr 1fr 1fr}.cm-tab{padding:.5rem .8rem}}
+
+/* ===== visual profissional ===== */
+body{background:#F2F6FC}
+.cm.page{max-width:980px;padding-top:1.4rem}
+.cm-tabs{background:#fff;border:1px solid #DDE5F3;border-radius:14px;padding:.35rem;gap:.25rem;box-shadow:0 10px 26px -20px rgba(15,35,80,.6);margin:-2.2rem 0 1.4rem;position:relative;z-index:2;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.cm-tabs::-webkit-scrollbar{display:none}
+.cm-tab{flex:1 0 auto;border:0;border-radius:10px!important;padding:.75rem 1rem;color:#475569;background:transparent;white-space:nowrap}
+.cm-tab:hover{background:#EEF4FF;color:#1D4ED8}
+.cm-tab[aria-selected="true"]{background:linear-gradient(180deg,#3B8CFF,#1D5FD1);color:#fff;box-shadow:0 6px 14px -6px rgba(29,95,209,.9)}
+.cm-bar{background:#fff;border:1px solid #DDE5F3;border-radius:12px;padding:.8rem 1rem}
+.cm-bar p{color:#475569}
+.cm-btn{background:linear-gradient(180deg,#3B8CFF,#1D5FD1);border:1px solid #1D5FD1;box-shadow:0 6px 14px -8px rgba(29,95,209,.9)}
+.cm-btn:hover{background:linear-gradient(180deg,#5AA0FF,#2A6FE6);border-color:#2A6FE6}
+.cm-btn.ghost{background:#fff;color:#1D4ED8;border-color:#BBD3FF;box-shadow:none}
+.cm-btn.ghost:hover{background:#F1F6FF;border-color:#6FA8FF}
+.cm-btn.done{background:#ECFDF3;color:#166534;border-color:#86EFAC;box-shadow:none}
+.cm-form{background:#fff;border:1px solid #DDE5F3;border-top:3px solid #2F80ED;border-radius:14px;box-shadow:0 14px 30px -22px rgba(15,35,80,.5)}
+.cm-card{border:1px solid #DDE5F3;border-radius:14px!important;padding:1.2rem 1.3rem;box-shadow:0 1px 2px rgba(15,35,80,.04),0 14px 28px -22px rgba(15,35,80,.5);transition:box-shadow .2s,transform .2s}
+.cm-card:hover{box-shadow:0 1px 2px rgba(15,35,80,.05),0 18px 34px -20px rgba(29,78,216,.45)}
+.cm-av{background:linear-gradient(145deg,#3B8CFF,#1D4ED8);color:#fff;width:32px;height:32px}
+.cm-meta{align-items:center}
+.cm-type{margin-left:auto;font-style:normal;font:800 .6rem 'Inter',sans-serif;letter-spacing:.6px;text-transform:uppercase;padding:.2rem .55rem;border-radius:999px;background:#E6EFFF;color:#1D4ED8}
+.cm-type.votacao{background:#FDF0D5;color:#92580A}.cm-type.post{background:#E9F7EF;color:#166534}
+.cm-card h3{font-size:1.12rem;letter-spacing:-.005em}
+.cm-prog{height:10px;background:#E3EBFA}
+.cm-prog i{background:linear-gradient(90deg,#2F80ED,#6FA8FF)}
+.cm-opt{border-radius:10px!important;border-color:#D5DFF1}
+.cm-opt:hover{border-color:#6FA8FF;background:#F5F9FF}
+.cm-opt.res:hover{background:#fff;border-color:#D5DFF1}
+.cm-opt .bar{background:#DCE8FF}.cm-opt.mine .bar{background:#B7D0FF}
+.cm-stat{background:#fff;border:1px solid #DDE5F3;border-radius:12px!important}.cm-stat b{color:#1D4ED8}
+.cm-empty{background:#fff;border:1px dashed #BBD3FF;border-radius:14px!important}
+.cm-note{border-radius:12px!important}
+@media(max-width:560px){.cm-tabs{margin-top:-1.8rem}.cm-tab{padding:.7rem .8rem;font-size:.68rem}.fz-hero-in{padding-top:1.5rem}}
+
+/* ===== ícones e botões hi-tech ===== */
+.fz-i{width:1.2em;height:1.2em;flex:none;vertical-align:-.22em}
+.cm-tab{display:inline-flex;align-items:center;justify-content:center;gap:.5rem}.cm-tab .fz-i{width:1.25em;height:1.25em}
+.fz-chips span{display:inline-flex;align-items:center;gap:.4rem}.fz-chips i{display:inline-flex}
+.cm-btn{position:relative;overflow:hidden;isolation:isolate;gap:.5rem;padding:.7rem 1.25rem;border-radius:10px!important;letter-spacing:.9px;border:1px solid rgba(120,175,255,.65);background:linear-gradient(180deg,#2F7BF0 0%,#1650C4 55%,#0F3A93 100%);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 -1px 0 rgba(0,10,40,.4) inset,0 10px 22px -12px rgba(47,128,237,1),0 0 0 1px rgba(10,30,90,.35)}
+.cm-btn::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle,rgba(255,255,255,.16) 0 .7px,transparent 1px) 0 0/4px 4px}
+.cm-btn::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:45%;z-index:-1;background:linear-gradient(105deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg);transition:left .55s}
+.cm-btn:hover::after{left:130%}
+.cm-btn:hover{background:linear-gradient(180deg,#4A90FF 0%,#1F62DC 55%,#134BB0 100%);border-color:#A9CBFF;box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 12px 26px -12px rgba(47,128,237,1),0 0 20px -2px rgba(70,150,255,.7)}
+.cm-btn:active{transform:translateY(1px)}
+.cm-btn.ghost{background:linear-gradient(180deg,#fff,#F2F7FF);color:#1D4ED8;border-color:#A9C6F5;box-shadow:0 1px 0 #fff inset,0 6px 14px -12px rgba(29,78,216,.7)}
+.cm-btn.ghost::before,.cm-btn.ghost::after{display:none}
+.cm-btn.ghost:hover{background:linear-gradient(180deg,#F4F8FF,#E6F0FF);border-color:#5E9BFF;box-shadow:0 0 16px -4px rgba(47,128,237,.6)}
+.cm-btn.done{background:linear-gradient(180deg,#F0FDF5,#DDF7E8);color:#14673A;border-color:#7ADAA0;box-shadow:0 0 14px -6px rgba(34,160,90,.6)}.cm-btn.done::before,.cm-btn.done::after{display:none}
+.cm-tab[aria-selected="true"]{background:linear-gradient(180deg,#2F7BF0,#1650C4);box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 8px 18px -8px rgba(29,95,209,1),0 0 18px -4px rgba(70,150,255,.6)}
+.cm-share{display:inline-flex;align-items:center;gap:.4rem;border:1px solid #A9C6F5;background:#F3F8FF;color:#1D4ED8;padding:.4rem .8rem;border-radius:9px;font:800 .66rem 'Inter',sans-serif;letter-spacing:.6px;text-transform:uppercase;cursor:pointer;transition:background .15s,box-shadow .15s,border-color .15s}
+.cm-share:hover{background:#E4EFFF;border-color:#5E9BFF;box-shadow:0 0 14px -4px rgba(47,128,237,.7)}
+.cm-foot a{display:inline-flex;align-items:center;gap:.3rem;text-decoration:none}.cm-foot a .fz-i{width:1em;height:1em}
+.cm-foot{justify-content:space-between}
+.cm-type{display:inline-flex;align-items:center;gap:.3rem}.cm-type .fz-i{width:1.15em;height:1.15em}
+.cm-opt{border-radius:10px!important}
+.share-bar{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;padding:.8rem .9rem;border:1px solid #CFE0FF;background:linear-gradient(180deg,#F7FAFF,#EEF4FF);border-radius:12px;margin:.8rem 0 .5rem}
+.share-lbl{flex:1 0 100%;font:800 .62rem 'Inter',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#1D4ED8}
+
+/* ===== v9: cantos retos, cartões e botões mais profissionais ===== */
+.cm-card,.cm-btn,.cm-share,.cm-tab,.cm-tabs,.cm-bar,.cm-form,.cm-form input,.cm-form textarea,.cm-form select,.cm-stat,.cm-empty,.cm-note,.cm-focus,.share-bar,.cm-opt,.cm-img,.cm-up img,.cm-av,.cm-type,.cm-prog,.cm-prog i,.cm-end,.fz-chips span,.fz-badge,.cm-me input{border-radius:0!important}
+.cm-card{position:relative;border:1px solid #CFD9EA;padding:1.3rem 1.4rem 1.1rem;box-shadow:0 1px 0 rgba(15,35,80,.05);background:#fff;transition:border-color .15s,box-shadow .15s}
+.cm-card::before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:3px;background:linear-gradient(90deg,#1D5FD1,#6FA8FF)}
+.cm-card[data-t="votacao"]::before{background:linear-gradient(90deg,#B45309,#F5B74A)}
+.cm-card[data-t="post"]::before{background:linear-gradient(90deg,#0B7A5E,#34D3A5)}
+.cm-card:hover{border-color:#9DB9E6;box-shadow:0 10px 24px -18px rgba(15,35,80,.55)}
+.cm-meta{padding-bottom:.75rem;margin-bottom:.9rem;border-bottom:1px solid #E8EEF8;gap:.7rem}
+.cm-av{width:34px;height:34px;background:#0B1F4D;color:#8DB8FF;border:1px solid #2250B8;font-size:.82rem;letter-spacing:.02em}
+.cm-meta b{font-size:.8rem}
+.cm-type{border:1px solid #BBD3FF;background:#F0F6FF;color:#1D4ED8;padding:.22rem .55rem;letter-spacing:.9px}
+.cm-type.votacao{border-color:#F2D49A;background:#FFF7E6;color:#92580A}.cm-type.post{border-color:#A8E3CC;background:#EDFAF4;color:#0B6B52}
+.cm-card h3{font-size:1.2rem;line-height:1.28;letter-spacing:-.01em;margin-bottom:.5rem}
+.cm-card p{color:#334155}
+.cm-prog{position:relative;height:9px;background:#E3EAF6;margin:.5rem 0 .45rem}
+.cm-prog i{background:linear-gradient(90deg,#1D5FD1,#5C9BFF)}
+.cm-prog::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(10% - 2px),rgba(255,255,255,.95) calc(10% - 2px),rgba(255,255,255,.95) 10%)}
+.cm-cnt{font-size:.78rem;letter-spacing:.01em}.cm-cnt b{font-size:1.15rem;letter-spacing:-.01em}
+.cm-opt{border:1px solid #C9D5EA;padding:.8rem 1rem;background:#fff;transition:border-color .15s,background .15s,box-shadow .15s}
+.cm-opt:hover{border-color:#1D5FD1;background:#F5F9FF;box-shadow:inset 3px 0 0 #1D5FD1}
+.cm-opt.res:hover{border-color:#C9D5EA;background:#fff;box-shadow:none}
+.cm-foot{margin-top:1.1rem;padding-top:.75rem;border-top:1px solid #E8EEF8}
+/* botões: retos, sólidos, com marca de canto */
+.cm-btn{padding:.8rem 1.5rem;font-size:.72rem;letter-spacing:1px;border:1px solid #0F3A93;border-bottom-width:3px;background:linear-gradient(180deg,#2A6FE6,#1650C4);box-shadow:0 8px 18px -12px rgba(22,80,196,.9)}
+.cm-btn:hover{background:linear-gradient(180deg,#3A82F7,#1B5AD6);border-color:#0F3A93}
+.cm-btn:active{transform:translateY(1px);border-bottom-width:2px}
+.cm-btn.ghost{background:#fff;color:#1D4ED8;border:1px solid #1D5FD1;border-bottom-width:3px;box-shadow:none}
+.cm-btn.ghost:hover{background:#F0F6FF}
+.cm-btn.done{background:#F0FDF5;color:#14673A;border:1px solid #1E9E5A;border-bottom-width:3px;box-shadow:none}
+.cm-share{padding:.45rem .85rem;background:#fff;border:1px solid #1D5FD1;color:#1D4ED8}
+.cm-share:hover{background:#F0F6FF}
+.cm-tabs{padding:0;gap:0;border:1px solid #CFD9EA;box-shadow:0 1px 0 rgba(15,35,80,.05)}
+.cm-tab{padding:.95rem 1.1rem;border-right:1px solid #E8EEF8!important;border:0;border-bottom:3px solid transparent;color:#475569;background:#fff}
+.cm-tab:last-child{border-right:0!important}
+.cm-tab:hover{background:#F5F9FF;color:#1D4ED8}
+.cm-tab[aria-selected="true"]{background:#F0F6FF;color:#0F3A93;border-bottom:3px solid #1D5FD1;box-shadow:none}
+.cm-bar{border:1px solid #CFD9EA;border-left:3px solid #1D5FD1}
+.cm-form{border:1px solid #CFD9EA;border-top:3px solid #1D5FD1;box-shadow:none}
+.cm-form input,.cm-form textarea,.cm-form select{border:1px solid #BCCBE3;background:#fff}
+.cm-form input:focus,.cm-form textarea:focus,.cm-form select:focus{outline:0;border-color:#1D5FD1;box-shadow:0 0 0 2px rgba(29,95,209,.18)}
+.share-bar{border:1px solid #CFD9EA;border-left:3px solid #1D5FD1;background:#F7FAFF}
+.share-bar .sh-btn{border-radius:0!important}
+.cm-stat{border:1px solid #CFD9EA;border-top:3px solid #1D5FD1}
+.cm-empty{border:1px dashed #9DB9E6;background:#fff}
+.fz-chips span{padding:.4rem .75rem;background:rgba(255,255,255,.06);border:1px solid rgba(160,200,255,.4)}
 </style>
+<section class="fz-hero"><div class="fz-hero-in">
+    <span data-lockup></span>
+    <h1>Sua voz, com peso.</h1>
+    <p id="cm-sub">Abra petições, crie votações e enquetes e publique para a comunidade de assinantes da Fuzion Insights e fora dela. Cada item tem link e botões de compartilhamento para você divulgar nas redes; criar é um benefício de assinante.</p>
+    <div class="fz-chips"><span><i data-ic="peticao"></i>Petições</span><span><i data-ic="votacao"></i>Votações e enquetes</span><span><i data-ic="post"></i>Publicações</span></div>
+</div></section>
 <main class="page cm">
-    <h1>Comunidade</h1>
-    <p class="updated" id="cm-sub">Petições, votações e publicações dos assinantes da Fuzion Insights. Qualquer pessoa com conta pode assinar, votar e curtir; criar é um benefício de assinante.</p>
     <div class="cm-tabs" role="tablist" aria-label="Seções da comunidade">
-        <button class="cm-tab" role="tab" data-tab="peticao">Petições</button>
-        <button class="cm-tab" role="tab" data-tab="votacao">Votações</button>
-        <button class="cm-tab" role="tab" data-tab="post">Publicações</button>
-        <button class="cm-tab" role="tab" data-tab="minha">Minha área</button>
+        <button class="cm-tab" role="tab" data-tab="peticao"><i data-ic="peticao"></i>Petições</button>
+        <button class="cm-tab" role="tab" data-tab="votacao"><i data-ic="votacao"></i>Votações e enquetes</button>
+        <button class="cm-tab" role="tab" data-tab="post"><i data-ic="post"></i>Publicações</button>
+        <button class="cm-tab" role="tab" data-tab="minha"><i data-ic="user"></i>Minha área</button>
     </div>
     <div id="cm-aviso"></div>
     <section id="cm-feed">
@@ -175,7 +283,7 @@ function toggleShare(btn) {
   const url = linkOf(it), en = encodeURIComponent, t = it.titulo || ((it.autor ? it.autor + ': ' : '') + (it.texto || '').slice(0, 90)), msg = (it.tipo === 'peticao' ? 'Assine esta petição: ' : it.tipo === 'votacao' ? 'Vote nesta enquete: ' : '') + t;
   const nets = [['wa', 'WhatsApp', 'whatsapp', `https://wa.me/?text=${en(msg + ' — ' + url)}`], ['x', 'X', 'x', `https://twitter.com/intent/tweet?text=${en(msg)}&url=${en(url)}`], ['fb', 'Facebook', 'facebook', `https://www.facebook.com/sharer/sharer.php?u=${en(url)}`], ['li', 'LinkedIn', 'linkedin', `https://www.linkedin.com/sharing/share-offsite/?url=${en(url)}`], ['tg', 'Telegram', 'telegram', `https://t.me/share/url?url=${en(url)}&text=${en(msg)}`]];
   const bar = document.createElement('div'); bar.className = 'share-bar';
-  bar.innerHTML = (navigator.share ? `<button type="button" class="sh-btn pill main" data-native>${ICON.share}<span>Enviar</span></button>` : '') +
+  bar.innerHTML = '<span class="share-lbl">Divulgue dentro e fora da Comunidade</span>' + (navigator.share ? `<button type="button" class="sh-btn pill main" data-native>${ICON.share}<span>Enviar</span></button>` : '') +
     nets.map(n => `<a class="sh-btn ${n[0]}" href="${n[3]}" target="_blank" rel="noopener" aria-label="Compartilhar no ${n[1]}" title="${n[1]}">${ICON[n[2]]}<span>${n[1]}</span></a>`).join('') +
     `<button type="button" class="sh-btn pill" data-copy title="Copiar link">${ICON.link}<span>Copiar link</span></button>`;
   art.querySelector('.cm-foot').before(bar);
@@ -196,7 +304,7 @@ function card(it) {
   if (it.tipo === 'peticao') {
     const pct = Math.min(100, Math.round(((it.n || 0) / (it.meta || 100)) * 100));
     body = `<h3>${esc(it.titulo)}</h3>${imgOf(it)}<p>${esc(it.texto)}</p><div class="cm-prog" aria-hidden="true"><i style="width:${pct}%"></i></div><div class="cm-cnt"><b>${num(it.n)}</b> de ${num(it.meta || 100)} assinaturas</div>
-      <button type="button" class="cm-btn${mine ? ' done' : ''}" data-a="${mine ? 'des' : 'sign'}" data-id="${it.id}">${mine ? '✓ Você assinou' : 'Assinar petição'}</button>`;
+      <button type="button" class="cm-btn${mine ? ' done' : ''}" data-a="${mine ? 'des' : 'sign'}" data-id="${it.id}">${mine ? fzIcon('check') + 'Você assinou' : fzIcon('peticao') + 'Assinar petição'}</button>`;
   } else if (it.tipo === 'votacao') {
     const enc = it.fim && it.fim < hoje(), total = (it.v || []).reduce((a, b) => a + b, 0), showRes = !!mine || enc || own;
     body = `<h3>${esc(it.titulo)}</h3>${imgOf(it)}${it.texto ? `<p>${esc(it.texto)}</p>` : ''}` + (it.opcoes || []).map((o, i) => {
@@ -205,11 +313,11 @@ function card(it) {
         : `<button type="button" class="cm-opt" data-a="vote" data-id="${it.id}" data-op="${i}"><span>${esc(o)}</span></button>`;
     }).join('') + `<div class="cm-cnt">${num(total)} ${total === 1 ? 'voto' : 'votos'} · ${enc ? '<span class="cm-end">Encerrada</span>' : 'encerra em ' + dmy(it.fim)}</div>`;
   } else {
-    body = `${imgOf(it)}<p style="font-size:.95rem;margin-bottom:.6rem">${esc(it.texto)}</p><button type="button" class="cm-btn ghost${mine ? ' done' : ''}" data-a="${mine ? 'des' : 'like'}" data-id="${it.id}">♥ ${mine ? 'Curtido' : 'Curtir'} · ${num(it.n)}</button>`;
+    body = `${imgOf(it)}<p style="font-size:.95rem;margin-bottom:.6rem">${esc(it.texto)}</p><button type="button" class="cm-btn ghost${mine ? ' done' : ''}" data-a="${mine ? 'des' : 'like'}" data-id="${it.id}">${fzIcon('heart')}${mine ? 'Curtido' : 'Curtir'} · ${num(it.n)}</button>`;
   }
   const sub = `mailto:fuzioninsights@gmail.com?subject=${encodeURIComponent('Denúncia de conteúdo da comunidade')}&body=${encodeURIComponent('Tipo: ' + it.tipo + '\nCódigo: ' + it.id + '\n\nMotivo:')}`;
-  return `<article class="cm-card" id="i-${it.id}" data-t="${it.tipo}"><div class="cm-meta"><span class="cm-av">${ini}</span><span><b>${esc(it.autor || 'Assinante')}</b> · ${fmt(it.t)}</span></div>${body}
-    <div class="cm-foot"><button type="button" class="lk" data-a="share" data-id="${it.id}" style="color:var(--gold-d);font-weight:700;text-decoration:none">↗ Compartilhar</button><a href="${sub}">Denunciar</a>${own || adm ? `<button type="button" class="lk" data-a="del" data-id="${it.id}">Excluir</button>` : ''}</div></article>`;
+  return `<article class="cm-card" id="i-${it.id}" data-t="${it.tipo}"><div class="cm-meta"><span class="cm-av">${ini}</span><span><b>${esc(it.autor || 'Assinante')}</b> · ${fmt(it.t)}</span><em class="cm-type ${it.tipo}">${fzIcon(it.tipo)}${it.tipo === 'peticao' ? 'Petição' : it.tipo === 'votacao' ? 'Enquete' : 'Post'}</em></div>${body}
+    <div class="cm-foot"><button type="button" class="cm-share" data-a="share" data-id="${it.id}">${fzIcon('share')}Compartilhar</button><a href="${sub}">${fzIcon('flag')}Denunciar</a>${own || adm ? `<button type="button" class="lk" data-a="del" data-id="${it.id}">Excluir</button>` : ''}</div></article>`;
 }
 function paintList() {
   const L = S.lists[S.tab];
@@ -217,6 +325,7 @@ function paintList() {
   const head = fo ? `<div class="cm-focus"><span>Você abriu um item compartilhado.</span><a href="#${S.tab}" id="cm-all">Ver todas as ${esc(TXT[S.tab].nome.toLowerCase())}</a></div>${card(fo)}` : '';
   if (fo && L && L.ok) L.itens = L.itens.filter(x => x.id !== fo.id);
   $c('cm-list').innerHTML = head + (!L || !L.ok ? '<p style="color:var(--muted)">Carregando…</p>' : L.itens.length ? L.itens.map(card).join('') : fo ? '' : '<div class="cm-empty">Ainda não há nada por aqui. Seja o primeiro a criar!</div>');
+  if (fo && fo.tipo === 'peticao') { const sb = document.querySelector(`#i-${fo.id} [data-a=share]`); if (sb && !document.querySelector(`#i-${fo.id} .share-bar`)) toggleShare(sb); }
   const all = $c('cm-all'); if (all) all.onclick = e => { e.preventDefault(); S.focus = null; history.replaceState(null, '', '#' + S.tab); paintList(); };
   $c('cm-more').hidden = !(L && L.mais);
 }
@@ -264,8 +373,9 @@ $c('cm-form').addEventListener('submit', async e => {
   const btn = $c('f-go'); btn.disabled = true;
   const r = await api(b); btn.disabled = false;
   if (!r.ok) return say(r.erro);
-  $c('cm-form').classList.remove('on'); toast('Publicado!');
+  $c('cm-form').classList.remove('on'); toast('Publicado! Divulgue o link abaixo.');
   await loadMe(); await loadList(tab); paintList(); paintTop();
+  { const nb = r.item && document.querySelector(`#i-${r.item.id} [data-a=share]`); if (nb && !document.querySelector(`#i-${r.item.id} .share-bar`)) { toggleShare(nb); nb.scrollIntoView({ block: 'center', behavior: 'smooth' }); } }
 });
 
 /* ---------- ações nos cartões ---------- */
@@ -322,7 +432,7 @@ function paintTop() {
   document.querySelectorAll('.cm-tab').forEach(t => t.setAttribute('aria-selected', t.dataset.tab === S.tab ? 'true' : 'false'));
   const me = S.tab === 'minha'; $c('cm-feed').hidden = me; $c('cm-me').hidden = !me;
   if (me) return paintMe();
-  $c('cm-hint').textContent = TXT[S.tab].dica; $c('cm-new').textContent = TXT[S.tab].novo; $c('cm-form').classList.remove('on');
+  $c('cm-hint').textContent = TXT[S.tab].dica; $c('cm-new').innerHTML = fzIcon('plus') + TXT[S.tab].novo.replace('+ ', ''); $c('cm-form').classList.remove('on');
 }
 async function go(tab, keep) {
   if (!keep) S.focus = null;

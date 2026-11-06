@@ -458,11 +458,11 @@
         /* ===== Comunidade na home ===== */
         .cmty{grid-column:1/-1;background:#fff;border:1px solid var(--border);border-top:3px solid var(--gold);padding:1.1rem 1.2rem 1.2rem}
         .cmty-h{display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.8rem}
-        .cmty-h b{font:800 .8rem 'Inter',sans-serif;letter-spacing:1.4px;text-transform:uppercase}
+        .cmty-h b{display:inline-flex;align-items:center;gap:.5rem;color:#1D4ED8;font:800 .8rem 'Inter',sans-serif;letter-spacing:1.4px;text-transform:uppercase}
         .cmty-h a.all{font:700 .7rem 'Inter',sans-serif;letter-spacing:.6px;text-transform:uppercase;color:var(--gold-d);text-decoration:none}
         .cmty-tabs{display:flex;gap:.4rem}
         .cmty-tab{border:1px solid var(--border);background:#fff;color:var(--text);padding:.45rem .9rem;font:700 .7rem 'Inter',sans-serif;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;border-radius:999px!important;transition:background .15s,color .15s,border-color .15s}
-        .cmty-tab:hover{border-color:var(--gold)}.cmty-tab[aria-selected="true"]{background:#0A0A0B;color:#fff;border-color:#0A0A0B}
+        .cmty-tab:hover{border-color:var(--gold)}.cmty-tab[aria-selected="true"]{background:linear-gradient(180deg,#2F7BF0,#1650C4);color:#fff;border-color:#7CB0FF;box-shadow:0 0 16px -4px rgba(70,150,255,.7)}
         .cmty-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.8rem}
         .cmty-card{display:flex;flex-direction:column;gap:.45rem;text-decoration:none;color:inherit;background:var(--bg-s);border:1px solid var(--border);padding:.85rem .95rem;border-radius:10px!important;transition:border-color .15s,box-shadow .15s,transform .15s}
         .cmty-card:hover{border-color:var(--gold);box-shadow:0 6px 18px -10px rgba(47,128,237,.6);transform:translateY(-1px)}
@@ -473,12 +473,26 @@
         .cmty-th{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:7px!important;background:#E3EBFA}
         .cmty-tp{font-style:normal;font:800 .56rem 'Inter',sans-serif;letter-spacing:.8px;text-transform:uppercase;background:#E3EBFA;color:#1D4ED8;padding:.12rem .4rem;border-radius:4px!important;margin-right:.25rem}.cmty-tp.v{background:#E7F7EC;color:#166534}
         .cmty-empty{grid-column:1/-1;text-align:center;padding:1.2rem .5rem;color:var(--muted);font-size:.88rem}
-        .cmty-cta{display:inline-block;margin-top:.7rem;background:#0A0A0B;color:#fff;padding:.65rem 1.2rem;font:700 .72rem 'Inter',sans-serif;letter-spacing:.5px;text-transform:uppercase;text-decoration:none;border-radius:8px!important}
+        .cmty-cta{display:inline-block;margin-top:.7rem;background:linear-gradient(180deg,#2F7BF0,#1650C4);box-shadow:0 0 16px -4px rgba(70,150,255,.7);color:#fff;padding:.65rem 1.2rem;font:700 .72rem 'Inter',sans-serif;letter-spacing:.5px;text-transform:uppercase;text-decoration:none;border-radius:8px!important}
         .cmty-cta:hover{background:var(--gold-d)}
         .cmty-th{display:block;height:110px;margin:-.1rem 0 .1rem;border-radius:7px!important;background:#E3EBFA center/cover no-repeat}
-        .cmty-tag{font-style:normal;font:800 .6rem 'Inter',sans-serif;letter-spacing:.5px;text-transform:uppercase;padding:.12rem .4rem;border-radius:4px!important;margin-right:.2rem;background:#DCE8FF;color:#1D4ED8}.cmty-tag.v{background:#FDE9C8;color:#92580A}
+        .cmty-tag .fz-i{width:1.15em;height:1.15em;margin-right:.2rem}.cmty-tag{display:inline-flex;align-items:center;font-style:normal;font:800 .6rem 'Inter',sans-serif;letter-spacing:.5px;text-transform:uppercase;padding:.12rem .4rem;border-radius:4px!important;margin-right:.2rem;background:#DCE8FF;color:#1D4ED8}.cmty-tag.v{background:#FDE9C8;color:#92580A}
         .cmty-card .cmty-th+small{margin-top:.1rem}
         @media(max-width:680px){.cmty{padding:.9rem .9rem 1rem}.cmty-grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:.2rem}.cmty-grid::-webkit-scrollbar{display:none}.cmty-card{scroll-snap-align:start}.cmty-empty{grid-column:auto;min-width:100%}}
+        /* v9: faixa da Comunidade com cantos retos */
+        .cmty-card,.cmty-th,.cmty-tag,.cmty-bar,.cmty-bar i,.cmty-tab,.cmty-cta{border-radius:0!important}
+        .cmty{border:1px solid #CFD9EA;border-top:3px solid #1D5FD1}
+        .cmty-card{position:relative;background:#fff;border:1px solid #CFD9EA;padding:.95rem 1rem 1rem;box-shadow:none;transform:none}
+        .cmty-card::before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:3px;background:linear-gradient(90deg,#1D5FD1,#6FA8FF)}
+        .cmty-card:has(.cmty-tag.v)::before{background:linear-gradient(90deg,#B45309,#F5B74A)}
+        .cmty-card:hover{border-color:#1D5FD1;box-shadow:0 10px 22px -16px rgba(15,35,80,.55);transform:none}
+        .cmty-tag{border:1px solid #BBD3FF;background:#F0F6FF;color:#1D4ED8}.cmty-tag.v{border-color:#F2D49A;background:#FFF7E6;color:#92580A}
+        .cmty-bar{height:7px;position:relative}.cmty-bar::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(10% - 2px),rgba(255,255,255,.95) calc(10% - 2px),rgba(255,255,255,.95) 10%)}
+        .cmty-tabs{gap:0;border:1px solid #CFD9EA}
+        .cmty-tab{border:0;border-right:1px solid #E8EEF8;border-bottom:3px solid transparent;background:#fff;color:#475569;padding:.5rem .95rem}
+        .cmty-tab:last-child{border-right:0}
+        .cmty-tab[aria-selected="true"]{background:#F0F6FF;color:#0F3A93;border-bottom-color:#1D5FD1;box-shadow:none}
+        .cmty-cta{border:1px solid #0F3A93;border-bottom-width:3px;background:linear-gradient(180deg,#2A6FE6,#1650C4);box-shadow:none}
     </style>
 </head>
 <body>
@@ -1346,13 +1360,13 @@
             const num = n => (n || 0).toLocaleString('pt-BR');
             const card = x => {
                 const pet = x.tipo === 'peticao', pct = Math.min(100, Math.round((x.n || 0) / (x.meta || 100) * 100)), enc = x.fim && x.fim < new Date().toISOString().slice(0, 10);
-                return `<a class="cmty-card" href="/comunidade.html#${x.tipo}/${esc(x.id)}">${x.img ? `<span class="cmty-th" style="background-image:url(/ci/${esc(x.id)}.jpg)"></span>` : ''}<small><em class="cmty-tag ${pet ? 'p' : 'v'}">${pet ? '✍ Petição' : '🗳 Votação'}</em> ${esc(x.autor || 'Assinante')} · ${when(x.t)}</small><strong>${esc(x.titulo)}</strong>`
+                return `<a class="cmty-card" href="/comunidade.html#${x.tipo}/${esc(x.id)}">${x.img ? `<span class="cmty-th" style="background-image:url(/ci/${esc(x.id)}.jpg)"></span>` : ''}<small><em class="cmty-tag ${pet ? 'p' : 'v'}">${fzIcon(pet ? 'peticao' : 'votacao')}${pet ? 'Petição' : 'Votação'}</em> ${esc(x.autor || 'Assinante')} · ${when(x.t)}</small><strong>${esc(x.titulo)}</strong>`
                     + (pet ? `<span class="cmty-bar" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="cmty-n"><b>${num(x.n)}</b> de ${num(x.meta || 100)} assinaturas</span>` : `<span class="cmty-n"><b>${num(x.n)}</b> ${x.n === 1 ? 'voto' : 'votos'} · ${enc ? 'encerrada' : 'encerra em ' + String(x.fim || '').split('-').reverse().join('/')}</span>`) + `</a>`;
             };
             const cta = (txt) => `<div class="cmty-empty">${txt}<br><a class="cmty-cta" href="/comunidade.html">Ir para a Comunidade</a></div>`;
             const cards = CM.bad ? cta('Petições, votações e publicações dos assinantes da Fuzion Insights. Participe e dê voz à sua opinião.')
                 : it.length ? it.map(card).join('') : cta('Ainda não há petições nem votações. Seja o primeiro a criar!');
-            box.innerHTML = `<div class="cmty-h"><b>💬 Comunidade</b>${CM.bad ? '' : `<div class="cmty-tabs" role="tablist"><button type="button" class="cmty-tab" role="tab" data-t="rec" aria-selected="${CM.tab === 'rec'}">Recentes</button><button type="button" class="cmty-tab" role="tab" data-t="top" aria-selected="${CM.tab === 'top'}">Mais votadas</button></div>`}<a class="all" href="/comunidade.html">Ver tudo →</a></div><div class="cmty-grid">${cards}</div>`;
+            box.innerHTML = `<div class="cmty-h"><b>${fzIcon('community')}Comunidade</b>${CM.bad ? '' : `<div class="cmty-tabs" role="tablist"><button type="button" class="cmty-tab" role="tab" data-t="rec" aria-selected="${CM.tab === 'rec'}">Recentes</button><button type="button" class="cmty-tab" role="tab" data-t="top" aria-selected="${CM.tab === 'top'}">Mais votadas</button></div>`}<a class="all" href="/comunidade.html">Ver tudo →</a></div><div class="cmty-grid">${cards}</div>`;
             box.querySelectorAll('.cmty-tab').forEach(b => b.onclick = async () => { CM.tab = b.dataset.t; await cmLoad(CM.tab); cmDraw(); });
         }
         async function renderCmty(show) {
