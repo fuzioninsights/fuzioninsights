@@ -75,6 +75,13 @@
   status = 200
   force = true
 
+# Busca no texto completo das matérias
+[[redirects]]
+  from = "/api/busca"
+  to = "/.netlify/functions/busca"
+  status = 200
+  force = true
+
 # Pagamento automático (Mercado Pago)
 [[redirects]]
   from = "/api/checkout"

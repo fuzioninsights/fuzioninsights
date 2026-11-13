@@ -448,3 +448,29 @@ a.chip:hover,a.chip:focus-visible{background:#fff;border-color:var(--gold-d);col
 
 /* menu lateral: Comunidade só com a marca do site (sem o balão) */
 .mg-cm .fz-lock .m2,.mg-cm .fz-lock i{display:none}
+
+/* ===== rodapé organizado: marca à esquerda, redes e links alinhados com o conteúdo ===== */
+.site-footer{text-align:left;padding:2.4rem var(--gutter) 1.4rem}
+.site-footer .wrap{max-width:1200px;margin:0 auto;width:100%}
+.f-brand b{display:block;font:800 1.55rem/1 'Inter',sans-serif;letter-spacing:.22em;color:var(--text)}
+.f-status{justify-content:flex-start;margin:.65rem 0 1.2rem}
+.f-socials{justify-content:flex-start;margin:0 0 1.5rem;gap:.9rem}
+.f-socials a{padding:.3rem .3rem .3rem 0}
+.f-links{justify-content:flex-start;gap:.55rem 1.5rem;margin:0 0 1.6rem}
+.f-copy{margin:0;padding-top:1.1rem;border-top:1px solid var(--border);font-size:.72rem;color:var(--muted)}
+/* brilho dos ícones das redes: curto e preciso (mais high-tech) */
+.f-socials a:hover svg,.f-socials a:focus-visible svg{filter:drop-shadow(0 0 1.5px #2F80ED) drop-shadow(0 0 4px rgba(47,128,237,.55));transform:translateY(-1px) scale(1.1)}
+
+/* ===== rodapé preto, com a logo do site antes do nome ===== */
+.site-footer{background:var(--bg-h);border-top:2px solid var(--gold);color:#8A8A94}
+.f-brand{display:flex;align-items:center;gap:.9rem}
+.f-logo{width:52px;height:52px;flex:none}
+.f-logo svg{width:36px;height:36px}
+.f-name b{color:#fff;font-size:1.35rem;letter-spacing:.2em}
+.f-name b span{font-weight:500;color:#9DB8E6;letter-spacing:.2em}
+.f-status{color:#6FA8FF;margin:.6rem 0 0}
+.f-brand{margin-bottom:1.3rem}
+.f-socials a{color:#8A8A94}
+.f-socials a:hover,.f-socials a:focus-visible{color:#5B9BFF}
+.f-links a{color:#D4D4D8}.f-links a:hover{color:#6FA8FF}
+.f-copy{color:#8A8A94;border-top-color:rgba(255,255,255,.12)}

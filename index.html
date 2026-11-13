@@ -634,8 +634,47 @@
         .cmty-card:hover{box-shadow:0 0 10px -4px rgba(47,128,237,.6)}
         .cmty-cta{box-shadow:none;border-color:rgba(47,128,237,.7)}
 
+        /* ===== v14: cards sem fundo desfocado ===== */
+        .card .cv::before{display:none}
+        .card .cv{background:#E4E4E7}
+        .card .cv img{object-fit:cover}
         /* ===== v13: Ver mais quadrado ===== */
         .more-btn{border-radius:0!important}
+
+        /* ===== v14: TV — espaços iguais entre os botões; mobile em uma única fileira ===== */
+        .tv-list{grid-template-columns:repeat(2,35px);grid-template-rows:repeat(5,35px);gap:3px;align-content:start}
+        .tv .tv-item{width:35px;height:35px}
+        @media(max-width:560px){
+            .tv-list{grid-template-columns:repeat(10,minmax(0,1fr));grid-template-rows:none;grid-auto-flow:row;gap:3px;justify-content:stretch}
+            .tv .tv-item{width:100%;height:auto;aspect-ratio:1}
+            .tv .tv-item svg{width:56%;height:56%}
+            .tv-pulse{top:2px;right:2px;width:5px;height:5px}
+        }
+
+        /* ===== v15: cards no mobile com foto quadrada e menos texto ===== */
+        @media(max-width:560px){
+            .card{grid-template-columns:128px minmax(0,1fr)}
+            .card .cv{aspect-ratio:1/1;height:auto;min-height:0;align-self:start}
+            .card-body{padding:.6rem .7rem}
+            .card-ex{-webkit-line-clamp:2}
+            .card-footer{display:none}
+        }
+
+        /* ===== v16: slider compacto e menos espaço vazio entre os blocos da home ===== */
+        main{row-gap:1.4rem}
+        .sl-slide{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);height:auto;min-height:0}
+        .sl-slide .cv{aspect-ratio:auto;height:300px;min-height:0}
+        .sl-txt{padding:1.1rem 1.4rem;gap:.55rem}
+        .sl-txt h2{font-size:1.3rem}
+        .sl-txt p{font-size:.84rem;-webkit-line-clamp:3}
+        @media(max-width:860px){
+            .sl-slide{grid-template-columns:minmax(0,1fr)}
+            .sl-slide .cv{aspect-ratio:2/1;height:auto}
+            .sl-txt{padding:.8rem 1rem .9rem}
+            .sl-txt h2{font-size:1.05rem}
+            .sl-txt p{-webkit-line-clamp:2}
+            .sl-more{display:none}
+        }
     </style>
 </head>
 <body>
@@ -860,18 +899,17 @@
     </div>
 
     <footer class="site-footer"><div class="wrap">
+        <div class="f-brand"><a class="logo-sq f-logo" href="/" aria-label="Fuzion Insights — página inicial" data-fzlogo></a><div class="f-name"><b>FUZION <span>INSIGHTS</span></b><div class="f-status"><span class="live-dot"></span><span>Redação aberta 24h</span></div></div></div>
         <div class="f-socials">
             <a href="https://instagram.com/fuzioninsights" target="_blank" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
             <a href="https://x.com/fuzioninsights" target="_blank" title="X (Twitter)"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 7.778 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.335L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
             <a href="https://tiktok.com/@fuzion.insights" target="_blank" title="TikTok"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.62 4.17.94 1.09 2.29 1.8 3.74 1.96v3.91c-1.39-.02-2.78-.45-3.93-1.31-.22-.16-.42-.35-.61-.55-.07 1.63-.03 3.25-.04 4.88a6.19 6.19 0 01-1.57 4.11c-1.89 2.01-4.99 2.5-7.42 1.15-2.61-1.45-3.76-4.63-2.61-7.41 1.01-2.45 3.65-3.9 6.26-3.41v4c-1.14-.3-2.39.11-2.99 1.09-.67 1.09-.34 2.59.74 3.27 1.12.7 2.68.25 3.25-.99.23-.49.27-1.05.26-1.59-.02-3.1-.01-6.19-.01-9.29z"/></svg></a>
             <a href="https://youtube.com/@fuzioninsights" target="_blank" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.016 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
         </div>
-        <div class="f-status"><span class="live-dot"></span><span>Redação Aberta 24 Horas</span></div>
-        <p>© <span data-year>2026</span> Fuzion Insights. Todos os direitos reservados.</p>
-        <p class="f-disc">Conteúdo informativo e educacional. Não constitui recomendação de investimento, consultoria financeira ou jurídica.</p>
-        <nav class="f-links" aria-label="Institucional" style="margin:1.2rem 0 0">
+        <nav class="f-links" aria-label="Institucional">
         <a href="sobre.html">Sobre</a><a href="correcoes.html">Política de Correções</a><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="#" data-cookie-prefs>Preferências de cookies</a>
         </nav>
+        <p class="f-copy">© <span data-year>2026</span> Fuzion Insights. Todos os direitos reservados.</p>
     </div></footer>
 
     <script src="site.js"></script>
@@ -1440,7 +1478,36 @@
             // preenchimento automático do navegador (e-mail, nome…) não é busca: só vale o que a pessoa digita no campo
             if (document.activeElement !== $('sb') || (/@/.test(raw) && !/\s/.test(raw))) { $('sb').value = ''; searchQ = ''; rnd(db); return; }
             const q = raw.toLowerCase(); searchQ = q; shown = pg(); if (!q) { rnd(db); return; }
-            const f = {}; Object.keys(db).forEach(k => { const a = db[k]; if ((a.title || '').toLowerCase().includes(q) || (a.content || a.txt || '').toLowerCase().includes(q) || (a.description || '').toLowerCase().includes(q) || tagList(a).some(t => t.toLowerCase().includes(q))) f[k] = a; }); rnd(f);
+            const toks = nrm(q).split(/\s+/).filter(Boolean);
+            const f = {}; Object.keys(db).forEach(k => { const a = db[k], hay = nrm([a.title, a.description, a.excerpt, tagList(a).join(' '), plainTxt(a.content || a.txt || ''), a.kw || ''].join(' ')); if (toks.every(t => hay.includes(t))) f[k] = a; });
+            rnd(f);
+            if (nrm(raw).length >= 3) fullSearch(q, toks, f);
+        }
+        /* a lista da home traz só o começo do texto: a busca completa (texto inteiro das matérias) vem de /api/busca */
+        const nrm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        let schTimer, fullTxt = null;
+        async function localFull(toks) {
+            if (!fullTxt) {
+                fullTxt = {}; const ks = Object.keys(db);
+                const run = async k => { try { const c = await (await fetch(`${SITE.db}/artigos/${encodeURIComponent(k)}/content.json`)).json(); if (typeof c === 'string') fullTxt[db[k].id] = nrm(plainTxt(c)); } catch (e) {} };
+                for (let i = 0; i < ks.length; i += 10) await Promise.all(ks.slice(i, i + 10).map(run));
+            }
+            return Object.keys(fullTxt).filter(id => toks.every(t => fullTxt[id].includes(t)));
+        }
+        function fullSearch(q, toks, f) {
+            clearTimeout(schTimer);
+            schTimer = setTimeout(async () => {
+                const stale = Object.values(db).some(a => 'hasImg' in a && (a.kw === undefined || a.kwt));
+                if (!stale) return;                                   // o índice da lista já cobre o texto inteiro: nada a baixar
+                let ids = null; const none = !Object.keys(f).length;
+                if (none && searchQ === q) $('feed').innerHTML = '<p class="empty">Buscando no texto completo das matérias…</p>';
+                try { const r = await fetch('/api/busca?q=' + encodeURIComponent(q)); if (r.ok) { const d = await r.json(); if (Array.isArray(d.ids)) ids = d.ids; } } catch (e) {}
+                if (ids === null) ids = await localFull(toks);
+                if (searchQ !== q) return;
+                const g = Object.assign({}, f); let add = 0;
+                Object.keys(db).forEach(k => { if (!g[k] && ids.includes(db[k].id)) { g[k] = db[k]; add++; } });
+                if (add) rnd(g); else if (none) rnd(f);
+            }, 350);
         }
         async function sh(e, id) {
             e.preventDefault(); e.stopPropagation();
@@ -1511,7 +1578,7 @@
             const cta = (txt) => `<div class="cmty-empty">${txt}<br><a class="cmty-cta" href="/comunidade.html">Ir para a Comunidade</a></div>`;
             const cards = CM.bad ? cta('Petições, votações e publicações dos assinantes da Fuzion Insights. Participe e dê voz à sua opinião.')
                 : it.length ? it.map(card).join('') : cta('Ainda não há petições nem votações. Seja o primeiro a criar!');
-            box.innerHTML = `<div class="cmty-h"><b><img class="cmty-logo" src="logo-quadrado.png" alt="" width="30" height="30">Comunidade</b>${`<div class="cmty-tabs" role="tablist"><button type="button" class="cmty-tab" role="tab" data-t="rec" aria-selected="${CM.tab === 'rec'}">Recentes</button><button type="button" class="cmty-tab" role="tab" data-t="top" aria-selected="${CM.tab === 'top'}">Mais votadas</button></div>`}<a class="all" href="/comunidade.html">Ver tudo →</a></div><div class="cmty-grid">${cards}</div>`;
+            box.innerHTML = `<div class="cmty-h"><b><img class="cmty-logo" src="logo-quadrado.png" alt="" width="30" height="30">Comunidade</b>${`<div class="cmty-tabs" role="tablist"><button type="button" class="cmty-tab" role="tab" data-t="rec" aria-selected="${CM.tab === 'rec'}">Recentes</button><button type="button" class="cmty-tab" role="tab" data-t="top" aria-selected="${CM.tab === 'top'}">Mais votadas</button></div>`}</div><div class="cmty-grid">${cards}</div>`;
             box.querySelectorAll('.cmty-tab').forEach(b => b.onclick = async () => { CM.tab = b.dataset.t; await cmLoad(CM.tab); cmDraw(); });
         }
         async function renderCmty(show) {
@@ -1636,7 +1703,9 @@
         function rnd(data) {
             const f = $('feed'); f.innerHTML = ''; if (!data) return; feedData = data;
             const searching = !!searchQ;
-            const keys = Object.keys(data).filter(k => (searching || inSec(data[k])) && tagOk(data[k])).sort((x, y) => byDate(data[x], data[y]));
+            const stk = searching ? nrm(searchQ).split(/\s+/).filter(Boolean) : [];
+            const rk = a => stk.every(w => nrm(a.title).includes(w)) ? 0 : stk.every(w => nrm((a.description || '') + ' ' + tagList(a).join(' ')).includes(w)) ? 1 : 2;
+            const keys = Object.keys(data).filter(k => (searching || inSec(data[k])) && tagOk(data[k])).sort((x, y) => (searching ? (rk(data[x]) - rk(data[y])) : 0) || byDate(data[x], data[y]));
             try { renderSlider(searching ? [] : pickSlides()); } catch (e) {}
             try { renderTV(!searching && sec === 'Home' && !tagFilter); } catch (e) {} try { renderCmty(!searching && sec === 'Home' && !tagFilter); } catch (e) {}
             let n = 0;
@@ -1683,6 +1752,7 @@
                 Object.keys(db).forEach(k => { m[k] = liteOf(db[k]); });
                 try { const cur = await (await fetch(`${SITE.db}/lista/_tv.json`)).json(); if (cur && !cur.error) m._tv = cur; } catch (e) {}
                 const r = await fetch(`${SITE.db}/lista.json?auth=${t}`, { method: 'PUT', body: JSON.stringify(m) });
+                if (r.ok && !window.__lsOk) { window.__lsOk = 1; toast('Índice de busca atualizado (texto completo das matérias).'); }
                 if ((r.status === 401 || r.status === 403) && !listaWarned) { listaWarned = true; toast('Para o site carregar rápido, libere o caminho “lista” nas regras do Firebase (veja a orientação do Claude).'); }
             } catch (e) {}
         }

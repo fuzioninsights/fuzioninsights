@@ -646,6 +646,8 @@ function fzSiteMark(fill) { return `<svg viewBox="12 8 172 172" aria-hidden="tru
 function fzCmMark() { return `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 4h28a7 7 0 0 1 7 7v19a7 7 0 0 1-7 7H25l-9.5 8.4a.8.8 0 0 1-1.3-.6V37H10a7 7 0 0 1-7-7V11a7 7 0 0 1 7-7z" fill="#2F80ED"/><path d="M10 4h28a7 7 0 0 1 7 7v4H3v-4a7 7 0 0 1 7-7z" fill="#6FA8FF" opacity=".55"/><circle cx="15" cy="21" r="3.3" fill="#fff"/><circle cx="24" cy="21" r="3.3" fill="#fff" opacity=".88"/><circle cx="33" cy="21" r="3.3" fill="#fff" opacity=".72"/></svg>`; }
 function fzLockup() { return `<span class="fz-lock"><span class="m1">${fzSiteMark()}</span><i></i><span class="m2">${fzCmMark()}</span><span class="t"><b>Comunidade</b><small>Fuzion Insights</small></span></span>`; }
 document.querySelectorAll('[data-lockup]').forEach(el => { el.innerHTML = fzLockup(); });
+const fzFillLogos = () => document.querySelectorAll('[data-fzlogo]').forEach(el => { el.innerHTML = fzSiteMark('#7F7F7F'); });
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fzFillLogos); else fzFillLogos();
 
 function mountHeader() {
   const h = document.querySelector('.site-header'); if (!h || h.dataset.v3) return; h.dataset.v3 = '1';
@@ -692,7 +694,9 @@ function coverHTML(a, cls, eager) {
 const LKEY = 'fz_lista_v2';
 window.FZ_TV = (() => { try { return JSON.parse(localStorage.getItem('fz_tv') || 'null'); } catch (e) { return null; } })();
 const plainTxt = h => String(h || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-function liteOf(a) { const { content, image, og, ...r } = a; r.hasImg = !!image; r.iv = image ? image.length : 0; r.txt = plainTxt(content).slice(0, 500); return r; }
+/* kw: palavras únicas do texto COMPLETO (sem acento, 3+ letras, até ~5 mil caracteres) — é o que permite a busca achar qualquer palavra da matéria sem baixar o texto inteiro */
+function kwOf(content) { const seen = new Set(), out = []; let n = 0, cut = false; const w = plainTxt(content).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').match(/[a-z0-9]{3,}/g) || []; for (const x of w) { if (seen.has(x)) continue; seen.add(x); n += x.length + 1; if (n > 9000) { cut = true; break; } out.push(x); } return { kw: out.join(' '), cut }; }
+function liteOf(a) { const { content, image, og, ...r } = a; r.hasImg = !!image; r.iv = image ? image.length : 0; r.txt = plainTxt(content).slice(0, 500); const k = kwOf(content); r.kw = k.kw; if (k.cut) r.kwt = 1; return r; }
 function normLite(map) {
   const o = {};
   Object.keys(map || {}).forEach(k => {
