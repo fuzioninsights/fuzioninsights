@@ -493,6 +493,149 @@
         .cmty-tab:last-child{border-right:0}
         .cmty-tab[aria-selected="true"]{background:#F0F6FF;color:#0F3A93;border-bottom-color:#1D5FD1;box-shadow:none}
         .cmty-cta{border:1px solid #0F3A93;border-bottom-width:3px;background:linear-gradient(180deg,#2A6FE6,#1650C4);box-shadow:none}
+
+        /* ===== v9: Fuzion TV compacta (botões quadrados em 2 fileiras), borda neon em volta, slider sem faixa preta, cards no mobile ===== */
+        .tv{width:100%;max-width:520px;justify-self:center;padding:.9rem .9rem 1rem;border:3px solid #2F80ED;box-shadow:0 0 0 1px rgba(47,128,237,.3),0 0 26px rgba(47,128,237,.5),inset 0 0 20px rgba(47,128,237,.14)}
+        .tv-guide,.tv-bug b{display:none}
+        .tv-h{margin-bottom:.7rem}
+        .tv-h b{font-size:.74rem}.tv-h a{font-size:.62rem}
+        .tv-in{display:grid;grid-template-columns:minmax(0,1fr);gap:.8rem;max-width:none;align-items:start}
+        .tv-playbtn{width:58px;height:58px}.tv-playbtn::after{left:22px;top:16px;border-left:18px solid #fff;border-top:11px solid transparent;border-bottom:11px solid transparent}
+        .tv-playbtn.soonbtn{width:44px;height:44px}.tv-playbtn.soonbtn::after{left:17px;top:11px;border-left-width:14px;border-top-width:9px;border-bottom-width:9px}
+        .tv-soon b{font-size:1.05rem}.tv-soon p{font-size:.74rem}
+        .tv-cap b{font-size:.85rem}
+        .tv-player{box-shadow:0 0 0 5px #0B1226,0 0 0 6px rgba(111,168,255,.35),0 0 0 7px #04070F}
+        .tv-list{display:grid;grid-template-columns:repeat(6,minmax(0,44px));justify-content:space-between;gap:.5rem;height:auto;min-height:0;max-height:none;overflow:visible;padding:0;-webkit-mask-image:none;mask-image:none}
+        .tv .tv-item{display:flex;align-items:center;justify-content:center;position:relative;width:100%;height:auto;aspect-ratio:1;padding:0;gap:0;text-align:center;flex:none;
+            color:var(--tc,#fff);background:var(--c,#2F80ED);border:0;border-radius:0!important;box-shadow:none;transform:none;opacity:1;transition:box-shadow .15s,filter .15s}
+        .tv .tv-item svg{width:55%;height:55%;max-width:22px;max-height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+        .tv .tv-item:hover{filter:brightness(1.12);transform:none;box-shadow:none}
+        .tv .tv-item.on{box-shadow:0 0 0 2px #050B18,0 0 0 4px #fff}
+        .tv .tv-item.soon{opacity:.45}.tv .tv-item.soon:hover,.tv .tv-item.soon.on{opacity:.9}
+        .tv .tv-item:focus-visible{outline:2px solid #fff;outline-offset:3px}
+        .tv .tv-item::after{content:attr(data-n);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);white-space:nowrap;background:#0A1126;color:#E6EEFF;border:1px solid rgba(141,184,255,.3);padding:.3rem .55rem;font:600 .68rem/1 'Inter',sans-serif;opacity:0;pointer-events:none;transition:opacity .12s;z-index:6}
+        .tv .tv-item:nth-child(6n+1)::after{left:0;transform:none}.tv .tv-item:nth-child(6n)::after{left:auto;right:0;transform:none}
+        .tv .tv-item:hover::after,.tv .tv-item:focus-visible::after{opacity:1}
+        .tv-pulse{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%!important;background:#fff;box-shadow:0 0 0 2px #B91C1C}
+        @media(prefers-reduced-motion:no-preference){.tv-pulse{animation:tvdot 1.4s ease-in-out infinite}@keyframes tvdot{0%,100%{opacity:1}50%{opacity:.2}}}
+        @media(max-width:860px){.tv{padding:.8rem .8rem .9rem}.tv .tv-item::after{display:none}.tv-list{overflow:visible}}
+
+        /* slider: sem a faixa escura embaixo (os pontos de navegação ficam sobre a capa) */
+        .sl-txt{padding:1.3rem 1.4rem}
+        .sl-nav{left:1rem;right:auto;bottom:1rem;padding:.3rem .45rem;background:rgba(0,0,0,.5)}
+        .sl-dots{margin-right:0}.sl-btn{display:none}
+        @media(max-width:860px){.sl-txt{padding:.9rem 1rem 1rem}.sl-nav{top:.7rem;bottom:auto;left:.8rem}}
+
+        /* mobile: foto de um lado e descrição do outro */
+        @media(max-width:560px){
+            .grid{grid-template-columns:minmax(0,1fr);gap:.9rem}
+            .card{display:grid;grid-template-columns:118px minmax(0,1fr);align-items:stretch}
+            .card .cv{aspect-ratio:auto;height:100%;min-height:150px}
+            .card-body{padding:.65rem .75rem;min-width:0}
+            .card-title{font-size:.92rem;margin:.3rem 0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+            .card-ex{font-size:.74rem;line-height:1.45;margin-bottom:.5rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+            .card-chips{display:none}
+            .card-footer{padding-top:.45rem;font-size:.64rem}
+        }
+
+        /* ===== v10: TV menor à direita + Comunidade à esquerda, botões quase juntos com neon ===== */
+        .tvrow{grid-column:1/-1;display:flex;align-items:stretch;gap:1rem}
+        .tvrow:not(:has(.tv[style*="display: grid"],.cmty[style*="display: block"])){display:none}
+        .tvrow .tv{flex:0 0 440px;width:auto;max-width:none;margin-left:auto;justify-self:auto;grid-template-columns:minmax(0,1fr);align-content:center;padding:.8rem .8rem .9rem}
+        .tvrow .cmty{flex:1 1 0;min-width:0}
+        .tv-in{grid-template-columns:minmax(0,1fr) auto;gap:.7rem;align-items:start}
+        .tv .tv-playbtn{width:42px;height:42px}.tv .tv-playbtn::after{left:16px;top:11px;border-left:13px solid #fff;border-top:8px solid transparent;border-bottom:8px solid transparent}
+        .tv .tv-playbtn.soonbtn{width:34px;height:34px;margin-bottom:.2rem}.tv .tv-playbtn.soonbtn::after{left:13px;top:8px;border-left-width:11px;border-top-width:7px;border-bottom-width:7px}
+        .tv .tv-soon{gap:.25rem;padding:.8rem}.tv .tv-soon b{font-size:.85rem;letter-spacing:1.4px}.tv .tv-soon i{font-size:.58rem}.tv .tv-soon p{display:none}
+        .tv .tv-cap{left:.6rem;right:.6rem;bottom:.5rem}.tv .tv-cap b{font-size:.74rem}.tv .tv-cap i{font-size:.54rem}
+        .tv .tv-bug{top:.45rem;right:.45rem;font-size:.55rem;padding:.18rem .4rem;gap:.3rem}.tv .tv-bug u{display:none}
+        .tv .tv-stage .tv-hud{padding:.3rem .45rem;gap:.3rem}
+        .tv .tv-stage .hud-b{width:26px;height:26px}.tv .tv-stage .hud-b[data-h="pp"]{width:32px;height:28px}
+        .tv .tv-stage .hud-b svg,.tv .tv-stage .hud-b[data-h="pp"] svg{width:13px;height:13px}
+        .tv .tv-stage .hud-t{font-size:.64rem}.tv .hud-live{font-size:.54rem}
+        .tv-list{grid-template-columns:repeat(5,28px);justify-content:start;gap:2px;align-content:start}
+        .tv .tv-item{aspect-ratio:auto;width:28px;height:28px;opacity:1;filter:none;
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),inset 0 1px 0 rgba(255,255,255,.3);transition:box-shadow .15s,filter .15s}
+        .tv .tv-item svg{width:15px;height:15px;max-width:none;max-height:none;stroke-width:1.7}
+        .tv .tv-item:hover,.tv .tv-item:focus-visible,.tv .tv-item:active{filter:brightness(1.1);
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),0 0 6px var(--c,#2F80ED),0 0 14px color-mix(in srgb,var(--c,#2F80ED) 65%,transparent)}
+        .tv .tv-item.on{filter:brightness(1.12);
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.45),0 0 8px var(--c,#2F80ED),0 0 20px var(--c,#2F80ED),0 0 34px color-mix(in srgb,var(--c,#2F80ED) 45%,transparent)}
+        .tv .tv-item.soon{opacity:1;filter:saturate(.7) brightness(.8)}
+        .tv .tv-item.soon:hover,.tv .tv-item.soon.on{filter:brightness(1.05)}
+        .tv .tv-item:focus-visible{outline:1px solid #fff;outline-offset:2px}
+        .tv .tv-item:nth-child(6n+1)::after,.tv .tv-item:nth-child(6n)::after{left:50%;right:auto;transform:translateX(-50%)}
+        .tv .tv-item:nth-child(5n+1)::after{left:0;transform:none}
+        .tv .tv-item:nth-child(5n)::after{left:auto;right:0;transform:none}
+        .tv-pulse{top:3px;right:3px;width:6px;height:6px}
+
+        /* Comunidade: high-tech, neon azul, com a logo do site */
+        .cmty{background-color:#070C18;background-image:radial-gradient(circle,rgba(141,184,255,.085) 0 .8px,transparent 1.1px),linear-gradient(180deg,rgba(47,128,237,.06),transparent 40%);background-size:4px 4px,100% 100%;
+            border:3px solid #2F80ED;box-shadow:0 0 0 1px rgba(47,128,237,.3),0 0 26px rgba(47,128,237,.5),inset 0 0 20px rgba(47,128,237,.14);color:#fff;padding:.9rem 1rem 1rem}
+        .cmty-h{margin-bottom:.8rem}
+        .cmty-h b{color:#fff;gap:.6rem;font-size:.78rem;letter-spacing:2px;text-shadow:0 0 14px rgba(47,128,237,.9)}
+        .cmty-logo{display:block;width:30px;height:30px;object-fit:cover;box-shadow:0 0 0 1px #2F80ED,0 0 14px rgba(47,128,237,.8)}
+        .cmty-h a.all{color:#8DB8FF}.cmty-h a.all:hover{color:#fff;text-shadow:0 0 10px #2F80ED}
+        .cmty-tabs{border:1px solid rgba(47,128,237,.55)}
+        .cmty-tab{background:transparent;color:#9DB8E6;border-right-color:rgba(47,128,237,.35)}
+        .cmty-tab:hover{color:#fff}
+        .cmty-tab[aria-selected="true"]{background:rgba(47,128,237,.22);color:#fff;border-bottom-color:#2F80ED;box-shadow:0 0 14px -4px #2F80ED}
+        .cmty-card{background:rgba(10,22,48,.88);border:1px solid rgba(47,128,237,.45);color:#fff}
+        .cmty-card::before{background:linear-gradient(90deg,#2F80ED,#6FA8FF);box-shadow:0 0 8px #2F80ED}
+        .cmty-card:has(.cmty-tag.v)::before{background:linear-gradient(90deg,#B45309,#F5B74A);box-shadow:0 0 8px #F5B74A}
+        .cmty-card:hover{border-color:#5B9BFF;box-shadow:0 0 18px -4px rgba(47,128,237,.85)}
+        .cmty-card strong{color:#fff}.cmty-card small{color:#8DB8FF}
+        .cmty-n{color:#9DB8E6}.cmty-n b{color:#fff}
+        .cmty-bar{background:#0E1B38}.cmty-bar::after{background:repeating-linear-gradient(90deg,transparent 0,transparent calc(10% - 2px),#070C18 calc(10% - 2px),#070C18 10%)}
+        .cmty-bar i{box-shadow:0 0 8px rgba(47,128,237,.8)}
+        .cmty-tag{background:rgba(47,128,237,.15);border-color:rgba(91,155,255,.5);color:#8DB8FF}
+        .cmty-tag.v{background:rgba(245,183,74,.12);border-color:rgba(245,183,74,.5);color:#F5B74A}
+        .cmty-empty{color:#B6C6E6}
+        .cmty-cta{border-color:#2F80ED;box-shadow:0 0 14px rgba(47,128,237,.6)}
+        @media(min-width:861px){
+            .cmty-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
+            .cmty-th{display:none}
+            .cmty-card:nth-child(n+5){display:none}
+        }
+        @media(max-width:860px){
+            .tvrow{flex-direction:column-reverse}
+            .tvrow .tv{flex:none;width:100%;margin-left:0}
+        }
+        @media(max-width:560px){
+            .tv-in{grid-template-columns:minmax(0,1fr);gap:.6rem}
+            .tv-list{grid-template-columns:repeat(5,minmax(0,40px))}
+            .tv .tv-item{width:100%;height:auto;aspect-ratio:1}
+            .tv .tv-item svg{width:55%;height:55%}
+        }
+
+        /* ===== v11: botões da TV em 2 colunas verticais, na altura do player ===== */
+        .tvrow .tv{flex-basis:452px}
+        .tv-in{align-items:stretch}
+        .tv-list{grid-template-columns:repeat(2,36px);grid-template-rows:repeat(5,36px);grid-auto-flow:column;gap:2px;align-content:space-between;align-self:stretch;justify-content:end}
+        .tv .tv-item{width:36px;height:36px}
+        .tv .tv-item svg{width:18px;height:18px}
+        .tv .tv-item:nth-child(n)::after{left:auto;right:calc(100% + 8px);bottom:auto;top:50%;transform:translateY(-50%)}
+        .tv-pulse{top:4px;right:4px}
+        @media(max-width:560px){
+            .tv-list{grid-template-columns:repeat(5,minmax(0,40px));grid-template-rows:none;grid-auto-flow:row;align-content:start;justify-content:start}
+            .tv .tv-item{width:100%;height:auto;aspect-ratio:1}
+            .tv .tv-item svg{width:55%;height:55%}
+        }
+
+        /* ===== v12: Comunidade com destaque sutil (a TV continua sendo o destaque) ===== */
+        .cmty{border:1px solid rgba(47,128,237,.5);border-top:2px solid rgba(47,128,237,.8);box-shadow:0 0 14px rgba(47,128,237,.16),inset 0 0 16px rgba(47,128,237,.05)}
+        .cmty-h b{text-shadow:none;letter-spacing:1.6px}
+        .cmty-logo{box-shadow:0 0 0 1px rgba(47,128,237,.6)}
+        .cmty-h a.all:hover{text-shadow:none}
+        .cmty-tabs{border-color:rgba(47,128,237,.35)}
+        .cmty-tab[aria-selected="true"]{box-shadow:none;background:rgba(47,128,237,.16)}
+        .cmty-card{border-color:rgba(47,128,237,.3)}
+        .cmty-card::before{box-shadow:none}
+        .cmty-card:hover{box-shadow:0 0 10px -4px rgba(47,128,237,.6)}
+        .cmty-cta{box-shadow:none;border-color:rgba(47,128,237,.7)}
+
+        /* ===== v13: Ver mais quadrado ===== */
+        .more-btn{border-radius:0!important}
     </style>
 </head>
 <body>
@@ -642,17 +785,14 @@
             <div style="margin-top:2.5rem;border-top:2px solid #000;padding-top:1.2rem">
                 <h3 style="font-family:'Inter',system-ui,sans-serif;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem">Assinantes e Newsletter (<span id="sub-count">0</span>)</h3>
                 <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.9rem"><button type="button" class="editor-btn" onclick="copyEmails('newsletter')" title="E-mails da newsletter gratuita">Copiar e-mails da newsletter</button><button type="button" class="editor-btn" onclick="copyEmails('ativos')" title="Assinantes pagos com acesso ativo">Copiar e-mails dos assinantes ativos</button><button type="button" class="editor-btn" onclick="copyEmails('todos')" title="Todos, exceto cancelados">Copiar todos</button></div>
-                <div style="background:#F4F4F5;border:1px solid var(--border);padding:.8rem;margin-bottom:.9rem">
-                    <div style="font-weight:800;font-size:.72rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:.5rem">Acesso VIP (editores e colaboradores)</div>
-                    <div style="display:flex;gap:.5rem;flex-wrap:wrap"><input type="email" id="vip-em" placeholder="e-mail do editor VIP" style="flex:1;min-width:200px"><button type="button" class="editor-btn" onclick="grantVip()">Conceder VIP</button></div>
-                    <p style="font-size:.68rem;color:var(--muted);margin:.5rem 0 0">Libera o conteúdo exclusivo e a criação de petições, votações e publicações na Comunidade, sem pagamento e sem vencimento. Para retirar, use “Revogar” na lista abaixo.</p>
-                </div>
                 <div id="sub-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:280px;overflow-y:auto"></div>
             </div>
         </section>
 
-        <section class="tv" id="tv" style="display:none" aria-label="Fuzion TV"></section>
-        <section class="cmty" id="cmty" style="display:none" aria-label="Comunidade"></section>
+        <div class="tvrow">
+            <section class="cmty" id="cmty" style="display:none" aria-label="Comunidade"></section>
+            <section class="tv" id="tv" style="display:none" aria-label="Fuzion TV"></section>
+        </div>
         <section class="hero" id="hero" style="display:none"></section>
         <div class="ad-box" data-ad="mid"></div>
 
@@ -715,9 +855,6 @@
             <div style="display:flex;flex-direction:column;gap:.3rem"><label for="em">E-mail Administrativo</label><input type="email" id="em" placeholder="nome@exemplo.com"></div>
             <div style="display:flex;flex-direction:column;gap:.3rem"><label for="pw">Senha de Segurança</label><input type="password" id="pw" placeholder="••••••••••••" onkeydown="if(event.key==='Enter')log()"></div>
             <button class="btn" style="width:100%" onclick="log()">Entrar no Terminal</button>
-            <button type="button" class="btn ghost" style="width:100%" onclick="mailLink()">Receber link de acesso por e-mail</button>
-            <span onclick="forgotPw()" style="text-align:center;font-size:.72rem;color:#1D4ED8;cursor:pointer;font-weight:700">Esqueci minha senha</span>
-            <p id="lm-msg" role="status" style="text-align:center;font-size:.76rem;min-height:1.2em;margin:0;color:#B91C1C"></p>
             <span onclick="$('lm').style.display='none'" style="text-align:center;font-size:.7rem;color:#71717A;cursor:pointer;text-transform:uppercase;font-weight:700">Cancelar</span>
         </div>
     </div>
@@ -966,60 +1103,17 @@
         function discardDraft() { dropDraft(editingKey); $('draft-banner').style.display = 'none'; }
 
         /* ---------- LOGIN / PAINEL ---------- */
-        const LM_ERR = {
-            TOO_MANY_ATTEMPTS_TRY_LATER: 'Muitas tentativas seguidas. Aguarde alguns minutos ou use o link de acesso por e-mail.',
-            INVALID_LOGIN_CREDENTIALS: 'E-mail ou senha incorretos.', INVALID_PASSWORD: 'E-mail ou senha incorretos.', EMAIL_NOT_FOUND: 'E-mail ou senha incorretos.',
-            USER_DISABLED: 'Esta conta foi desativada.', INVALID_EMAIL: 'Digite um e-mail válido.', MISSING_PASSWORD: 'Digite a senha.',
-            OPERATION_NOT_ALLOWED: 'Este tipo de login não está ativado no Firebase (Authentication > Sign-in method).',
-            INVALID_OOB_CODE: 'Link inválido ou já usado. Peça um novo.', EXPIRED_OOB_CODE: 'O link expirou. Peça um novo.',
-            UNAUTHORIZED_DOMAIN: 'Este endereço do site não está autorizado no Firebase (Authentication > Settings > Authorized domains).'
-        };
-        const lmMsg = (t, ok) => { const e = $('lm-msg'); if (!e) return; e.style.color = ok ? '#166534' : '#B91C1C'; e.textContent = t || ''; };
-        const fbErr = d => { const m = String((d && d.error && d.error.message) || ''), k = Object.keys(LM_ERR).find(x => m.indexOf(x) === 0); return LM_ERR[k] || (m ? 'Não foi possível entrar (' + m + ').' : 'Erro ao autenticar.'); };
-        const idt = (fn, body) => fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${fn}?key=${SITE.firebaseKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(r => r.json());
-        // só abre o painel se a conta for mesmo de editor (só o administrador consegue ler /assinantes)
-        async function enterPanel(d) {
-            try {
-                const j = await (await fetch(`${SITE.db}/assinantes.json?auth=${d.idToken}&shallow=true`)).json();
-                if (j && j.error) { lmMsg('Esta conta não tem permissão de editor. Assinantes e VIPs entram pela Área do assinante.'); return; }
-            } catch (e) {}
-            adminToken = Admin.save(d);
-            $('lm').style.display = 'none'; $('pw').value = ''; lmMsg(''); showP(); rnd(db);
-        }
         function log() {
-            lmMsg('Entrando…', true);
-            idt('signInWithPassword', { email: $('em').value.trim(), password: $('pw').value, returnSecureToken: true })
-                .then(d => { if (d.idToken) enterPanel(d); else lmMsg(fbErr(d)); })
-                .catch(() => lmMsg('Erro ao autenticar. Verifique sua conexão.'));
+            fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${SITE.firebaseKey}`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: $('em').value.trim(), password: $('pw').value, returnSecureToken: true })
+            }).then(r => r.json()).then(d => {
+                if (d.idToken) {
+                    adminToken = Admin.save(d);
+                    $('lm').style.display = 'none'; $('pw').value = ''; showP(); rnd(db);
+                } else alert('Acesso Negado.');
+            }).catch(() => alert('Erro ao autenticar. Verifique sua conexão.'));
         }
-        // entrar sem senha: o Firebase manda um link para o e-mail; ao clicar, o painel abre
-        function mailLink() {
-            const email = $('em').value.trim(); if (!email) { lmMsg('Digite o e-mail e clique de novo.'); return; }
-            lmMsg('Enviando…', true);
-            idt('sendOobCode', { requestType: 'EMAIL_SIGNIN', email, continueUrl: location.origin + '/?editor=1', canHandleCodeInApp: true })
-                .then(d => { if (d.error) { lmMsg(fbErr(d)); return; } try { localStorage.setItem('fz_mail_link', email); } catch (e) {} lmMsg('Link enviado. Abra o e-mail (veja também o spam) e clique no link.', true); })
-                .catch(() => lmMsg('Erro de conexão. Tente de novo.'));
-        }
-        function forgotPw() {
-            const email = $('em').value.trim(); if (!email) { lmMsg('Digite o e-mail e clique em “Esqueci minha senha”.'); return; }
-            lmMsg('Enviando…', true);
-            idt('sendOobCode', { requestType: 'PASSWORD_RESET', email })
-                .then(d => lmMsg(d.error ? fbErr(d) : 'Enviamos o link para redefinir a senha. Veja também o spam.', !d.error))
-                .catch(() => lmMsg('Erro de conexão. Tente de novo.'));
-        }
-        // volta do link do e-mail: conclui o login sem senha
-        window.addEventListener('DOMContentLoaded', () => {
-            const q = new URLSearchParams(location.search), code = q.get('oobCode');
-            if (q.get('mode') !== 'signIn' || !code) return;
-            let email = ''; try { email = localStorage.getItem('fz_mail_link') || ''; } catch (e) {}
-            if (!email) email = (prompt('Confirme o e-mail em que você recebeu o link:') || '').trim();
-            $('lm').style.display = 'flex';
-            if (!email) { lmMsg('Informe o e-mail para concluir o acesso.'); return; }
-            lmMsg('Concluindo o acesso…', true);
-            idt('signInWithEmailLink', { email, oobCode: code })
-                .then(d => { history.replaceState(null, '', location.pathname); if (d.idToken) { try { localStorage.removeItem('fz_mail_link'); } catch (e) {} enterPanel(d); } else lmMsg(fbErr(d)); })
-                .catch(() => lmMsg('Erro de conexão. Tente de novo.'));
-        });
         function showP() { $('panel').style.display = 'block'; loadSubs(); renderManager(); if (!editingKey) offerDraft(); }
         function out() { Admin.clear(); adminToken = null; cancelEdit(true); dirty = false; $('panel').style.display = 'none'; rnd(db); }
         function sessionExpired() { alert('Sua sessão de edição expirou. O texto que você estava escrevendo foi salvo como rascunho: entre novamente (Ctrl+Shift+E) e clique em “Recuperar”.'); out(); }
@@ -1051,7 +1145,7 @@
             const t = await tok(); if (!t) return sessionExpired();
             const hoje = isoDay(new Date()), renova = s.status === 'ativo' && s.ate && s.ate > hoje;
             const base = renova ? new Date(s.ate + 'T12:00:00') : new Date(); base.setDate(base.getDate() + (s.plano === 'anual' ? 366 : 31));
-            const ate = s.plano === 'vip' ? '2099-12-31' : isoDay(base), id = encodeURIComponent(emailKey(s.email)), url = `${SITE.db}/ativos/${id}.json?auth=${t}`;
+            const ate = isoDay(base), id = encodeURIComponent(emailKey(s.email)), url = `${SITE.db}/ativos/${id}.json?auth=${t}`;
             let codigo; try { const old = await (await fetch(url)).json(); codigo = old && old.codigo; } catch (e) {}
             codigo = codigo || makeCode();
             const r = await fetch(url, { method: 'PUT', body: JSON.stringify({ email: s.email.trim().toLowerCase(), plano: s.plano, codigo, ate, ativadoEm: new Date().toISOString() }) });
@@ -1060,23 +1154,6 @@
             await fetch(`${SITE.db}/assinantes/${key}.json?auth=${t}`, { method: 'PATCH', body: JSON.stringify({ status: 'ativo', ate }) });
             subsDb[key] = Object.assign(s, { status: 'ativo', ate }); loadSubs();
             mailCode(s.email, codigo, ate);
-        }
-        /* Acesso VIP (editores/colaboradores): assinatura paga liberada sem pagamento, sem vencimento.
-           Dá acesso ao conteúdo exclusivo e a criar petições, votações e publicações na Comunidade. Não dá acesso ao painel do editor. */
-        async function grantVip() {
-            const em = ($('vip-em').value || '').trim().toLowerCase();
-            if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) { toast('Digite um e-mail válido.'); return; }
-            const t = await tok(); if (!t) return sessionExpired();
-            const ate = '2099-12-31', url = `${SITE.db}/ativos/${encodeURIComponent(emailKey(em))}.json?auth=${t}`;
-            let codigo; try { const old = await (await fetch(url)).json(); codigo = old && old.codigo; } catch (e) {}
-            codigo = codigo || makeCode();
-            const r = await fetch(url, { method: 'PUT', body: JSON.stringify({ email: em, plano: 'vip', codigo, ate, ativadoEm: new Date().toISOString() }) });
-            if (r.status === 401 || r.status === 403) { alert('O Firebase recusou gravar em “ativos”. Falta liberar esse caminho nas regras.'); return; }
-            if (!r.ok) { alert('Não foi possível conceder agora. Tente de novo.'); return; }
-            const ex = Object.keys(subsDb).find(k => String(subsDb[k].email || '').trim().toLowerCase() === em);
-            if (ex) await fetch(`${SITE.db}/assinantes/${ex}.json?auth=${t}`, { method: 'PATCH', body: JSON.stringify({ plano: 'vip', status: 'ativo', ate }) });
-            else await fetch(`${SITE.db}/assinantes.json?auth=${t}`, { method: 'POST', body: JSON.stringify({ email: em, plano: 'vip', status: 'ativo', ate, date: new Date().toLocaleDateString('pt-BR') }) });
-            $('vip-em').value = ''; toast('VIP concedido a ' + em + '. Peça para entrar em Área do assinante com esse e-mail.'); loadSubs();
         }
         async function sendCode(key) {
             const s = subsDb[key]; if (!s) return; const t = await tok(); if (!t) return sessionExpired();
@@ -1328,7 +1405,7 @@
             bar.style.display = 'flex'; bar.innerHTML = `<span>Artigos com a tag</span><span class="chip">${esc(nome)}</span><a href="/" onclick="clearTag();return false">Limpar filtro</a>`;
         }
         function clearTag(silent) {
-            if (!tagFilter) return; tagFilter = ''; shown = PAGE;
+            if (!tagFilter) return; tagFilter = ''; shown = pg();
             try { history.replaceState(null, '', location.pathname); } catch (e) {}
             renderTagBar(); if (!silent) { rnd(db); trending(); }
         }
@@ -1344,7 +1421,7 @@
             return { name: f.n, sub: f.s.find(x => slugify(x) === slugify(q.get('sub') || '')) || '' };
         }
         function setSec(s, sub) {
-            sec = s; subSel = sub || ''; shown = PAGE; window.FZ_SEC = s; setNav(s, subSel);
+            sec = s; subSel = sub || ''; shown = pg(); window.FZ_SEC = s; setNav(s, subSel);
             const ft = $('ft'); ft.style.cssText = secStyle(s); ft.classList.toggle('colored', s !== 'Home' && s !== 'Exclusivos');
             ft.textContent = s === 'Home' ? 'Todas as Análises' : (s === 'Exclusivos' ? 'Análises exclusivas para assinantes' : (subSel ? `${s} · ${subSel}` : s));
             $('sb').value = ''; searchQ = ''; rnd(db); trending();
@@ -1362,7 +1439,7 @@
             const raw = $('sb').value.trim();
             // preenchimento automático do navegador (e-mail, nome…) não é busca: só vale o que a pessoa digita no campo
             if (document.activeElement !== $('sb') || (/@/.test(raw) && !/\s/.test(raw))) { $('sb').value = ''; searchQ = ''; rnd(db); return; }
-            const q = raw.toLowerCase(); searchQ = q; shown = PAGE; if (!q) { rnd(db); return; }
+            const q = raw.toLowerCase(); searchQ = q; shown = pg(); if (!q) { rnd(db); return; }
             const f = {}; Object.keys(db).forEach(k => { const a = db[k]; if ((a.title || '').toLowerCase().includes(q) || (a.content || a.txt || '').toLowerCase().includes(q) || (a.description || '').toLowerCase().includes(q) || tagList(a).some(t => t.toLowerCase().includes(q))) f[k] = a; }); rnd(f);
         }
         async function sh(e, id) {
@@ -1434,7 +1511,7 @@
             const cta = (txt) => `<div class="cmty-empty">${txt}<br><a class="cmty-cta" href="/comunidade.html">Ir para a Comunidade</a></div>`;
             const cards = CM.bad ? cta('Petições, votações e publicações dos assinantes da Fuzion Insights. Participe e dê voz à sua opinião.')
                 : it.length ? it.map(card).join('') : cta('Ainda não há petições nem votações. Seja o primeiro a criar!');
-            box.innerHTML = `<div class="cmty-h"><b>${fzIcon('community')}Comunidade</b>${CM.bad ? '' : `<div class="cmty-tabs" role="tablist"><button type="button" class="cmty-tab" role="tab" data-t="rec" aria-selected="${CM.tab === 'rec'}">Recentes</button><button type="button" class="cmty-tab" role="tab" data-t="top" aria-selected="${CM.tab === 'top'}">Mais votadas</button></div>`}<a class="all" href="/comunidade.html">Ver tudo →</a></div><div class="cmty-grid">${cards}</div>`;
+            box.innerHTML = `<div class="cmty-h"><b><img class="cmty-logo" src="logo-quadrado.png" alt="" width="30" height="30">Comunidade</b>${`<div class="cmty-tabs" role="tablist"><button type="button" class="cmty-tab" role="tab" data-t="rec" aria-selected="${CM.tab === 'rec'}">Recentes</button><button type="button" class="cmty-tab" role="tab" data-t="top" aria-selected="${CM.tab === 'top'}">Mais votadas</button></div>`}<a class="all" href="/comunidade.html">Ver tudo →</a></div><div class="cmty-grid">${cards}</div>`;
             box.querySelectorAll('.cmty-tab').forEach(b => b.onclick = async () => { CM.tab = b.dataset.t; await cmLoad(CM.tab); cmDraw(); });
         }
         async function renderCmty(show) {
@@ -1444,10 +1521,23 @@
             await cmLoad(CM.tab);
             cmDraw(); box.dataset.ok = '1'; box.style.display = 'block';
         }
+        const TV_ICONS = {
+            live: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 010 8.4M7.8 16.2a6 6 0 010-8.4M19.1 4.9a10 10 0 010 14.2M4.9 19.1a10 10 0 010-14.2"/></svg>',
+            'Destaques': '<svg viewBox="0 0 24 24"><path d="M12 2.5l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3L8 14.7l-5-4.9 6.9-1z"/></svg>',
+            'Mercado': '<svg viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>',
+            'Tecnologia': '<svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>',
+            'Ciência': '<svg viewBox="0 0 24 24"><path d="M10 2v7.5L4.5 19a2 2 0 001.7 3h11.6a2 2 0 001.7-3L14 9.5V2"/><path d="M8.5 2h7M7 16h10"/></svg>',
+            'Meio Ambiente': '<svg viewBox="0 0 24 24"><path d="M11 20A7 7 0 019.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6 2.4-.5 4.9-2 5.9-3"/></svg>',
+            'Cidade': '<svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>',
+            'Arte e Cultura': '<svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.7-.8 1.7-1.7 0-.4-.2-.8-.5-1.1-.3-.3-.4-.7-.4-1.1 0-.9.8-1.7 1.7-1.7H16c3.3 0 6-2.7 6-6 0-4.9-4.5-8.4-10-8.4z"/><circle cx="7.5" cy="11.5" r=".6"/><circle cx="10" cy="7.5" r=".6"/><circle cx="15" cy="7.5" r=".6"/></svg>',
+            'Social': '<svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/></svg>',
+            'Política': '<svg viewBox="0 0 24 24"><path d="M3 22h18M6 18v-7M10 18v-7M14 18v-7M18 18v-7M12 2l8 5H4z"/></svg>',
+            'Estratégia': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2 6.3-6.4 2.1 2-6.3z"/></svg>'
+        };
         function renderTV(show) {
             const box = $('tv'); if (!show) { box.style.display = 'none'; return; }
             const cfg = window.FZ_TV || {}, sig = JSON.stringify(cfg);
-            if (tvSig === sig) { box.style.display = box.dataset.has ? 'block' : 'none'; return; }
+            if (tvSig === sig) { box.style.display = box.dataset.has ? 'grid' : 'none'; return; }
             tvSig = sig; box.dataset.has = ''; box.style.display = 'none';
             const v = SITE.video || {}, cid = /^UC[\w-]{22}$/.test(v.channelId || '') ? v.channelId : '', handle = esc(v.handle || '@fuzioninsights');
             const N = 'https://www.youtube-nocookie.com/embed/';
@@ -1476,18 +1566,18 @@
                 const items = [];
                 if (cfg.live && ((cfg.live === 'canal' && cid) || ytOk(cfg.live))) items.push({ k: 'live', id: cfg.live, t: 'TV AO VIVO', color: '#EF4444' });
                 const dv = (vids || []).filter(x => x && ytOk(x.id)).map(x => x.id).slice(0, 12), dpl = cfg.playlist || v.playlistId || (!dv.length && cid ? 'UU' + cid.slice(2) : '');
-                items.push({ k: 'chan', t: 'Destaques', color: '#2F80ED', list: dpl, vids: dpl ? [] : dv, soon: !(dpl || dv.length) });
-                SECTIONS.forEach(s => { const c = (cfg.canais || {})[slugify(s.n)] || {}, pp = c.playlist || '', vv = (c.videos || []).filter(ytOk); items.push({ k: 'chan', t: s.n, color: s.c, list: pp, vids: pp ? [] : vv, soon: !(pp || vv.length) }); });
+                items.push({ k: 'chan', t: 'Destaques', hidden: true, color: '#2F80ED', list: dpl, vids: dpl ? [] : dv, soon: !(dpl || dv.length) });
+                SECTIONS.forEach(s => { const c = (cfg.canais || {})[slugify(s.n)] || {}, pp = c.playlist || '', vv = (c.videos || []).filter(ytOk); items.push({ k: 'chan', t: s.n, color: s.c, tc: s.t || '#fff', list: pp, vids: pp ? [] : vv, soon: !(pp || vv.length) }); });
                 let nn = 0; items.forEach(it => { it.num = it.k === 'live' ? 'AO VIVO' : String(++nn).padStart(2, '0'); });
-                box.dataset.has = '1'; box.style.display = 'block';
-                const first = Math.max(0, items.findIndex(i => !i.soon)), f = items[first];
-                const row = (it, i) => { const st = it.k === 'live' ? 'Transmissão ao vivo' : it.soon ? 'Sem sinal · em breve' : it.list ? 'Playlist' : `${it.vids.length} vídeo${it.vids.length > 1 ? 's' : ''}`; return `<button type="button" class="tv-item${i === first ? ' on' : ''}${it.k === 'live' ? ' is-live' : ''}${it.soon ? ' soon' : ''}" style="--c:${it.color}" data-i="${i}"><span class="tv-ch">${it.k === 'live' ? '<small>LIVE</small><em></em>' : `<small>CH</small>${it.num}`}</span><span class="tv-nm"><b>${esc(it.t)}</b><i>${st}</i></span><span class="tv-hd">${it.soon ? 'OFF' : 'HD'}</span><span class="tv-air">NO AR</span></button>`; };
+                box.dataset.has = '1'; box.style.display = 'grid';
+                let first = items.findIndex(i => !i.soon && !i.hidden); if (first < 0) first = items.findIndex(i => !i.soon); if (first < 0) first = 0; const f = items[first];
+                const row = (it, i) => { const nm = it.k === 'live' ? 'TV ao vivo' : it.t + (it.soon ? ' · em breve' : ''); return `<button type="button" class="tv-item${i === first ? ' on' : ''}${it.k === 'live' ? ' is-live' : ''}${it.soon ? ' soon' : ''}" style="--c:${it.color};--tc:${it.tc || '#fff'}" data-i="${i}" data-n="${esc(nm)}" aria-label="${esc(nm)}" aria-pressed="${i === first}">${TV_ICONS[it.k === 'live' ? 'live' : it.t] || TV_ICONS['Destaques']}${it.k === 'live' ? '<i class="tv-pulse"></i>' : ''}</button>`; };
                 const bug = it => `<span class="tv-bug">${it.k === 'live' ? '<em></em>AO VIVO' : `<b>CH ${it.num}</b>${esc(it.t)}`}<u>HD</u></span>`;
                 const stage = f.soon ? soonView(f) : `<button type="button" class="tv-poster" data-i="${first}" style="--bg:${bg(f)}" aria-label="Reproduzir: ${esc(f.t)}"><span class="tv-scan"></span><span class="tv-playbtn"></span>${bug(f)}<span class="tv-cap"><b>${esc(f.t)}</b><i>Toque para assistir</i></span></button>`;
-                box.innerHTML = `<div class="tv-h"><b>Fuzion TV</b><span class="tv-guide">Guia de canais</span><a href="https://youtube.com/${handle}" target="_blank" rel="noopener">Ver canal no YouTube →</a></div><div class="tv-in"><div class="tv-player" id="tv-pl">${stage}</div><div class="tv-list" role="list" aria-label="Canais da Fuzion TV">${items.map(row).join('')}</div></div>`;
+                box.innerHTML = `<div class="tv-h"><b>Fuzion TV</b><span class="tv-guide">Guia de canais</span><a href="https://youtube.com/${handle}" target="_blank" rel="noopener">Ver canal no YouTube →</a></div><div class="tv-in"><div class="tv-player" id="tv-pl">${stage}</div><div class="tv-list" role="group" aria-label="Canais da Fuzion TV">${items.map((it, i) => it.hidden ? '' : row(it, i)).join('')}</div></div>`;
                 box.onclick = e => {
                     const b = e.target.closest('[data-i]'); if (!b) return; const it = items[+b.dataset.i]; if (!it) return;
-                    box.querySelectorAll('.tv-item').forEach(x => x.classList.toggle('on', x.dataset.i === b.dataset.i)); playIt(it);
+                    box.querySelectorAll('.tv-item').forEach(x => { const on = x.dataset.i === b.dataset.i; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on); }); playIt(it);
                 };
             };
             if (cfg.videos && cfg.videos.length) finish(cfg.videos.map(id => ({ id })));
@@ -1541,7 +1631,8 @@
                 msg(empty ? 'Pronto: modo automático.' : 'Salvo! A home já usa esta seleção.'); $('tv-sum').textContent = empty ? 'Modo automático (últimos vídeos do canal)' : 'Modo manual ativo'; tvSig = null; renderTV(sec === 'Home' && !tagFilter && !searchQ);
             } catch (e) { msg('Falha de conexão. Tente de novo.'); }
         }
-        let shown = 12, feedData = null; const PAGE = 12;
+        const pg = () => { let c = 2; try { c = getComputedStyle($('feed')).gridTemplateColumns.split(' ').filter(x => x && x !== 'none').length || 2; } catch (e) {} return c < 2 ? 5 : c * 3; }; /* 3 linhas de matérias por vez (no celular, 5) */
+        let shown = pg(), feedData = null;
         function rnd(data) {
             const f = $('feed'); f.innerHTML = ''; if (!data) return; feedData = data;
             const searching = !!searchQ;
@@ -1558,7 +1649,7 @@
                 f.appendChild(w);
                 if (!searching && (n === 4 || n === 10)) f.appendChild(createAd('feed'));
             });
-            if (keys.length > shown) { const mw = document.createElement('div'); mw.className = 'more-wrap'; mw.innerHTML = `<button type="button" class="more-btn">Ver mais análises <small>(${keys.length - shown} restantes)</small></button>`; mw.querySelector('button').onclick = () => { shown += PAGE; rnd(feedData); }; f.appendChild(mw); }
+            if (keys.length > shown) { const mw = document.createElement('div'); mw.className = 'more-wrap'; mw.innerHTML = `<button type="button" class="more-btn">Ver mais</button>`; mw.querySelector('button').onclick = () => { shown += pg(); rnd(feedData); }; f.appendChild(mw); }
             initAds(f);
             if (!n) f.innerHTML = `<p class="empty">${searching ? 'Nenhuma análise encontrada para esta busca. <a href="#" onclick="$(\'sb\').value=\'\';searchQ=\'\';rnd(db);return false">Limpar busca</a>' : 'Ainda não há análises nesta seção.'}</p>`;
         }

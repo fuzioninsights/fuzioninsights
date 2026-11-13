@@ -445,3 +445,6 @@ a.chip:hover,a.chip:focus-visible{background:#fff;border-color:var(--gold-d);col
 .mg-cm .mg-cm-go{border-bottom:3px solid #9CBBEB}
 
 .sh-btn,.sh-btn.pill{border-radius:0!important}
+
+/* menu lateral: Comunidade só com a marca do site (sem o balão) */
+.mg-cm .fz-lock .m2,.mg-cm .fz-lock i{display:none}
