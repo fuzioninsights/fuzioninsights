@@ -356,6 +356,31 @@ function initAds(root) {
   });
 }
 
+/* Contador de visitas próprio: 1 aviso mínimo por página, enviado quando o navegador está ocioso (não pesa nem atrasa nada).
+   O servidor guarda só números; o IP vira um código diário embaralhado. O cookie fz_vid só existe se o visitante aceitou os cookies. */
+function fzStats() {
+  try {
+    if (!/^https?:$/.test(location.protocol) || navigator.webdriver) return;
+    if (/\/painel\.html$/.test(location.pathname) || localStorage.getItem('fz_nostat') === '1') return;
+    let consent = null; try { consent = localStorage.getItem('fz_consent'); } catch (e) {}
+    const hoje = new Date().toISOString().slice(0, 10); let ret = 0;
+    if (consent === 'all') {
+      const m = document.cookie.match(/(?:^|; )fz_vid=(\d{4}-\d{2}-\d{2})/);
+      if (m) { if (m[1] !== hoje) ret = 1; } else document.cookie = 'fz_vid=' + hoje + '; max-age=31536000; path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
+    }
+    const send = o => { try { const blob = new Blob([JSON.stringify(o)], { type: 'text/plain' }); if (!(navigator.sendBeacon && navigator.sendBeacon('/api/visita', blob))) fetch('/api/visita', { method: 'POST', body: blob, keepalive: true }); } catch (e) {} };
+    let ref = ''; try { if (document.referrer) { const u = new URL(document.referrer); ref = u.hostname === location.hostname ? 'self' : u.hostname.replace(/^www\./, ''); } } catch (e) {}
+    let lcp = 0, cls = 0, inp = 0, enviado = false;
+    try { new PerformanceObserver(l => { const e = l.getEntries(); if (e.length) lcp = e[e.length - 1].startTime; }).observe({ type: 'largest-contentful-paint', buffered: true }); } catch (e) {}
+    try { new PerformanceObserver(l => l.getEntries().forEach(e => { if (!e.hadRecentInput) cls += e.value; })).observe({ type: 'layout-shift', buffered: true }); } catch (e) {}
+    try { new PerformanceObserver(l => l.getEntries().forEach(e => { if (e.duration > inp) inp = e.duration; })).observe({ type: 'event', durationThreshold: 40, buffered: true }); } catch (e) {}
+    const fim = () => { if (enviado || !lcp) return; enviado = true; send({ t: 'w', l: Math.round(lcp), c: Math.round(cls * 1000), i: Math.round(inp) }); };
+    addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') fim(); });
+    addEventListener('pagehide', fim);
+    (window.requestIdleCallback || (f => setTimeout(f, 1500)))(() => send({ t: 'v', p: location.pathname + (/artigo\.html$/.test(location.pathname) ? location.search : ''), r: ref, w: innerWidth, ret }));
+  } catch (e) {}
+}
+
 /* Banner de cookies / consentimento (LGPD) */
 function cookieBanner(force) {
   let c = null; try { c = localStorage.getItem('fz_consent'); } catch (e) {}
@@ -514,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.querySelectorAll('.f-links').forEach(n => { if (!n.querySelector('[href$="acesso.html"]')) n.insertAdjacentHTML('beforeend', '<a href="/comunidade.html">Comunidade</a><a href="/assine.html">Assinar</a><a href="/acesso.html">Área do assinante</a>'); });
   if (Admin.token) setInterval(() => Admin.fresh(), 5 * 60 * 1000);
-  cookieBanner(); trackHeader(); initAds(); fMkt(); setInterval(fMkt, 60000);
+  cookieBanner(); fzStats(); trackHeader(); initAds(); fMkt(); setInterval(fMkt, 60000);
 });
 
 

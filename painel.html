@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel | Fuzion Insights</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body{background:#F4F6FA}
+        .pn-top{background:#0A0A0B;border-bottom:2px solid #2F80ED;padding:.7rem var(--gutter,1.35rem)}
+        .pn-top .in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:.9rem}
+        .pn-top img{width:38px;height:38px;display:block}
+        .pn-top b{color:#fff;font:800 .95rem 'Inter',sans-serif;letter-spacing:.16em}
+        .pn-top b span{font-weight:500;color:#9DB8E6}
+        .pn-top .sp{flex:1}
+        .pn-top a,.pn-top button{color:#9DB8E6;font:600 .78rem 'Inter',sans-serif;background:none;border:1px solid rgba(157,184,230,.35);padding:.45rem .8rem;cursor:pointer;text-decoration:none}
+        .pn-top a:hover,.pn-top button:hover{color:#fff;border-color:#2F80ED}
+        .pn{max-width:1200px;margin:0 auto;padding:1.4rem var(--gutter,1.35rem) 3rem;font-family:'Inter',sans-serif;color:#0B1220}
+        .pn-login{max-width:380px;margin:4rem auto;background:#fff;border:1px solid #E4E4E7;padding:1.6rem}
+        .pn-login h1{font-size:1.1rem;margin:0 0 .3rem}.pn-login p{font-size:.8rem;color:#52525B;margin:0 0 1rem}
+        .pn-login input{width:100%;padding:.7rem .8rem;border:1px solid #D4D4D8;margin-bottom:.6rem;font:500 .9rem 'Inter',sans-serif}
+        .pn-btn{background:#1D4ED8;color:#fff;border:0;padding:.75rem 1.2rem;font:700 .8rem 'Inter',sans-serif;letter-spacing:.04em;cursor:pointer;width:100%}
+        .pn-btn:hover{background:#1E40AF}
+        .pn-err{color:#B91C1C;font-size:.8rem;margin:.6rem 0 0;white-space:pre-line}
+        .pn-tabs{display:flex;gap:0;border-bottom:1px solid #D4D4D8;margin-bottom:1.2rem;align-items:flex-end}
+        .pn-tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:.8rem 1.2rem;font:700 .85rem 'Inter',sans-serif;color:#52525B;cursor:pointer}
+        .pn-tabs button[aria-selected="true"]{color:#0B1220;border-bottom-color:#2F80ED}
+        .pn-tabs .sp{flex:1}
+        .pn-tabs select{margin:0 0 .5rem;padding:.45rem .6rem;border:1px solid #D4D4D8;font:600 .8rem 'Inter',sans-serif;background:#fff}
+        .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.8rem;margin-bottom:1rem}
+        .kpi{background:#fff;border:1px solid #E4E4E7;border-top:3px solid #2F80ED;padding:.9rem 1rem}
+        .kpi small{display:block;font:600 .68rem 'Inter',sans-serif;color:#71717A;letter-spacing:.06em;text-transform:uppercase}
+        .kpi b{display:block;font:800 1.7rem/1.2 'Inter',sans-serif;margin-top:.15rem;font-variant-numeric:tabular-nums}
+        .kpi span{font-size:.74rem;color:#52525B}
+        .grid2{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:1rem;margin-bottom:1rem}
+        .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:1rem}
+        @media(max-width:860px){.grid2{grid-template-columns:minmax(0,1fr)}}
+        .card-p{background:#fff;border:1px solid #E4E4E7;padding:1rem 1.1rem;min-width:0}
+        .card-p h3{font:800 .82rem 'Inter',sans-serif;letter-spacing:.04em;text-transform:uppercase;margin:0 0 .8rem;color:#0B1220}
+        .card-p h3 em{font-style:normal;font-weight:500;color:#71717A;text-transform:none;letter-spacing:0;margin-left:.4rem}
+        .bar{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto;gap:.6rem;align-items:center;font-size:.8rem;padding:.28rem 0}
+        .bar .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .bar .tr{height:7px;background:#EEF0F4}.bar .tr i{display:block;height:100%;background:#2F80ED}
+        .bar .vl{font-variant-numeric:tabular-nums;font-weight:700;min-width:2.2rem;text-align:right}
+        .empty-p{color:#71717A;font-size:.82rem;padding:.4rem 0}
+        .chip{display:inline-block;font:700 .66rem 'Inter',sans-serif;padding:.18rem .5rem;letter-spacing:.03em;margin:0 .25rem .25rem 0}
+        .chip.ok{background:#DCFCE7;color:#166534}.chip.warn{background:#FEF3C7;color:#92400E}.chip.bad{background:#FEE2E2;color:#991B1B}.chip.na{background:#EEF0F4;color:#52525B}
+        .vit{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem}
+        .vit>div{border:1px solid #E4E4E7;padding:.8rem .9rem}
+        .vit small{display:block;color:#71717A;font-size:.72rem;margin-top:.35rem;line-height:1.4}
+        .vit b{font:800 1.4rem 'Inter',sans-serif}
+        table.t{width:100%;border-collapse:collapse;font-size:.8rem}
+        table.t th{text-align:left;font:700 .68rem 'Inter',sans-serif;color:#71717A;letter-spacing:.06em;text-transform:uppercase;padding:.45rem .5rem;border-bottom:1px solid #D4D4D8}
+        table.t td{padding:.55rem .5rem;border-bottom:1px solid #EEF0F4;vertical-align:top}
+        table.t td a{color:#0B1220;font-weight:600;text-decoration:none}table.t td a:hover{color:#1D4ED8}
+        .sc{font:800 .95rem 'Inter',sans-serif;font-variant-numeric:tabular-nums}
+        .rules{background:#0A0A0B;color:#D4D4D8;padding:.8rem 1rem;font:500 .74rem/1.5 ui-monospace,Consolas,monospace;overflow:auto;white-space:pre}
+        .hint{font-size:.78rem;color:#52525B;line-height:1.55;margin:.2rem 0 .8rem}
+        .tog{display:flex;gap:.6rem;align-items:center;font-size:.82rem;margin-top:.8rem}
+        svg.ch{width:100%;height:auto;display:block}
+        svg.ch text{font:600 10px 'Inter',sans-serif;fill:#71717A}
+    </style>
+</head>
+<body>
+<div class="pn-top"><div class="in"><img src="logo-quadrado.png" alt=""><b>FUZION <span>INSIGHTS · PAINEL</span></b><div class="sp"></div><a href="/">Ver site</a><button type="button" id="sair" hidden>Sair</button></div></div>
+<main class="pn" id="pn"></main>
+<script>
+(() => {
+    const DB = 'https://fuzion-insights-default-rtdb.firebaseio.com', KEY = 'AIzaSyCwWE9YtckCT--utTkRJAqxk1_HWu0EJlM';
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const root = $('pn');
+    let tk = '', tab = 'vis', range = 30, S = {}, LISTA = {}, DENIED = false, SITE = null;
+    const brDay = ms => new Date(ms).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
+    const fmt = n => (Math.round(n) || 0).toLocaleString('pt-BR');
+    const fmtD = d => d.slice(8, 10) + '/' + d.slice(5, 7);
+    const slugify = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    const slugFromTitle = t => { let s = slugify(t); if (s.length > 60) { s = s.slice(0, 60); const k = s.lastIndexOf('-'); if (k > 25) s = s.slice(0, k); } return s.replace(/-+$/, '') || 'artigo'; };
+    const artSlug = a => a.slug || slugFromTitle(a.title);
+    const tagList = a => (Array.isArray(a.tags) ? a.tags : (a.tags ? Object.values(a.tags) : [])).map(t => String(t).trim()).filter(Boolean);
+
+    /* ---------- login (conta do administrador, a mesma do site) ---------- */
+    function loginView(msg) {
+        $('sair').hidden = true;
+        root.innerHTML = `<form class="pn-login" id="lg"><h1>Painel do administrador</h1><p>Entre com a conta de administrador do Fuzion Insights.</p>
+            <input id="em" type="email" placeholder="E-mail" autocomplete="username" required><input id="pw" type="password" placeholder="Senha" autocomplete="current-password" required>
+            <button class="pn-btn" type="submit">ENTRAR</button>${msg ? `<p class="pn-err">${esc(msg)}</p>` : ''}</form>`;
+        $('lg').onsubmit = async e => {
+            e.preventDefault();
+            try {
+                const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${KEY}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: $('em').value.trim(), password: $('pw').value, returnSecureToken: true }) });
+                const d = await r.json(); if (!d.idToken) return loginView('E-mail ou senha incorretos.');
+                tk = d.idToken; sessionStorage.setItem('fz_pn', JSON.stringify({ t: tk, e: Date.now() + 55 * 60 * 1000 })); start();
+            } catch (er) { loginView('Sem conexão. Tente de novo.'); }
+        };
+    }
+    $('sair').onclick = () => { sessionStorage.removeItem('fz_pn'); tk = ''; loginView(); };
+
+    /* ---------- dados ---------- */
+    async function carregar() {
+        root.innerHTML = '<p class="empty-p">Carregando…</p>';
+        const from = brDay(Date.now() - 29 * 864e5);
+        const q = `orderBy=${encodeURIComponent('"$key"')}&startAt=${encodeURIComponent('"' + from + '"')}`;
+        const [st, li] = await Promise.all([
+            fetch(`${DB}/stats/d.json?auth=${tk}&${q}`).then(async r => { if (r.status === 401 || r.status === 403) { DENIED = true; return {}; } DENIED = false; return r.ok ? (await r.json()) || {} : {}; }).catch(() => ({})),
+            fetch(`${DB}/lista.json`).then(r => r.ok ? r.json() : null).catch(() => null)
+        ]);
+        S = st; LISTA = li || {};
+        SITE = await checarSite();
+        desenhar();
+    }
+    async function checarSite() {
+        const out = {};
+        const chk = async (nome, url, test) => { try { const r = await fetch(url, { cache: 'no-store' }); const t = r.ok ? await r.text() : ''; out[nome] = r.ok ? (test ? test(t) : true) : false; } catch (e) { out[nome] = null; } };
+        await Promise.all([chk('sitemap', '/sitemap.xml', t => (t.match(/<loc>/g) || []).length), chk('robots', '/robots.txt', t => /sitemap:/i.test(t))]);
+        out.https = location.protocol === 'https:' ? true : (location.protocol === 'file:' ? null : false);
+        return out;
+    }
+    const diasN = n => Array.from({ length: n }, (_, i) => brDay(Date.now() - (n - 1 - i) * 864e5));
+    const soma = (dias, f) => dias.reduce((s, d) => s + (Number(f(S[d] || {})) || 0), 0);
+    function agreg(dias, campo) { const o = {}; dias.forEach(d => { const m = (S[d] || {})[campo] || {}; for (const k in m) o[k] = (o[k] || 0) + (Number(m[k]) || 0); }); return o; }
+    const top = (o, n) => Object.entries(o).sort((a, b) => b[1] - a[1]).slice(0, n);
+
+    /* ---------- peças de tela ---------- */
+    function barras(lista, fmtNome) {
+        if (!lista.length) return '<p class="empty-p">Sem dados ainda.</p>';
+        const max = Math.max(...lista.map(x => x[1])) || 1;
+        return lista.map(([k, v]) => `<div class="bar"><span class="nm" title="${esc(fmtNome ? fmtNome(k, true) : k)}">${fmtNome ? fmtNome(k) : esc(k)}</span><span class="tr"><i style="width:${Math.max(3, v / max * 100)}%"></i></span><span class="vl">${fmt(v)}</span></div>`).join('');
+    }
+    function grafico(dias) {
+        const W = 700, H = 190, P = 24, vs = dias.map(d => Number((S[d] || {}).views) || 0), us = dias.map(d => Number((S[d] || {}).uniq) || 0);
+        const max = Math.max(5, ...vs), bw = (W - P * 2) / dias.length, y = v => H - 22 - (v / max) * (H - 40);
+        const bars = vs.map((v, i) => `<rect x="${P + i * bw + bw * .12}" y="${y(v)}" width="${bw * .76}" height="${H - 22 - y(v)}" fill="#2F80ED" opacity=".9"><title>${fmtD(dias[i])}: ${fmt(v)} visualizações</title></rect>`).join('');
+        const line = us.map((v, i) => `${i ? 'L' : 'M'}${P + i * bw + bw / 2},${y(v)}`).join(' ');
+        const step = Math.ceil(dias.length / 8), lab = dias.map((d, i) => i % step === 0 ? `<text x="${P + i * bw + bw / 2}" y="${H - 6}" text-anchor="middle">${fmtD(d)}</text>` : '').join('');
+        return `<svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="Visitas por dia"><text x="${P}" y="12">${fmt(max)}</text><line x1="${P}" x2="${W - P}" y1="${H - 22}" y2="${H - 22}" stroke="#D4D4D8"/>${bars}<path d="${line}" fill="none" stroke="#F97316" stroke-width="2"/>${lab}</svg>
+            <p class="hint" style="margin:.4rem 0 0"><span style="color:#2F80ED">■</span> visualizações &nbsp; <span style="color:#F97316">━</span> visitantes únicos</p>`;
+    }
+    const pctBom = (v, m) => { const n = Number(v[m + '_n']) || 0; return n ? Math.round((Number(v[m + '_g']) || 0) / n * 100) : null; };
+    function vitais(dias) {
+        const v = agreg(dias, 'vt');
+        const def = [['lcp', 'LCP · carregamento', 'Quando o conteúdo principal aparece. Bom: até 2,5 s.', x => (x / 1000).toFixed(1).replace('.', ',') + ' s', 1], ['cls', 'CLS · estabilidade', 'O quanto a página "pula" enquanto carrega. Bom: até 0,1.', x => (x / 1000).toFixed(2).replace('.', ','), 1], ['inp', 'INP · resposta ao toque', 'Tempo entre o toque/clique e a resposta. Bom: até 200 ms.', x => Math.round(x) + ' ms', 1]];
+        return `<div class="vit">${def.map(([m, nome, dica, f]) => { const n = Number(v[m + '_n']) || 0, p = pctBom(v, m), media = n ? (Number(v[m + '_s']) || 0) / n : 0; const chip = p == null ? '<span class="chip na">SEM DADOS</span>' : (p >= 75 ? '<span class="chip ok">BOM</span>' : (p >= 50 ? '<span class="chip warn">ATENÇÃO</span>' : '<span class="chip bad">RUIM</span>'));
+            return `<div><small style="margin:0 0 .2rem;font-weight:700;color:#0B1220">${nome}</small><b>${n ? f(media) : '—'}</b> ${chip}<small>${p == null ? 'Aparece depois das primeiras visitas.' : p + '% das visitas dentro da meta · ' + fmt(n) + ' medições. '}${dica}</small></div>`; }).join('')}</div>`;
+    }
+    const nomePg = (k, completo) => {
+        const path = k.replace(/~/g, '/').replace(/\^/g, '.'); let t = null;
+        const m = /^\/artigo\/(.+)$/.exec(path); if (m) { let s = m[1]; try { s = decodeURIComponent(s); } catch (e) {} const a = Object.values(LISTA).find(a => artSlug(a) === s || a.id === s); if (a) t = a.title; }
+        if (path === '/') t = 'Página inicial';
+        return completo ? (t || path) : esc(t || path);
+    };
+    const NOMES_REF = { busca: 'Buscadores (Google, Bing…)', direto: 'Direto / sem origem', instagram: 'Instagram', facebook: 'Facebook', x: 'X / Twitter', linkedin: 'LinkedIn', whatsapp: 'WhatsApp', telegram: 'Telegram', youtube: 'YouTube', reddit: 'Reddit', outros: 'Outros sites' };
+    const NOMES_DEV = { mobile: 'Celular', desktop: 'Computador', tablet: 'Tablet' };
+    const pais = c => { if (c === 'xx') return 'Não identificado'; try { return new Intl.DisplayNames(['pt-BR'], { type: 'region' }).of(c.toUpperCase()); } catch (e) { return c.toUpperCase(); } };
+
+    /* ---------- aba Visitas ---------- */
+    function abaVisitas() {
+        const dias = diasN(range), hoje = diasN(1), sete = diasN(7);
+        const vP = soma(dias, d => d.views), uP = soma(dias, d => d.uniq), rP = soma(dias, d => d.ret);
+        const kp = (t, v, s) => `<div class="kpi"><small>${t}</small><b>${v}</b><span>${s}</span></div>`;
+        const vazio = !Object.keys(S).length;
+        return (DENIED ? regrasAviso() : '') + (vazio && !DENIED ? '<div class="card-p" style="margin-bottom:1rem"><p class="hint" style="margin:0"><b>Ainda não há visitas registradas.</b> Publique o site com a função de contagem (netlify/functions/visita.js) e acesse algumas páginas — os números aparecem aqui em segundos. Seus acessos neste navegador podem ser ignorados no quadro “Configurações”, ao fim da aba Otimização.</p></div>' : '') + `
+        <div class="kpis">${kp('Hoje', fmt(soma(hoje, d => d.views)), fmt(soma(hoje, d => d.uniq)) + ' visitantes únicos')}${kp('Últimos 7 dias', fmt(soma(sete, d => d.views)), fmt(soma(sete, d => d.uniq)) + ' únicos (somando os dias)')}
+        ${kp('Últimos ' + range + ' dias', fmt(vP), fmt(uP) + ' únicos (somando os dias)')}${kp('Quem volta', uP ? Math.round(rP / uP * 100) + '%' : '—', 'com cookie aceito, de dias diferentes')}${kp('Média por dia', fmt(vP / range), 'visualizações no período')}</div>
+        <div class="grid2"><div class="card-p"><h3>Visitas por dia</h3>${grafico(dias)}</div>
+        <div class="card-p"><h3>De onde vêm <em>por origem</em></h3>${barras(top(agreg(dias, 'ref'), 8), k => esc(NOMES_REF[k] || k))}</div></div>
+        <div class="grid2"><div class="card-p"><h3>Páginas mais vistas</h3>${barras(top(agreg(dias, 'pg'), 12), nomePg)}</div>
+        <div><div class="card-p" style="margin-bottom:1rem"><h3>Aparelho</h3>${barras(top(agreg(dias, 'dev'), 4), k => esc(NOMES_DEV[k] || k))}</div>
+        <div class="card-p"><h3>Países</h3>${barras(top(agreg(dias, 'ct'), 6), k => esc(pais(k)))}</div></div></div>
+        <div class="card-p"><h3>Velocidade real <em>medida nos aparelhos dos visitantes</em></h3>${vitais(dias)}</div>`;
+    }
+    const regrasAviso = () => `<div class="card-p" style="margin-bottom:1rem;border-left:4px solid #F59E0B"><h3>Falta liberar o caminho “stats” no Firebase</h3><p class="hint">No Firebase: Realtime Database &gt; Regras. Acrescente, ao lado de “premium” e “comunidade” (troque pelo e-mail de administrador):</p>
+        <div class="rules">"stats": { ".read": "auth != null &amp;&amp; auth.token.email == 'SEU_EMAIL_ADMIN'",
+           ".write": "auth != null &amp;&amp; auth.token.email == 'SEU_EMAIL_ADMIN'" }</div></div>`;
+
+    /* ---------- aba Otimização ---------- */
+    function analisar(a) {
+        const p = [], t = (a.title || '').trim().length, d = (a.description || a.excerpt || '').trim().length, kb = a.hasImg ? Math.round((Number(a.iv) || 0) * 0.75 / 1024) : 0, tags = tagList(a).length, slug = artSlug(a).length;
+        const palavras = a.kw !== undefined ? a.kw.split(' ').filter(Boolean).length : null;
+        const add = (ok, peso, msg, sev) => p.push({ ok, peso, msg, sev: sev || 'warn' });
+        add(t >= 30 && t <= 65, 20, t < 30 ? `Título curto (${t} caracteres) — use de 30 a 65` : `Título longo (${t} caracteres) — o Google corta acima de ~65`);
+        add(d >= 70 && d <= 160, 20, d < 70 ? `Resumo curto (${d}) — escreva de 70 a 160 caracteres` : `Resumo longo (${d}) — o Google corta acima de ~160`);
+        add(!!a.hasImg, 15, 'Sem imagem de capa', 'bad');
+        add(!a.hasImg || kb <= 300, 10, `Capa pesada (${kb} KB) — comprima para menos de 300 KB`);
+        add(tags >= 2, 10, `Poucas tags (${tags}) — use ao menos 2`);
+        add(palavras === null || palavras >= 120, 15, `Texto curto — pouco conteúdo original (${palavras} termos únicos)`);
+        add(slug <= 75, 10, `Endereço (slug) muito longo (${slug} caracteres)`);
+        const score = p.reduce((s, x) => s + (x.ok ? x.peso : 0), 0);
+        return { score, falhas: p.filter(x => !x.ok), kb };
+    }
+    function abaOtimizacao() {
+        const dias = diasN(30), arts = Object.values(LISTA).filter(a => a && a.title);
+        const an = arts.map(a => ({ a, r: analisar(a) })).sort((x, y) => x.r.score - y.r.score);
+        const media = an.length ? Math.round(an.reduce((s, x) => s + x.r.score, 0) / an.length) : null;
+        const pesadas = an.filter(x => x.r.kb > 300).sort((x, y) => y.r.kb - x.r.kb);
+        const comIdx = arts.filter(a => a.kw !== undefined).length;
+        const cor = s => s >= 80 ? 'ok' : (s >= 60 ? 'warn' : 'bad');
+        const sit = (ok, nome, det) => `<div class="bar" style="grid-template-columns:auto minmax(0,1fr)"><span class="chip ${ok === null ? 'na' : ok ? 'ok' : 'bad'}">${ok === null ? 'N/D' : ok ? 'OK' : 'ATENÇÃO'}</span><span>${nome}${det ? ` <span style="color:#71717A">— ${det}</span>` : ''}</span></div>`;
+        const nostat = localStorage.getItem('fz_nostat') === '1';
+        return `<div class="kpis"><div class="kpi"><small>Nota média das matérias</small><b>${media == null ? '—' : media + '/100'}</b><span>${an.length} matérias analisadas</span></div>
+            <div class="kpi"><small>Matérias a melhorar</small><b>${an.filter(x => x.r.score < 80).length}</b><span>nota abaixo de 80</span></div>
+            <div class="kpi"><small>Capas pesadas</small><b>${pesadas.length}</b><span>acima de 300 KB</span></div>
+            <div class="kpi"><small>Busca no texto completo</small><b>${arts.length ? Math.round(comIdx / arts.length * 100) + '%' : '—'}</b><span>matérias já indexadas (entre como admin no site para atualizar)</span></div></div>
+        <div class="card-p" style="margin-bottom:1rem"><h3>Velocidade real <em>últimos 30 dias, medida nos aparelhos dos visitantes (Core Web Vitals)</em></h3>${vitais(dias)}</div>
+        <div class="grid2"><div class="card-p"><h3>Saúde do site</h3>
+            ${sit(SITE && SITE.https, 'Site em HTTPS', SITE && SITE.https === null ? 'abra pelo endereço publicado para testar' : '')}
+            ${sit(SITE && SITE.sitemap > 0 ? true : (SITE && SITE.sitemap === null ? null : false), 'Sitemap para o Google', SITE && SITE.sitemap ? SITE.sitemap + ' endereços listados' : 'não encontrado')}
+            ${sit(SITE && SITE.robots === null ? null : !!(SITE && SITE.robots), 'robots.txt apontando para o sitemap', '')}
+            ${sit(arts.length ? comIdx === arts.length : null, 'Índice de busca no texto completo', arts.length ? comIdx + ' de ' + arts.length + ' matérias' : '')}
+            ${sit(pesadas.length === 0, 'Capas leves (até 300 KB)', pesadas.length ? pesadas.length + ' acima do ideal' : 'todas leves')}
+            <p class="hint" style="margin-top:.8rem">Dica: o que mais pesa na nota do Google é velocidade (veja o quadro ao lado) e conteúdo útil e original. Comprimir as capas pesadas é o ganho mais rápido.</p></div>
+        <div class="card-p"><h3>Capas mais pesadas</h3>${pesadas.length ? pesadas.slice(0, 8).map(x => `<div class="bar" style="grid-template-columns:minmax(0,1fr) auto"><span class="nm" title="${esc(x.a.title)}">${esc(x.a.title)}</span><span class="vl" style="min-width:4rem">${fmt(x.r.kb)} KB</span></div>`).join('') : '<p class="empty-p">Nenhuma capa acima de 300 KB.</p>'}</div></div>
+        <div class="card-p"><h3>SEO por matéria <em>das que mais precisam de ajuste para as melhores</em></h3>
+            ${an.length ? `<div style="overflow-x:auto"><table class="t"><thead><tr><th>Matéria</th><th>Nota</th><th>O que ajustar</th></tr></thead><tbody>${an.slice(0, 40).map(({ a, r }) => `<tr><td><a href="/artigo/${encodeURIComponent(artSlug(a))}" target="_blank" rel="noopener">${esc(a.title)}</a></td><td><span class="sc chip ${cor(r.score)}">${r.score}</span></td><td>${r.falhas.length ? r.falhas.map(f => `<span class="chip ${f.sev === 'bad' ? 'bad' : 'warn'}">${esc(f.msg)}</span>`).join('') : '<span class="chip ok">Tudo certo</span>'}</td></tr>`).join('')}</tbody></table></div>` : '<p class="empty-p">Nenhuma matéria encontrada na lista pública.</p>'}</div>
+        <div class="card-p" style="margin-top:1rem"><h3>Configurações</h3><label class="tog"><input type="checkbox" id="nostat" ${nostat ? 'checked' : ''}> Não contar as minhas visitas neste navegador</label>
+            <p class="hint" style="margin-top:.5rem">Fica salvo só neste aparelho. Use em cada navegador em que você acessa o site como administrador.</p></div>`;
+    }
+
+    function desenhar() {
+        $('sair').hidden = false;
+        root.innerHTML = `<div class="pn-tabs" role="tablist"><button type="button" role="tab" data-t="vis" aria-selected="${tab === 'vis'}">Visitas</button><button type="button" role="tab" data-t="otm" aria-selected="${tab === 'otm'}">Otimização</button><span class="sp"></span>
+            ${tab === 'vis' ? `<select id="rg" aria-label="Período"><option value="7" ${range === 7 ? 'selected' : ''}>Últimos 7 dias</option><option value="14" ${range === 14 ? 'selected' : ''}>Últimos 14 dias</option><option value="30" ${range === 30 ? 'selected' : ''}>Últimos 30 dias</option></select>` : ''}</div>
+            ${tab === 'vis' ? abaVisitas() : abaOtimizacao()}`;
+        root.querySelectorAll('.pn-tabs button').forEach(b => b.onclick = () => { tab = b.dataset.t; desenhar(); });
+        const rg = $('rg'); if (rg) rg.onchange = () => { range = Number(rg.value); desenhar(); };
+        const ns = $('nostat'); if (ns) ns.onchange = () => { try { ns.checked ? localStorage.setItem('fz_nostat', '1') : localStorage.removeItem('fz_nostat'); } catch (e) {} };
+    }
+
+    function start() { carregar(); }
+    try { const s = JSON.parse(sessionStorage.getItem('fz_pn') || 'null'); if (s && s.e > Date.now()) { tk = s.t; start(); } else loginView(); } catch (e) { loginView(); }
+})();
+</script>
+</body>
+</html>

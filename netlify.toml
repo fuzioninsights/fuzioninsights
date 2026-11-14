@@ -82,6 +82,13 @@
   status = 200
   force = true
 
+# Contador de visitas próprio
+[[redirects]]
+  from = "/api/visita"
+  to = "/.netlify/functions/visita"
+  status = 200
+  force = true
+
 # Pagamento automático (Mercado Pago)
 [[redirects]]
   from = "/api/checkout"
