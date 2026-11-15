@@ -733,6 +733,33 @@
             .sl-txt h2{font-size:1.05rem}
             .sl-txt p{-webkit-line-clamp:2;font-size:.84rem}
         }
+
+        /* ===== v19: correção do mobile — no celular a TV não tem largura/altura fixa (o 452px do desktop virava ALTURA) ===== */
+        @media(max-width:860px){
+            .tvrow .tv{flex:0 0 auto;width:100%;max-width:none;margin-left:0;align-content:start}
+        }
+
+        /* mobile: os botões dividem a largura toda, sejam 9 ou 10 */
+        @media(max-width:560px){
+            .tv-list{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:3px}
+        }
+
+        /* durante a reprodução o selo "AO VIVO" já está na barra de controles */
+        .tv-player.is-play .tv-bug{display:none}
+
+        /* ===== v20: "mobile" = até 860px (celular, tablet, janela estreita): botões SEMPRE abaixo da tela, em uma fileira; tela 4:3; fundo de TV mesmo sem miniatura ===== */
+        .tv-player{background:#0A1633}
+        .tv .tv-poster{background:var(--bg) center/cover no-repeat,radial-gradient(120% 100% at 50% 0%,#17356F 0%,#0A1633 55%,#060C1C 100%)}
+        .tv .tv-item,.tv .tv-poster{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+        @media(max-width:860px){
+            .tvrow .tv{max-width:520px;margin-left:auto;margin-right:auto}
+            .tv-in{grid-template-columns:minmax(0,1fr);gap:.6rem}
+            .tv-list{grid-template-columns:none;grid-template-rows:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:3px;align-content:start;justify-content:stretch;align-self:auto}
+            .tv .tv-item{width:100%;height:auto;aspect-ratio:1}
+            .tv .tv-item svg{width:55%;height:55%}
+            .tv-player:not(.is-play){aspect-ratio:4/3}
+            .tv-vid{aspect-ratio:4/3}
+        }
     </style>
 </head>
 <body>
