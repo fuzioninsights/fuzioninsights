@@ -74,8 +74,8 @@
     const $ = id => document.getElementById(id);
     const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const root = $('pn');
-    let tk = '', tab = 'vis', range = 30, S = {}, LISTA = {}, DENIED = false, SITE = null;
-    const brDay = ms => new Date(ms).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
+    let tk = '', tab = 'vis', range = 30, S = {}, LISTA = {}, DENIED = false, SITE = null, vday = brDay(Date.now()), VIS = null, vfilter = '';
+    function brDay(ms) { return new Date(ms).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }); }
     const fmt = n => (Math.round(n) || 0).toLocaleString('pt-BR');
     const fmtD = d => d.slice(8, 10) + '/' + d.slice(5, 7);
     const slugify = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -220,13 +220,54 @@
             <p class="hint" style="margin-top:.5rem">Fica salvo só neste aparelho. Use em cada navegador em que você acessa o site como administrador.</p></div>`;
     }
 
+
+    /* ---------- aba Visitantes (IP e localização, só o administrador vê) ---------- */
+    const flag = c => /^[a-z]{2}$/.test(c || '') && c !== 'xx' ? String.fromCodePoint(...[...c.toUpperCase()].map(ch => 127397 + ch.charCodeAt(0))) : '🌐';
+    async function carregarVis() {
+        VIS = { day: vday, loading: true, data: {} }; desenhar();
+        try {
+            const r = await fetch(`${DB}/stats/v/${vday}.json?auth=${tk}`);
+            if (r.status === 401 || r.status === 403) DENIED = true;
+            VIS = { day: vday, loading: false, data: r.ok ? (await r.json()) || {} : {} };
+        } catch (e) { VIS = { day: vday, loading: false, data: {} }; }
+        desenhar();
+    }
+    const hora = t => t ? new Date(t).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' }) : '—';
+    const localDe = v => [v.ci, v.rg].filter(Boolean).join(', ') || 'Local não identificado';
+    function linhasVis() {
+        const rows = Object.entries((VIS && VIS.data) || {}).map(([h, v]) => Object.assign({ h }, v)).sort((a, b) => (b.lt || b.t || 0) - (a.lt || a.t || 0));
+        const f = vfilter.trim().toLowerCase();
+        return f ? rows.filter(v => [v.ip, v.ci, v.rg, pais(v.ct || 'xx'), v.p, v.lp].join(' ').toLowerCase().includes(f)) : rows;
+    }
+    function tabelaVis() {
+        const rows = linhasVis();
+        if (!rows.length) return '<p class="empty-p">Nenhum visitante registrado neste dia' + (vfilter ? ' com esse filtro' : '') + '.</p>';
+        return `<div style="overflow-x:auto"><table class="t"><thead><tr><th>Hora</th><th>Local</th><th>IP</th><th>Aparelho</th><th>Origem</th><th>Entrou por</th><th>Páginas</th></tr></thead><tbody>${rows.slice(0, 300).map(v => `<tr>
+            <td>${hora(v.t)}</td><td>${flag(v.ct)} ${esc(localDe(v))}<br><span style="color:#71717A">${esc(pais(v.ct || 'xx'))}</span></td>
+            <td><code style="font-size:.76rem">${esc(v.ip || '—')}</code></td><td>${esc(NOMES_DEV[v.dv] || v.dv || '—')}</td><td>${esc(NOMES_REF[v.rf] || v.rf || '—')}</td>
+            <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis">${esc(nomePg(String(v.p || '/').replace(/\//g, '~').replace(/\./g, '^'), true))}</td><td class="sc">${fmt(v.n || 1)}</td></tr>`).join('')}</tbody></table></div>${rows.length > 300 ? `<p class="hint">Mostrando 300 de ${rows.length}. Use o filtro para achar um IP ou cidade.</p>` : ''}`;
+    }
+    function abaVisitantes() {
+        if (!VIS || VIS.day !== vday) { setTimeout(carregarVis, 0); return '<p class="empty-p">Carregando…</p>'; }
+        if (VIS.loading) return '<p class="empty-p">Carregando…</p>';
+        const rows = Object.values(VIS.data);
+        const cid = {}, pa = {}; rows.forEach(v => { const k = flag(v.ct) + ' ' + localDe(v); cid[k] = (cid[k] || 0) + 1; const c = v.ct || 'xx'; pa[c] = (pa[c] || 0) + 1; });
+        const kp = (t, v, s) => `<div class="kpi"><small>${t}</small><b>${v}</b><span>${s}</span></div>`;
+        return (DENIED ? regrasAviso() : '') + `<div class="kpis">${kp('Visitantes no dia', fmt(rows.length), 'IPs diferentes')}${kp('Cidades', fmt(Object.keys(cid).length), 'locais diferentes')}${kp('Países', fmt(Object.keys(pa).length), 'diferentes')}${kp('Visualizações', fmt(rows.reduce((s, v) => s + (Number(v.n) || 0), 0)), 'páginas abertas')}</div>
+        <div class="grid2"><div class="card-p"><h3>Visitantes <em>mais recentes primeiro</em></h3><input id="vf" type="search" placeholder="Filtrar por IP, cidade, país ou página…" value="${esc(vfilter)}" style="width:100%;padding:.55rem .7rem;border:1px solid #D4D4D8;margin-bottom:.8rem;font:500 .85rem 'Inter',sans-serif"><div id="vtab">${tabelaVis()}</div></div>
+        <div><div class="card-p" style="margin-bottom:1rem"><h3>Cidades</h3>${barras(top(cid, 10), k => esc(k))}</div><div class="card-p"><h3>Países</h3>${barras(top(pa, 8), k => esc(flag(k) + ' ' + pais(k)))}</div></div></div>
+        <p class="hint">O IP e a localização aproximada de cada visitante ficam só neste painel e são apagados automaticamente depois de 30 dias. A localização vem do IP e pode apontar para a cidade do provedor de internet, não do visitante.</p>`;
+    }
+
     function desenhar() {
         $('sair').hidden = false;
-        root.innerHTML = `<div class="pn-tabs" role="tablist"><button type="button" role="tab" data-t="vis" aria-selected="${tab === 'vis'}">Visitas</button><button type="button" role="tab" data-t="otm" aria-selected="${tab === 'otm'}">Otimização</button><span class="sp"></span>
-            ${tab === 'vis' ? `<select id="rg" aria-label="Período"><option value="7" ${range === 7 ? 'selected' : ''}>Últimos 7 dias</option><option value="14" ${range === 14 ? 'selected' : ''}>Últimos 14 dias</option><option value="30" ${range === 30 ? 'selected' : ''}>Últimos 30 dias</option></select>` : ''}</div>
-            ${tab === 'vis' ? abaVisitas() : abaOtimizacao()}`;
+        root.innerHTML = `<div class="pn-tabs" role="tablist"><button type="button" role="tab" data-t="vis" aria-selected="${tab === 'vis'}">Visitas</button><button type="button" role="tab" data-t="vst" aria-selected="${tab === 'vst'}">Visitantes</button><button type="button" role="tab" data-t="otm" aria-selected="${tab === 'otm'}">Otimização</button><span class="sp"></span>
+            ${tab === 'vis' ? `<select id="rg" aria-label="Período"><option value="7" ${range === 7 ? 'selected' : ''}>Últimos 7 dias</option><option value="14" ${range === 14 ? 'selected' : ''}>Últimos 14 dias</option><option value="30" ${range === 30 ? 'selected' : ''}>Últimos 30 dias</option></select>` : (tab === 'vst' ? `<select id="vd" aria-label="Dia">${Array.from({ length: 14 }, (_, i) => brDay(Date.now() - i * 864e5)).map((d, i) => `<option value="${d}" ${d === vday ? 'selected' : ''}>${i === 0 ? 'Hoje' : (i === 1 ? 'Ontem' : fmtD(d))}</option>`).join('')}</select>` : '')}</div>
+            ${tab === 'vis' ? abaVisitas() : (tab === 'vst' ? abaVisitantes() : abaOtimizacao())}`;
         root.querySelectorAll('.pn-tabs button').forEach(b => b.onclick = () => { tab = b.dataset.t; desenhar(); });
         const rg = $('rg'); if (rg) rg.onchange = () => { range = Number(rg.value); desenhar(); };
+        const vd = $('vd'); if (vd) vd.onchange = () => { vday = vd.value; VIS = null; desenhar(); };
+        const vf = $('vf'); if (vf) vf.oninput = () => { vfilter = vf.value; $('vtab').innerHTML = tabelaVis(); };
         const ns = $('nostat'); if (ns) ns.onchange = () => { try { ns.checked ? localStorage.setItem('fz_nostat', '1') : localStorage.removeItem('fz_nostat'); } catch (e) {} };
     }
 

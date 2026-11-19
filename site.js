@@ -628,7 +628,7 @@ const FZAuth = (() => {
 /* ===== Seções, subcategorias e cores (cabeçalho, filtros, painel e cards usam esta lista) ===== */
 const SECTIONS = [
   { n: 'Mercado', c: '#EAB308', d: '#A16207', t: '#111', s: ['Economia', 'Negócios', 'Liderança', 'Bolsa e Ações', 'Renda Fixa', 'Criptomoedas', 'Commodities'] },
-  { n: 'Tecnologia', c: '#0891B2', s: ['Inteligência Artificial', 'Cibersegurança', 'Startups', 'Software e Nuvem', 'Gadgets'] },
+  { n: 'Tecnologia', c: '#0891B2', s: ['Inteligência Artificial', 'Cibersegurança', 'Startups', 'Software e Nuvem', 'Gadgets', 'Games'] },
   { n: 'Ciência', c: '#0D9488', s: ['Saúde', 'Espaço', 'Pesquisa e Descobertas', 'Física e Química'] },
   { n: 'Meio Ambiente', c: '#16A34A', d: '#15803D', s: ['Clima', 'Sustentabilidade', 'Energia Limpa', 'Biodiversidade', 'Água e Saneamento'] },
   { n: 'Cidade', c: '#475569', s: ['Brasília e DF', 'Mobilidade', 'Serviços', 'Meio Ambiente Urbano', 'Segurança'] },
