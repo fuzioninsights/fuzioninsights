@@ -12,7 +12,19 @@ async function adminToken() {
   cache = { t: d.idToken, exp: Date.now() + 50 * 60 * 1000 }; return d.idToken;
 }
 exports.handler = async (event) => {
-  const id = String((event.queryStringParameters || {}).id || '').replace(/\.jpe?g$/i, '').trim();
+  const qs = event.queryStringParameters || {};
+  if (qs.av) {                                   // foto de perfil: ?av=<uid>&v=<versão>
+    const uid = String(qs.av);
+    if (!/^[A-Za-z0-9]{10,40}$/.test(uid)) return { statusCode: 404, body: 'Not found' };
+    try {
+      const t = await adminToken();
+      const v = await (await fetch(`${DB}/comunidade/fotos/${uid}.json?auth=${t}`)).json();
+      const m = typeof v === 'string' && /^data:image\/jpeg;base64,(.+)$/s.exec(v);
+      if (!m) return { statusCode: 404, headers: { 'cache-control': 'public, max-age=60, s-maxage=300' }, body: 'Not found' };
+      return { statusCode: 200, isBase64Encoded: true, headers: { 'content-type': 'image/jpeg', 'cache-control': 'public, max-age=86400, s-maxage=2592000, immutable' }, body: m[1] };
+    } catch (e) { return { statusCode: 500, body: 'Error' }; }
+  }
+  const id = String(qs.id || '').replace(/\.jpe?g$/i, '').trim();
   if (!/^[0-9a-z]{9,14}$/.test(id)) return { statusCode: 404, body: 'Not found' };
   try {
     const t = await adminToken();

@@ -653,7 +653,7 @@ const secLink = (n, sub) => '/?secao=' + slugify(n) + (sub ? '&sub=' + slugify(s
 const FZ_IC = {
   peticao: '<path d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21H15"/><path d="M14 3l5 5v2.5"/><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M8.5 12.5h4M8.5 16h2.5"/><path d="M13.2 20.4l.5-2.2 5.6-5.6a1.4 1.4 0 0 1 2 2l-5.6 5.6z"/>',
   votacao: '<rect x="3" y="3.5" width="18" height="17" rx="4"/><path d="M8 16.5v-4.2M12 16.5V8M16 16.5v-6"/><circle cx="8" cy="12.3" r=".6" fill="currentColor"/><circle cx="12" cy="8" r=".6" fill="currentColor"/><circle cx="16" cy="10.5" r=".6" fill="currentColor"/>',
-  post: '<path d="M4.5 4.5h15A1.5 1.5 0 0 1 21 6v10a1.5 1.5 0 0 1-1.5 1.5H13L8.5 21v-3.5h-4A1.5 1.5 0 0 1 3 16V6a1.5 1.5 0 0 1 1.5-1.5z"/><path d="M7.5 9.2h9M7.5 12.6h5.5"/>',
+  post: '<path d="M6 3.5h8.5L19 8v12.5H6z"/><path d="M14 3.5V8h5"/><path d="M9 12.5h7M9 16h5"/>',
   user: '<circle cx="12" cy="8.2" r="3.7"/><path d="M4.6 20.2a7.4 7.4 0 0 1 14.8 0"/><path d="M19.5 4v3M18 5.5h3" opacity=".7"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   arrow: '<path d="M4.5 12h15M13.5 6l6 6-6 6"/>',
@@ -661,7 +661,11 @@ const FZ_IC = {
   heart: '<path d="M12 20.3S4 15.6 4 9.6A4.3 4.3 0 0 1 8.3 5.3c1.5 0 2.9.8 3.7 2 .8-1.2 2.2-2 3.7-2A4.3 4.3 0 0 1 20 9.6c0 6-8 10.7-8 10.7z"/>',
   flag: '<path d="M5 21V4M5 4.5h11l-2 3.5 2 3.5H5"/>',
   check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
-  community: '<path d="M4.5 4.5h15A1.5 1.5 0 0 1 21 6v10a1.5 1.5 0 0 1-1.5 1.5H13L8.5 21v-3.5h-4A1.5 1.5 0 0 1 3 16V6a1.5 1.5 0 0 1 1.5-1.5z"/><circle cx="8" cy="11" r=".9" fill="currentColor"/><circle cx="12" cy="11" r=".9" fill="currentColor"/><circle cx="16" cy="11" r=".9" fill="currentColor"/>'
+  community: '<path d="M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20"/><circle cx="10" cy="8.5" r="3.2"/><path d="M20 20v-1.4a3.2 3.2 0 0 0-2.4-3.1M15.5 5.4a3.2 3.2 0 0 1 0 6.2"/>',
+  lines: '<path d="M4 6.5h16M4 12h16M4 17.5h10"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/>',
+  camera: '<path d="M4 8h3l1.5-2h7L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/>',
+  trash: '<path d="M5 7h14M9 7V4.5h6V7M7 7l1 13h8l1-13"/>'
 };
 function fzIcon(n) { return `<svg class="fz-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${FZ_IC[n] || ''}</svg>`; }
 document.querySelectorAll('[data-ic]').forEach(el => { el.innerHTML = fzIcon(el.dataset.ic); });

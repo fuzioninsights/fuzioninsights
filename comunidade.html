@@ -183,13 +183,131 @@ body{background:#F2F6FC}
 .cm-stat{border:1px solid #CFD9EA;border-top:3px solid #1D5FD1}
 .cm-empty{border:1px dashed #9DB9E6;background:#fff}
 .fz-chips span{padding:.4rem .75rem;background:rgba(255,255,255,.06);border:1px solid rgba(160,200,255,.4)}
+
+/* ===== v10: painel do topo, cartões com avatar, capa 16:9, barra neon, comentários, curtidas, editar ===== */
+body{background:#F2F6FC}
+.cm-panel{position:relative;background-color:#070C18;background-image:radial-gradient(circle,rgba(141,184,255,.085) 0 .8px,transparent 1.1px),linear-gradient(180deg,rgba(47,128,237,.12),transparent 60%);background-size:4px 4px,100% 100%;border-top:1px solid rgba(47,128,237,.5);border-bottom:3px solid #2F80ED;box-shadow:0 0 26px rgba(47,128,237,.45);color:#fff;padding:1.5rem var(--gutter,1.35rem) 1.3rem}
+.cm-panel-in{max-width:980px;margin:0 auto}
+.cm-ph{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+.cm-plogo{display:block;width:46px;height:46px;box-shadow:0 0 0 1px #2F80ED,0 0 16px rgba(47,128,237,.7)}
+.cm-pword{display:flex;flex-direction:column;gap:5px;line-height:1}
+.cm-pword b{font:800 1.55rem/1 'Inter',sans-serif;letter-spacing:.05em;color:#8DB8FF;text-shadow:0 0 14px rgba(47,128,237,.65)}
+.cm-pword b .cur{color:#5CB0FF;margin-left:2px;animation:cmblink 1.1s steps(1) infinite}
+.cm-pword small{font:600 .6rem 'Inter',sans-serif;letter-spacing:.24em;color:#gray;}
+@keyframes cmblink{0%,45%{opacity:1}50%,95%{opacity:0}100%{opacity:1}}
+.cm-live{margin-left:auto;display:inline-flex;align-items:center;gap:.45rem;font:700 .62rem 'Inter',sans-serif;letter-spacing:.16em;color:#8DB8FF;border:1px solid rgba(47,128,237,.5);padding:.38rem .65rem}
+.cm-live i{width:7px;height:7px;background:#2F80ED;box-shadow:0 0 8px #2F80ED;border-radius:50%!important;animation:cmpulse 1.6s ease-in-out infinite}
+@keyframes cmpulse{0%,100%{opacity:1}50%{opacity:.3}}
+.cm-psub{margin:.85rem 0 1rem;font-size:.84rem;line-height:1.5;color:#B6C6E6;max-width:62ch}
+.cm-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding:.35rem .15rem .7rem;-webkit-overflow-scrolling:touch}
+.cm-track::-webkit-scrollbar{display:none}
+.cm-rc{flex:0 0 250px;scroll-snap-align:start;display:flex;flex-direction:column;background:rgba(10,22,48,.92);border:1px solid rgba(47,128,237,.45);color:#fff;text-decoration:none;transition:border-color .15s,box-shadow .15s,transform .15s}
+.cm-rc:hover,.cm-rc:focus-visible{border-color:#5B9BFF;box-shadow:0 0 18px -2px rgba(47,128,237,.75);outline:0;transform:translateY(-2px)}
+.cm-rc-img{position:relative;display:block;aspect-ratio:16/9;background:#0B1F4D;overflow:hidden}
+.cm-rc-img img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;display:block}
+.cm-rc-ph{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(120% 100% at 50% 0%,#17356F,#0A1633 60%);color:#8DB8FF}
+.cm-rc-ph .fz-i{width:34px;height:34px}
+.cm-rc-t{position:absolute;z-index:2;left:8px;top:8px;font:800 .56rem 'Inter',sans-serif;letter-spacing:.14em;padding:.24rem .45rem;background:rgba(5,11,24,.88);border:1px solid #2F80ED;color:#8DB8FF;font-style:normal}
+.cm-rc-t.votacao{border-color:#F5B74A;color:#F5B74A}.cm-rc-t.post{border-color:#34D3A5;color:#34D3A5}
+.cm-rc-b{display:flex;flex-direction:column;gap:.4rem;padding:.7rem .8rem .8rem;min-height:86px}
+.cm-rc-b b{font:700 .9rem/1.3 'Inter',sans-serif;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cm-rc-b small{font:600 .68rem 'Inter',sans-serif;color:#8DB8FF;letter-spacing:.02em;margin-top:auto}
+.cm-dots{display:flex;gap:6px;justify-content:center;margin-top:.35rem}
+.cm-dots button{width:22px;height:4px;border:0;padding:0;background:rgba(141,184,255,.3);cursor:pointer;border-radius:0!important}
+.cm-dots button.on{background:#2F80ED;box-shadow:0 0 8px #2F80ED}
+.cm-pe{color:#B6C6E6;font-size:.88rem;margin:.4rem 0 1rem}
+.cm-tabs{margin:1.2rem 0 1.4rem}
+@media(max-width:560px){.cm-tabs{margin-top:1rem}.cm-rc{flex-basis:218px}.cm-pword b{font-size:1.3rem}.cm-live{display:none}.cm-panel{padding-top:1.2rem}}
+
+/* cartões */
+.cm-card{padding:1.25rem 1.4rem 1rem}
+.cm-meta{padding-bottom:.8rem;margin-bottom:1rem;align-items:center}
+.cm-av{position:relative;overflow:hidden;width:42px;height:42px;font-size:.95rem;background:#0B1F4D;color:#8DB8FF;border:1px solid #2F80ED;box-shadow:0 0 10px -3px rgba(47,128,237,.8)}
+.cm-av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cm-av.sm{width:32px;height:32px;font-size:.75rem;box-shadow:none}
+.cm-av.xl{width:92px;height:92px;font-size:2rem}
+.cm-who{display:flex;flex-direction:column;gap:2px;min-width:0}
+.cm-who b{font-size:.88rem;color:#0B1220}
+.cm-who em{font-style:normal;font-size:.7rem;color:#64748B}
+.cm-title{font:800 1.55rem/1.2 'Inter',sans-serif;letter-spacing:-.02em;color:#050B18;margin:.1rem 0 .85rem;padding-left:.85rem;border-left:4px solid #2F80ED}
+.cm-card[data-t="votacao"] .cm-title{border-left-color:#F5B74A}
+.cm-cover{aspect-ratio:16/9;width:100%;max-width:520px;margin:0 0 .9rem;background:#0A1530;border:1px solid #CFD9EA;overflow:hidden}
+.cm-cover img{display:block;width:100%;height:100%;object-fit:cover}
+.cm-txt p{margin:0 0 .5rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:.92rem;line-height:1.55;color:#334155;white-space:pre-wrap;word-break:break-word}
+.cm-txt.open p{display:block;-webkit-line-clamp:unset;overflow:visible}
+.cm-lm{background:none;border:0;padding:0;margin:0 0 .5rem;color:#1D4ED8;font:700 .74rem 'Inter',sans-serif;cursor:pointer;letter-spacing:.02em}
+.cm-lm:hover{text-decoration:underline}.cm-lm[hidden]{display:none}
+/* contador de assinaturas: barra neon azul */
+.cm-prog{position:relative;height:12px;background:#0B1B40;border:1px solid rgba(47,128,237,.6);margin:.7rem 0 .5rem;box-shadow:0 0 12px -2px rgba(47,128,237,.5);overflow:visible}
+.cm-prog i{display:block;height:100%;background:linear-gradient(90deg,#2F80ED,#5CB0FF);box-shadow:0 0 8px #2F80ED,0 0 20px rgba(47,128,237,.85);transition:width .5s}
+.cm-prog::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(10% - 2px),#0B1B40 calc(10% - 2px),#0B1B40 10%);pointer-events:none}
+.cm-cnt{display:flex;align-items:baseline;gap:.35rem}
+.cm-pct{order:3;margin-left:auto;font-weight:800;color:#1D4ED8;font-size:.9rem}
+/* curtir, comentar, compartilhar */
+.cm-acts{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:.9rem;padding-top:.85rem;border-top:1px solid #E8EEF8}
+.cm-acts .cm-btn{padding:.65rem 1.1rem}
+.cm-ic{display:inline-flex;align-items:center;gap:.45rem;background:#fff;border:1px solid #BCCBE3;color:#334155;padding:.6rem .85rem;font:700 .72rem 'Inter',sans-serif;cursor:pointer;border-radius:0!important;transition:border-color .15s,color .15s,box-shadow .15s,background .15s}
+.cm-ic em{font-style:normal;letter-spacing:.4px;text-transform:uppercase}
+.cm-ic span{font-variant-numeric:tabular-nums;font-weight:800}
+.cm-ic:hover{border-color:#2F80ED;color:#1D4ED8;box-shadow:0 0 12px -3px rgba(47,128,237,.75)}
+.cm-ic.on{background:#EAF2FF;border-color:#2F80ED;color:#1D4ED8;box-shadow:0 0 12px -4px rgba(47,128,237,.85)}
+.cm-ic.on .fz-i{fill:currentColor}
+.cm-ic[disabled]{opacity:.6;cursor:default}
+/* comentários */
+.cm-com{margin-top:.8rem;border:1px solid #CFD9EA;background:#F7FAFF;padding:.8rem .95rem}
+.cm-com[hidden]{display:none}
+.cm-cl{color:#64748B;font-size:.82rem;margin:.2rem 0}
+.cm-c{display:flex;gap:.65rem;padding:.6rem 0;border-bottom:1px solid #E3EAF6}
+.cm-c:last-child{border-bottom:0}
+.cm-cb{min-width:0;flex:1}
+.cm-ch{display:flex;gap:.6rem;align-items:baseline;flex-wrap:wrap}
+.cm-ch b{font-size:.82rem;color:#0B1220}.cm-ch small{font-size:.68rem;color:#64748B}
+.cm-ch .lk{margin-left:auto;background:none;border:0;padding:0;font:600 .68rem 'Inter',sans-serif;color:#64748B;text-decoration:underline;cursor:pointer}
+.cm-ch .lk:hover{color:#B91C1C}
+.cm-cb p{margin:.15rem 0 0;font-size:.86rem;line-height:1.5;color:#334155;white-space:pre-wrap;word-break:break-word}
+.cm-cf{display:flex;gap:.5rem;align-items:flex-end;margin-top:.7rem}
+.cm-cf textarea{flex:1;min-height:44px;padding:.6rem .7rem;border:1px solid #BCCBE3;background:#fff;font:500 .88rem 'Inter',sans-serif;resize:vertical;border-radius:0!important}
+.cm-cf textarea:focus{outline:0;border-color:#2F80ED;box-shadow:0 0 0 2px rgba(47,128,237,.18)}
+/* rodapé do cartão */
+.cm-foot{margin-top:.9rem;padding-top:.7rem}
+.cm-own{display:inline-flex;gap:1rem;align-items:center}
+.cm-foot .lk{display:inline-flex;align-items:center;gap:.3rem;background:none;border:0;padding:0;color:#64748B;font:600 .72rem 'Inter',sans-serif;cursor:pointer;text-decoration:none}
+.cm-foot .lk:hover{color:#1D4ED8}.cm-foot .lk[data-a="del"]:hover{color:#B91C1C}
+.cm-foot .lk .fz-i{width:1em;height:1em}
+/* formulário e minha área */
+.cm-fh{margin:0 0 .4rem;font:800 1.05rem 'Inter',sans-serif;color:#050B18}
+.cm-pick{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.cm-pick img{width:160px;height:90px;object-fit:cover;border:1px solid #BCCBE3}
+.cm-pick img[hidden]{display:none}
+.cm-pick input[type=file]{width:auto!important;flex:1 1 220px;padding:.45rem!important;font-size:.8rem}
+.cm-dots[hidden]{display:none}
+.cm-chk{display:inline-flex!important;align-items:center;gap:.4rem;margin:0!important;font-weight:600!important}
+.cm-chk input{width:auto!important}
+.cm-me-av{display:flex;gap:1rem;align-items:center;margin:.2rem 0 1rem;flex-wrap:wrap}
+.cm-me-btns{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
+.cm-me-av small{display:block;color:#64748B;font-size:.7rem;max-width:42ch}
+.cm-li-b{display:inline-flex;gap:.4rem;flex:none}
+@media(max-width:560px){
+  .cm-title{font-size:1.25rem}
+  .cm-card{padding:1.05rem 1rem .9rem}
+  .cm-ic em{display:none}.cm-ic{padding:.6rem .75rem}
+  .cm-acts .cm-btn{flex:1 1 100%;justify-content:center}
+  .cm-cf{flex-direction:column;align-items:stretch}
+  .cm-av.xl{width:76px;height:76px}
+}
 </style>
-<section class="fz-hero"><div class="fz-hero-in">
-    <span data-lockup></span>
-    <h1>Sua voz, com peso.</h1>
-    <p id="cm-sub">Abra petições, crie votações e enquetes e publique para a comunidade de assinantes da Fuzion Insights e fora dela. Cada item tem link e botões de compartilhamento para você divulgar nas redes; criar é um benefício de assinante.</p>
-    <div class="fz-chips"><span><i data-ic="peticao"></i>Petições</span><span><i data-ic="votacao"></i>Votações e enquetes</span><span><i data-ic="post"></i>Publicações</span></div>
-</div></section>
+<section class="cm-panel" aria-label="Painel da Comunidade">
+    <div class="cm-panel-in">
+        <div class="cm-ph">
+            <img class="cm-plogo" src="logo-quadrado.png" alt="Fuzion Insights" width="46" height="46">
+            <div class="cm-pword"><b>FUZION INSIGHTS<span class="cur">_</span></b><small>COMUNIDADE</small></div>
+            <span class="cm-live"><i></i>MAIS RECENTES</span>
+        </div>
+        <p class="cm-psub" id="cm-sub">Petições, votações e publicações dos assinantes. Participe, assine, comente e dê voz à sua opinião e causa pessoal ou coletiva.</p>
+        <div class="cm-track" id="cm-track" aria-label="Itens mais recentes da Comunidade"></div>
+        <div class="cm-dots" id="cm-dots"></div>
+    </div>
+</section>
 <main class="page cm">
     <div class="cm-tabs" role="tablist" aria-label="Seções da comunidade">
         <button class="cm-tab" role="tab" data-tab="peticao"><i data-ic="peticao"></i>Petições</button>
@@ -223,19 +341,25 @@ body{background:#F2F6FC}
 <script src="site.js"></script>
 <script>
 (() => {
-const API = '/.netlify/functions/comunidade';
+const API = '/.netlify/functions/comunidade', IMGF = '/.netlify/functions/comunidade-img';
 const TXT = {
   peticao: { nome: 'Petições', novo: '+ Nova petição', dica: 'Abra uma causa e reúna assinaturas. Cada pessoa assina uma vez.' },
   votacao: { nome: 'Votações', novo: '+ Nova votação', dica: 'Pergunte à comunidade. Cada pessoa vota uma vez; o resultado aparece depois do voto.' },
   post: { nome: 'Publicações', novo: '+ Nova publicação', dica: 'Textos curtos para a comunidade. Seja respeitoso: o conteúdo é moderado.' }
 };
-const ERR = { login: 'Entre na sua conta para continuar.', verificar: 'Confirme o e-mail da sua conta (enviamos um link) para participar.', sem_assinatura: 'Criar é um benefício de assinante.', limite: 'Você atingiu o limite de 3 criações por dia. Volte amanhã.', curto: 'Texto muito curto. Escreva um pouco mais.', opcoes: 'Informe pelo menos 2 opções.', ja_votou: 'Você já participou desta.', encerrada: 'Esta votação já foi encerrada.', proibido: 'Você não pode excluir isto.', nome: 'Use de 3 a 30 caracteres.', imagem: 'Não foi possível usar essa imagem. Tente outra (JPG ou PNG).', regras: 'A comunidade ainda não foi ativada no servidor. Avise a redação.', configuracao: 'O serviço ainda não foi configurado.', rede: 'Sem conexão agora. Tente de novo.', servidor: 'Não foi possível concluir agora. Tente em instantes.' };
-const S = { tab: 'peticao', lists: {}, me: null, plano: null, uid: null };
+const TIPO_NOME = { peticao: 'Petição', votacao: 'Votação', post: 'Publicação' };
+const ERR = { login: 'Entre na sua conta para continuar.', verificar: 'Confirme o e-mail da sua conta (enviamos um link) para participar.', sem_assinatura: 'Criar é um benefício de assinante.', limite: 'Você atingiu o limite de 3 criações por dia. Volte amanhã.', limite_com: 'Você atingiu o limite de comentários de hoje.', curto: 'Texto muito curto. Escreva um pouco mais.', opcoes: 'Informe pelo menos 2 opções.', ja_votou: 'Você já participou desta.', encerrada: 'Esta votação já foi encerrada.', proibido: 'Você não tem permissão para isso.', nome: 'Use de 3 a 30 caracteres.', imagem: 'Não foi possível usar essa imagem. Tente outra (JPG ou PNG).', nao_existe: 'Este item não existe mais.', regras: 'A comunidade ainda não foi ativada no servidor. Avise a redação.', configuracao: 'O serviço ainda não foi configurado.', rede: 'Sem conexão agora. Tente de novo.', servidor: 'Não foi possível concluir agora. Tente em instantes.' };
+const S = { tab: 'peticao', lists: {}, me: null, plano: null, uid: null, focus: null, rec: null, com: {}, open: new Set(), exp: new Set(), editing: null, v: +(sessionStorage.getItem('fz_cmv') || 0) };
 const $c = id => document.getElementById(id);
+const bump = () => { S.v = Date.now(); try { sessionStorage.setItem('fz_cmv', S.v); } catch (e) {} };   // depois de uma ação sua, ignora o cache de borda
+const qv = () => S.v ? '&v=' + S.v : '';
 const fmt = t => { const d = Date.now() - t, m = Math.floor(d / 6e4); if (m < 1) return 'agora'; if (m < 60) return `há ${m} min`; const h = Math.floor(m / 60); if (h < 24) return `há ${h} h`; const dd = Math.floor(h / 24); return dd < 8 ? `há ${dd} d` : new Date(t).toLocaleDateString('pt-BR'); };
 const dmy = iso => String(iso || '').split('-').reverse().join('/');
 const hoje = () => new Date().toISOString().slice(0, 10);
 const num = n => (n || 0).toLocaleString('pt-BR');
+const imgUrl = it => `${IMGF}?id=${it.id}&v=${it.ed || it.t}`;
+const avUrl = (u, fv) => `${IMGF}?av=${encodeURIComponent(u)}&v=${fv}`;
+const avHTML = (u, nome, fv, cls) => `<span class="cm-av${cls ? ' ' + cls : ''}">${esc((nome || '?').trim().charAt(0).toUpperCase())}${fv ? `<img src="${avUrl(u, fv)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>`;
 
 async function api(body) {
   const token = await FZAuth.token();
@@ -264,14 +388,61 @@ async function loadList(tab, more) {
   const L = S.lists[tab] = S.lists[tab] || { itens: [], mais: false, ok: false };
   const last = more && L.itens.length ? L.itens[L.itens.length - 1].id : '';
   try {
-    const r = await fetch(`${API}?tipo=${tab}${last ? '&antes=' + last : ''}`);
+    const r = await fetch(`${API}?tipo=${tab}${last ? '&antes=' + last : ''}${qv()}`);
     const d = await r.json();
     if (!d.ok) { $c('cm-aviso').innerHTML = `<div class="cm-note">${esc(ERR[d.erro] || ERR.servidor)}</div>`; return; }
     $c('cm-aviso').innerHTML = '';
     L.itens = more ? L.itens.concat(d.itens) : d.itens; L.mais = d.mais; L.ok = true;
   } catch (e) { $c('cm-aviso').innerHTML = `<div class="cm-note">${esc(ERR.rede)}</div>`; }
 }
+async function loadFocus(tipo, id) {
+  S.focus = null;
+  try { const d = await (await fetch(`${API}?tipo=${tipo}&id=${encodeURIComponent(id)}${qv()}`)).json(); if (d.ok) S.focus = d.item; else toast(ERR.nao_existe); } catch (e) {}
+}
+async function loadCom(id, tipo) {
+  try { const d = await (await fetch(`${API}?tipo=${tipo}&id=${id}&com=1${qv()}`)).json(); S.com[id] = d.ok ? d.itens : []; } catch (e) { S.com[id] = []; }
+}
 
+/* ---------- painel do topo: o que há de mais recente ---------- */
+const recTxt = it => it.tipo === 'peticao' ? `${num(it.n)} ${it.n === 1 ? 'assinatura' : 'assinaturas'}` : it.tipo === 'votacao' ? `${num((it.v || []).reduce((a, b) => a + b, 0))} votos` : `${num(it.n)} ${it.n === 1 ? 'curtida' : 'curtidas'}`;
+const recCard = it => `<a class="cm-rc" href="#${it.tipo}/${it.id}" data-open="${it.tipo}/${it.id}"><span class="cm-rc-img">${it.img ? `<img src="${imgUrl(it)}" alt="" loading="lazy" onerror="this.remove()">` : ''}<span class="cm-rc-ph">${fzIcon(it.tipo)}</span><em class="cm-rc-t ${it.tipo}">${TIPO_NOME[it.tipo].toUpperCase()}</em></span><span class="cm-rc-b"><b>${esc(it.titulo || it.texto)}</b><small>${recTxt(it)} · ${fmt(it.t)}</small></span></a>`;
+let autoTm = 0, pausado = false;
+function paintPanel() {
+  const tr = $c('cm-track'), dots = $c('cm-dots'), L = S.rec;
+  if (!L) { tr.innerHTML = '<p class="cm-pe">Carregando…</p>'; dots.innerHTML = ''; return; }
+  if (!L.length) { tr.innerHTML = '<p class="cm-pe">Ainda não há nada por aqui. Seja o primeiro a criar!</p>'; dots.innerHTML = ''; return; }
+  tr.innerHTML = L.map(recCard).join('');
+  dots.innerHTML = L.map((_, i) => `<button type="button" aria-label="Ir para o item ${i + 1}" data-dot="${i}"></button>`).join('');
+  marcaDots(); startAuto();
+}
+const passo = () => { const c = $c('cm-track').children[0]; return c ? c.offsetWidth + 14 : 264; };
+function marcaDots() { const tr = $c('cm-track'), dots = $c('cm-dots'), i = Math.round(tr.scrollLeft / passo()), max = tr.scrollWidth - tr.clientWidth, n = tr.children.length, k = max <= 4 ? 0 : (tr.scrollLeft + 6 >= max ? n - 1 : Math.min(n - 1, i)); dots.hidden = max <= 4; [...dots.children].forEach((d, j) => d.classList.toggle('on', j === k)); }
+function startAuto() {
+  clearInterval(autoTm); if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  autoTm = setInterval(() => {
+    const tr = $c('cm-track'); if (pausado || document.hidden || tr.children.length < 2) return;
+    const max = tr.scrollWidth - tr.clientWidth; if (max <= 4) return;
+    tr.scrollTo({ left: tr.scrollLeft + 6 >= max ? 0 : Math.min(max, (Math.round(tr.scrollLeft / passo()) + 1) * passo()), behavior: 'smooth' });
+  }, 3800);
+}
+async function loadRecentes() {
+  try { const d = await (await fetch(`${API}?recentes=1${qv()}`)).json(); S.rec = d.ok ? d.itens : []; } catch (e) { S.rec = []; }
+  paintPanel();
+}
+{ const tr = $c('cm-track'), box = tr.parentNode;
+  tr.addEventListener('scroll', marcaDots, { passive: true });
+  ['mouseenter', 'focusin', 'touchstart'].forEach(ev => box.addEventListener(ev, () => { pausado = true; }, { passive: true }));
+  ['mouseleave', 'focusout'].forEach(ev => box.addEventListener(ev, () => { pausado = false; }));
+  box.addEventListener('touchend', () => setTimeout(() => { pausado = false; }, 4000), { passive: true });
+  $c('cm-dots').addEventListener('click', e => { const b = e.target.closest('[data-dot]'); if (b) tr.scrollTo({ left: +b.dataset.dot * passo(), behavior: 'smooth' }); });
+  tr.addEventListener('click', e => { const a = e.target.closest('[data-open]'); if (!a) return; e.preventDefault(); const [tp, id] = a.dataset.open.split('/'); openItem(tp, id); });
+}
+async function openItem(tipo, id) {
+  await loadFocus(tipo, id); if (!S.focus) return;
+  S.tab = tipo; history.replaceState(null, '', `#${tipo}/${id}`); paintTop();
+  if (!S.lists[tipo] || !S.lists[tipo].ok) await loadList(tipo);
+  paintList(); $c('cm-feed').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
 /* ---------- compartilhar + link direto ---------- */
 const findItem = id => (S.focus && S.focus.id === id) ? S.focus : ((S.lists[S.tab] || {}).itens || []).find(x => x.id === id);
@@ -289,34 +460,47 @@ function toggleShare(btn) {
   bar.querySelector('[data-copy]').onclick = () => copyText(url, 'Link copiado!');
   const nb = bar.querySelector('[data-native]'); if (nb) nb.onclick = () => navigator.share({ title: t, text: msg, url }).catch(() => {});
 }
-async function loadFocus(tipo, id) {
-  S.focus = null;
-  try { const d = await (await fetch(`${API}?tipo=${tipo}&id=${encodeURIComponent(id)}`)).json(); if (d.ok) S.focus = d.item; else toast('Este item não existe mais.'); } catch (e) {}
-}
 
 /* ---------- cartões ---------- */
-const imgOf = it => it.img ? `<img class="cm-img" src="/ci/${it.id}.jpg" alt="" loading="lazy">` : '';
 const mark = id => S.me && S.me.meus && S.me.meus[id];
+const liked = it => it.tipo === 'post' ? !!mark(it.id) : !!(S.me && S.me.likes && S.me.likes[it.id]);
+const likeN = it => it.tipo === 'post' ? (it.n || 0) : (it.lk || 0);
+const coverOf = it => it.img ? `<div class="cm-cover"><img src="${imgUrl(it)}" alt="" loading="lazy" onerror="this.parentNode.remove()"></div>` : '';
+const txtOf = it => it.texto ? `<div class="cm-txt${S.exp.has(it.id) ? ' open' : ''}"><p>${esc(it.texto)}</p><button type="button" class="cm-lm" data-a="lm" data-id="${it.id}" hidden>${S.exp.has(it.id) ? 'Mostrar menos' : 'Ler mais'}</button></div>` : '';
+function comHTML(it) {
+  const L = S.com[it.id]; if (!L) return '<p class="cm-cl">Carregando…</p>';
+  const adm = !!(S.me && S.me.adm), own = !!S.uid && it.u === S.uid;
+  return `<div class="cm-clist">${L.length ? L.map(c => `<div class="cm-c">${avHTML(c.u, c.autor, c.fv, 'sm')}<div class="cm-cb"><div class="cm-ch"><b>${esc(c.autor || 'Assinante')}</b><small>${fmt(c.t)}</small>${(adm || own || (S.uid && c.u === S.uid)) ? `<button type="button" class="lk" data-a="delc" data-id="${it.id}" data-c="${c.id}">Excluir</button>` : ''}</div><p>${esc(c.texto)}</p></div></div>`).join('') : '<p class="cm-cl">Ainda não há comentários. Seja o primeiro a comentar.</p>'}</div>
+    <form class="cm-cf" data-id="${it.id}"><textarea maxlength="400" rows="2" placeholder="Escreva um comentário…" aria-label="Comentário"></textarea><button type="submit" class="cm-btn">Comentar</button></form>`;
+}
 function card(it) {
-  const mine = mark(it.id), own = S.uid && it.u === S.uid, adm = S.me && S.me.adm, ini = esc((it.autor || '?').trim().charAt(0).toUpperCase());
+  const mine = mark(it.id), own = !!S.uid && it.u === S.uid, adm = !!(S.me && S.me.adm);
   let body = '';
   if (it.tipo === 'peticao') {
     const pct = Math.min(100, Math.round(((it.n || 0) / (it.meta || 100)) * 100));
-    body = `<h3>${esc(it.titulo)}</h3>${imgOf(it)}<p>${esc(it.texto)}</p><div class="cm-prog" aria-hidden="true"><i style="width:${pct}%"></i></div><div class="cm-cnt"><b>${num(it.n)}</b> de ${num(it.meta || 100)} assinaturas</div>
-      <button type="button" class="cm-btn${mine ? ' done' : ''}" data-a="${mine ? 'des' : 'sign'}" data-id="${it.id}">${mine ? fzIcon('check') + 'Você assinou' : fzIcon('peticao') + 'Assinar petição'}</button>`;
+    body = `<h3 class="cm-title">${esc(it.titulo)}</h3>${coverOf(it)}${txtOf(it)}<div class="cm-prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></div><div class="cm-cnt"><span class="cm-pct">${pct}%</span><b>${num(it.n)}</b> de ${num(it.meta || 100)} assinaturas</div>`;
   } else if (it.tipo === 'votacao') {
     const enc = it.fim && it.fim < hoje(), total = (it.v || []).reduce((a, b) => a + b, 0), showRes = !!mine || enc || own;
-    body = `<h3>${esc(it.titulo)}</h3>${imgOf(it)}${it.texto ? `<p>${esc(it.texto)}</p>` : ''}` + (it.opcoes || []).map((o, i) => {
+    body = `<h3 class="cm-title">${esc(it.titulo)}</h3>${coverOf(it)}${txtOf(it)}` + (it.opcoes || []).map((o, i) => {
       const v = (it.v || [])[i] || 0, pct = total ? Math.round(v * 100 / total) : 0;
       return showRes ? `<div class="cm-opt res${mine && mine.v === i ? ' mine' : ''}"><i class="bar" style="width:${pct}%"></i><span><em style="font-style:normal">${esc(o)}${mine && mine.v === i ? ' ✓' : ''}</em><b>${pct}% · ${num(v)}</b></span></div>`
         : `<button type="button" class="cm-opt" data-a="vote" data-id="${it.id}" data-op="${i}"><span>${esc(o)}</span></button>`;
     }).join('') + `<div class="cm-cnt">${num(total)} ${total === 1 ? 'voto' : 'votos'} · ${enc ? '<span class="cm-end">Encerrada</span>' : 'encerra em ' + dmy(it.fim)}</div>`;
   } else {
-    body = `${imgOf(it)}<p style="font-size:.95rem;margin-bottom:.6rem">${esc(it.texto)}</p><button type="button" class="cm-btn ghost${mine ? ' done' : ''}" data-a="${mine ? 'des' : 'like'}" data-id="${it.id}">${fzIcon('heart')}${mine ? 'Curtido' : 'Curtir'} · ${num(it.n)}</button>`;
+    body = `${coverOf(it)}${txtOf(it)}`;
   }
+  const sign = it.tipo === 'peticao' ? `<button type="button" class="cm-btn${mine ? ' done' : ''}" data-a="${mine ? 'des' : 'sign'}" data-id="${it.id}">${mine ? fzIcon('check') + 'Você assinou' : fzIcon('peticao') + 'Assinar petição'}</button>` : '';
+  const acts = `<div class="cm-acts">${sign}<button type="button" class="cm-ic${liked(it) ? ' on' : ''}" data-a="like" data-id="${it.id}" aria-pressed="${liked(it)}" title="Curtir">${fzIcon('heart')}<span>${num(likeN(it))}</span><em>${liked(it) ? 'Curtido' : 'Curtir'}</em></button><button type="button" class="cm-ic${S.open.has(it.id) ? ' on' : ''}" data-a="com" data-id="${it.id}" aria-expanded="${S.open.has(it.id)}" title="Comentários">${fzIcon('lines')}<span>${num(it.cm)}</span><em>Comentar</em></button><button type="button" class="cm-ic" data-a="share" data-id="${it.id}" title="Compartilhar">${fzIcon('share')}<em>Compartilhar</em></button></div>`;
   const sub = `mailto:fuzioninsights@gmail.com?subject=${encodeURIComponent('Denúncia de conteúdo da comunidade')}&body=${encodeURIComponent('Tipo: ' + it.tipo + '\nCódigo: ' + it.id + '\n\nMotivo:')}`;
-  return `<article class="cm-card" id="i-${it.id}" data-t="${it.tipo}"><div class="cm-meta"><span class="cm-av">${ini}</span><span><b>${esc(it.autor || 'Assinante')}</b> · ${fmt(it.t)}</span><em class="cm-type ${it.tipo}">${fzIcon(it.tipo)}${it.tipo === 'peticao' ? 'Petição' : it.tipo === 'votacao' ? 'Enquete' : 'Post'}</em></div>${body}
-    <div class="cm-foot"><button type="button" class="cm-share" data-a="share" data-id="${it.id}">${fzIcon('share')}Compartilhar</button><a href="${sub}">${fzIcon('flag')}Denunciar</a>${own || adm ? `<button type="button" class="lk" data-a="del" data-id="${it.id}">Excluir</button>` : ''}</div></article>`;
+  return `<article class="cm-card" id="i-${it.id}" data-t="${it.tipo}"><div class="cm-meta">${avHTML(it.u, it.autor, it.fv)}<span class="cm-who"><b>${esc(it.autor || 'Assinante')}</b><em>${fmt(it.t)}${it.ed ? ' · editado' : ''}</em></span><em class="cm-type ${it.tipo}">${fzIcon(it.tipo)}${TIPO_NOME[it.tipo]}</em></div>${body}${acts}<div class="cm-com"${S.open.has(it.id) ? '' : ' hidden'}>${S.open.has(it.id) ? comHTML(it) : ''}</div>
+    <div class="cm-foot"><a href="${sub}">${fzIcon('flag')}Denunciar</a>${own || adm ? `<span class="cm-own"><button type="button" class="lk" data-a="edit" data-id="${it.id}">${fzIcon('edit')}Editar</button><button type="button" class="lk" data-a="del" data-id="${it.id}">${fzIcon('trash')}Excluir</button></span>` : ''}</div></article>`;
+}
+function clampCheck(root) {   // mostra "Ler mais" só onde o texto passa de 3 linhas
+  (root || document).querySelectorAll('.cm-txt').forEach(w => { const p = w.querySelector('p'), b = w.querySelector('.cm-lm'); if (!p || !b) return; b.hidden = !(w.classList.contains('open') || p.scrollHeight > p.clientHeight + 2); });
+}
+function updCard(id) {
+  const it = findItem(id), art = $c('i-' + id); if (!it || !art) return paintList();
+  const t = document.createElement('template'); t.innerHTML = card(it); const n = t.content.firstElementChild; art.replaceWith(n); clampCheck(n);
 }
 function paintList() {
   const L = S.lists[S.tab];
@@ -327,103 +511,169 @@ function paintList() {
   if (fo && fo.tipo === 'peticao') { const sb = document.querySelector(`#i-${fo.id} [data-a=share]`); if (sb && !document.querySelector(`#i-${fo.id} .share-bar`)) toggleShare(sb); }
   const all = $c('cm-all'); if (all) all.onclick = e => { e.preventDefault(); S.focus = null; history.replaceState(null, '', '#' + S.tab); paintList(); };
   $c('cm-more').hidden = !(L && L.mais);
+  clampCheck($c('cm-list'));
+  S.open.forEach(id => { if (!S.com[id] && $c('i-' + id)) { const it = findItem(id); if (it) loadCom(id, it.tipo).then(() => updCard(id)); } });
 }
 
-/* ---------- formulário de criação ---------- */
-let FOTO = '';
-const pick = '<label for="f-i">Imagem (opcional)</label><div class="cm-pick"><input id="f-i" type="file" accept="image/jpeg,image/png,image/webp"><img id="f-ip" alt="" hidden></div><small>Reduzimos a imagem automaticamente. Use só imagens que você tem direito de publicar.</small>';
-async function toJpeg(file) {
-  const url = URL.createObjectURL(file);
-  try {
-    const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
-    let max = 1000, q = .8, out = '';
-    for (let k = 0; k < 7; k++) {
-      const s = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
-      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
-      out = c.toDataURL('image/jpeg', q); if (out.length <= 250000) return out; q = Math.max(.4, q - .1); max -= 130;
-    }
-    return '';
-  } finally { URL.revokeObjectURL(url); }
+/* ---------- imagens: capa 16:9 e foto de perfil quadrada ---------- */
+function loadImg(file) { const url = URL.createObjectURL(file); return new Promise((res, rej) => { const i = new Image(); i.onload = () => { URL.revokeObjectURL(url); res(i); }; i.onerror = () => { URL.revokeObjectURL(url); rej(); }; i.src = url; }); }
+async function toCover(file) {          // recorta no centro em 16:9 e reduz (até ~200 KB)
+  const im = await loadImg(file); let W = 960, q = .82;
+  for (let k = 0; k < 7; k++) {
+    const H = Math.round(W * 9 / 16), c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
+    const s = Math.max(W / im.width, H / im.height), dw = im.width * s, dh = im.height * s; x.drawImage(im, (W - dw) / 2, (H - dh) / 2, dw, dh);
+    const out = c.toDataURL('image/jpeg', q); if (out.length <= 200000) return out; q = Math.max(.45, q - .1); W -= 100;
+  }
+  return '';
 }
-function formHTML(tab) {
-  if (tab === 'peticao') return `<label for="f-t">Título da petição</label><input id="f-t" maxlength="120" placeholder="Ex.: Mais clareza nos dados do mercado"><label for="f-x">Por que isso importa?</label><textarea id="f-x" maxlength="1500" placeholder="Explique a causa (mínimo 30 caracteres)"></textarea>${pick}<div class="row2"><div><label for="f-m">Meta de assinaturas</label><input id="f-m" type="number" min="10" max="100000" value="100"></div></div>`;
-  if (tab === 'votacao') return `<label for="f-t">Pergunta</label><input id="f-t" maxlength="120" placeholder="Ex.: Qual tema vocês querem ver na próxima análise?"><label for="f-x">Contexto (opcional)</label><textarea id="f-x" maxlength="400" style="min-height:70px"></textarea><label>Opções (2 a 6)</label><div class="cm-opts" id="f-ops"><input maxlength="60" placeholder="Opção 1"><input maxlength="60" placeholder="Opção 2"></div><div style="margin-top:.4rem"><button type="button" class="cm-btn ghost" id="f-addop">+ opção</button></div>${pick}<div class="row2"><div><label for="f-d">Duração</label><select id="f-d"><option value="3">3 dias</option><option value="7" selected>7 dias</option><option value="14">14 dias</option><option value="30">30 dias</option></select></div></div>`;
-  return `<label for="f-x">Sua publicação</label><textarea id="f-x" maxlength="600" placeholder="Compartilhe uma ideia, pergunta ou aviso (até 600 caracteres)"></textarea>${pick}`;
+async function toSquare(file, size) {   // foto de perfil: quadrada, bem leve (até ~45 KB)
+  const im = await loadImg(file); let S2 = size || 192, q = .85;
+  for (let k = 0; k < 6; k++) {
+    const c = document.createElement('canvas'); c.width = c.height = S2; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, S2, S2);
+    const s = Math.max(S2 / im.width, S2 / im.height), dw = im.width * s, dh = im.height * s; x.drawImage(im, (S2 - dw) / 2, (S2 - dh) / 2, dw, dh);
+    const out = c.toDataURL('image/jpeg', q); if (out.length <= 45000) return out; q = Math.max(.5, q - .1); S2 -= 24;
+  }
+  return '';
 }
-function openForm() {
-  const f = $c('cm-form'); f.innerHTML = formHTML(S.tab) + `<div class="cm-act"><button class="cm-btn" type="submit" id="f-go">Publicar</button><button class="cm-btn ghost" type="button" id="f-cancel">Cancelar</button><small>Sem links suspeitos, ofensas ou dados pessoais. Limite de 3 criações por dia.</small></div>`;
-  f.classList.add('on'); FOTO = '';
+
+/* ---------- formulário (criar e editar) ---------- */
+let FOTO = '', SEMIMG = false;
+const pickHTML = it => `<label for="f-i">Imagem de capa (opcional, formato 16:9)</label><div class="cm-pick">${it && it.img ? `<img id="f-cur" src="${imgUrl(it)}" alt="" onerror="this.remove()">` : ''}<img id="f-ip" alt="" hidden><input id="f-i" type="file" accept="image/jpeg,image/png,image/webp">${it && it.img ? '<label class="cm-chk"><input type="checkbox" id="f-rm"> Remover a imagem atual</label>' : ''}</div><small>Cortamos e reduzimos a imagem automaticamente em 16:9. Use só imagens que você tem direito de publicar.</small>`;
+function formHTML(tab, it) {
+  const v = k => it ? esc(it[k] || '') : '';
+  if (tab === 'peticao') return `<label for="f-t">Título da petição</label><input id="f-t" maxlength="120" placeholder="Ex.: Mais clareza nos dados do mercado" value="${v('titulo')}"><label for="f-x">Por que isso importa?</label><textarea id="f-x" maxlength="1500" placeholder="Explique a causa (mínimo 30 caracteres)">${v('texto')}</textarea>${pickHTML(it)}<div class="row2"><div><label for="f-m">Meta de assinaturas</label><input id="f-m" type="number" min="10" max="100000" value="${it ? it.meta || 100 : 100}"></div></div>`;
+  if (tab === 'votacao') return `<label for="f-t">Pergunta</label><input id="f-t" maxlength="120" placeholder="Ex.: Qual tema vocês querem ver na próxima análise?" value="${v('titulo')}"><label for="f-x">Contexto (opcional)</label><textarea id="f-x" maxlength="400" style="min-height:70px">${v('texto')}</textarea>` +
+    (it ? `<label>Opções</label><div class="cm-opts">${(it.opcoes || []).map(o => `<input disabled value="${esc(o)}">`).join('')}</div><small>As opções e os votos não podem ser alterados depois de publicada.</small>` : `<label>Opções (2 a 6)</label><div class="cm-opts" id="f-ops"><input maxlength="60" placeholder="Opção 1"><input maxlength="60" placeholder="Opção 2"></div><div style="margin-top:.4rem"><button type="button" class="cm-btn ghost" id="f-addop">+ opção</button></div>`) +
+    `${pickHTML(it)}` + (it ? '' : `<div class="row2"><div><label for="f-d">Duração</label><select id="f-d"><option value="3">3 dias</option><option value="7" selected>7 dias</option><option value="14">14 dias</option><option value="30">30 dias</option></select></div></div>`);
+  return `<label for="f-x">Sua publicação</label><textarea id="f-x" maxlength="600" placeholder="Compartilhe uma ideia, pergunta ou aviso (até 600 caracteres)">${v('texto')}</textarea>${pickHTML(it)}`;
+}
+function openForm(tab, it) {
+  const f = $c('cm-form'); S.editing = it || null; FOTO = ''; SEMIMG = false;
+  f.innerHTML = `<h4 class="cm-fh">${it ? 'Editar ' + TIPO_NOME[tab].toLowerCase() : TXT[tab].novo.replace('+ ', '')}</h4>` + formHTML(tab, it) + `<div class="cm-act"><button class="cm-btn" type="submit" id="f-go">${it ? 'Salvar alterações' : 'Publicar'}</button><button class="cm-btn ghost" type="button" id="f-cancel">Cancelar</button><small>${it ? 'Alterações ficam marcadas como “editado”.' : 'Sem links suspeitos, ofensas ou dados pessoais. Limite de 3 criações por dia.'}</small></div>`;
+  f.classList.add('on');
   const fi = $c('f-i'); if (fi) fi.onchange = async () => {
     const pv = $c('f-ip'); FOTO = ''; pv.hidden = true; const file = fi.files[0]; if (!file) return;
-    const j = await toJpeg(file).catch(() => ''); if (!j) { fi.value = ''; return say('imagem'); }
-    FOTO = j; pv.src = j; pv.hidden = false;
+    const j = await toCover(file).catch(() => ''); if (!j) { fi.value = ''; return say('imagem'); }
+    FOTO = j; pv.src = j; pv.hidden = false; const cur = $c('f-cur'); if (cur) cur.hidden = true; const rm = $c('f-rm'); if (rm) rm.checked = false;
   };
   const add = $c('f-addop'); if (add) add.onclick = () => { const w = $c('f-ops'); if (w.children.length < 6) { const i = document.createElement('input'); i.maxLength = 60; i.placeholder = 'Opção ' + (w.children.length + 1); w.appendChild(i); } if (w.children.length >= 6) add.hidden = true; };
-  $c('f-cancel').onclick = () => f.classList.remove('on');
-  (f.querySelector('input,textarea') || f).focus();
+  $c('f-cancel').onclick = () => { f.classList.remove('on'); S.editing = null; };
+  f.scrollIntoView({ behavior: 'smooth', block: 'start' }); (f.querySelector('input,textarea') || f).focus();
 }
 $c('cm-form').addEventListener('submit', async e => {
-  e.preventDefault(); const tab = S.tab, b = { acao: 'criar', tipo: tab };
-  const g = id => ($c(id) ? $c(id).value : '');
+  e.preventDefault(); const tab = S.tab, ed = S.editing, g = id => ($c(id) ? $c(id).value : '');
+  const b = ed ? { acao: 'editar', tipo: ed.tipo, id: ed.id } : { acao: 'criar', tipo: tab };
   if (tab !== 'post') b.titulo = g('f-t'); b.texto = g('f-x');
   if (tab === 'peticao') b.meta = g('f-m');
-  if (tab === 'votacao') { b.opcoes = [...document.querySelectorAll('#f-ops input')].map(i => i.value); b.dias = g('f-d'); }
-  if (FOTO) b.img = FOTO;
+  if (!ed && tab === 'votacao') { b.opcoes = [...document.querySelectorAll('#f-ops input')].map(i => i.value); b.dias = g('f-d'); }
+  if (FOTO) b.img = FOTO; else if (ed && $c('f-rm') && $c('f-rm').checked) b.semimg = true;
   const btn = $c('f-go'); btn.disabled = true;
   const r = await api(b); btn.disabled = false;
   if (!r.ok) return say(r.erro);
-  $c('cm-form').classList.remove('on'); toast('Publicado! Divulgue o link abaixo.');
-  await loadMe(); await loadList(tab); paintList(); paintTop();
+  $c('cm-form').classList.remove('on'); S.editing = null; bump();
+  if (ed) {
+    const novo = r.item; [S.focus, ...Object.values(S.lists).flatMap(L => L.itens)].filter(x => x && x.id === ed.id).forEach(x => Object.assign(x, novo, { img: !!novo.img }));
+    toast('Alterações salvas.'); paintList(); loadRecentes(); return;
+  }
+  toast('Publicado! Divulgue o link abaixo.');
+  await loadMe(); await loadList(tab); paintList(); paintTop(); loadRecentes();
   { const nb = r.item && document.querySelector(`#i-${r.item.id} [data-a=share]`); if (nb && !document.querySelector(`#i-${r.item.id} .share-bar`)) { toggleShare(nb); nb.scrollIntoView({ block: 'center', behavior: 'smooth' }); } }
 });
 
 /* ---------- ações nos cartões ---------- */
 document.addEventListener('click', async e => {
-  const b = e.target.closest('[data-a]'); if (!b || b.closest('#cm-me') && b.dataset.a !== 'del') return;
+  const b = e.target.closest('[data-a]'); if (!b) return;
   const a = b.dataset.a, id = b.dataset.id, it = findItem(id);
+  if (b.closest('#cm-me') && a !== 'del' && a !== 'edit-me') return;
   if (a === 'share') { toggleShare(b); return; }
+  if (a === 'lm') { S.exp.has(id) ? S.exp.delete(id) : S.exp.add(id); const w = b.closest('.cm-txt'); w.classList.toggle('open', S.exp.has(id)); b.textContent = S.exp.has(id) ? 'Mostrar menos' : 'Ler mais'; return; }
+  if (a === 'edit-me') { await openItem(b.dataset.tp, id); if (S.focus && S.focus.id === id) { if (!S.me) await loadMe(); openForm(b.dataset.tp, S.focus); } return; }
+  if (a === 'edit') { if (it) openForm(it.tipo, it); return; }
+  if (a === 'com') {
+    if (!it) return;
+    if (S.open.has(id)) { S.open.delete(id); updCard(id); return; }
+    S.open.add(id); S.com[id] = null; updCard(id); await loadCom(id, it.tipo); updCard(id); return;
+  }
+  if (a === 'delc') {
+    if (!confirm('Excluir este comentário?')) return;
+    const r = await api({ acao: 'excluir_com', tipo: it.tipo, id, cid: b.dataset.c }); if (!r.ok) return say(r.erro);
+    bump(); S.com[id] = (S.com[id] || []).filter(c => c.id !== b.dataset.c); it.cm = Math.max(0, (it.cm || 1) - 1); updCard(id); return;
+  }
   if (a === 'del') {
-    if (!confirm('Excluir definitivamente?')) return;
-    const tipo = it ? it.tipo : b.dataset.tp; const r = await api({ acao: 'excluir', tipo, id });
-    if (!r.ok) return say(r.erro);
-    toast('Excluído.'); Object.values(S.lists).forEach(L => { L.itens = L.itens.filter(x => x.id !== id); }); if (S.focus && S.focus.id === id) S.focus = null;
-    await loadMe(); S.tab === 'minha' ? paintMe() : paintList(); return;
+    if (!confirm('Excluir definitivamente? Isso apaga também as assinaturas, curtidas e comentários.')) return;
+    const tipo = it ? it.tipo : b.dataset.tp; b.disabled = true; const r = await api({ acao: 'excluir', tipo, id });
+    if (!r.ok) { b.disabled = false; return say(r.erro); }
+    bump(); toast('Excluído.');
+    Object.values(S.lists).forEach(L => { L.itens = L.itens.filter(x => x.id !== id); }); if (S.focus && S.focus.id === id) S.focus = null; if (S.rec) S.rec = S.rec.filter(x => x.id !== id);
+    delete S.com[id]; S.open.delete(id);
+    await loadMe(); S.tab === 'minha' ? paintMe() : paintList(); paintPanel(); return;
   }
   if (!it) return;
   if (!(await ensureLogin())) return;
   if (!S.me) await loadMe();
+  if (a === 'like') {
+    b.disabled = true; const ja = liked(it); let r;
+    if (it.tipo === 'post') r = ja ? await api({ acao: 'desfazer', tipo: 'post', id }) : await api({ acao: 'votar', tipo: 'post', id });
+    else r = await api({ acao: 'curtir', tipo: it.tipo, id });
+    if (!r.ok) { b.disabled = false; if (r.erro === 'ja_votou') await loadMe(); updCard(id); return say(r.erro); }
+    bump();
+    if (it.tipo === 'post') { if (ja) { it.n = Math.max(0, (it.n || 1) - 1); delete S.me.meus[id]; } else { it.n = (it.n || 0) + 1; S.me.meus[id] = { tp: 'post', v: 0, ti: (it.texto || '').slice(0, 80) }; } }
+    else { S.me.likes = S.me.likes || {}; if (r.ativo) { S.me.likes[id] = 1; it.lk = (it.lk || 0) + 1; } else { delete S.me.likes[id]; it.lk = Math.max(0, (it.lk || 1) - 1); } }
+    updCard(id); return;
+  }
   b.disabled = true;
   const r = a === 'des' ? await api({ acao: 'desfazer', tipo: it.tipo, id }) : await api({ acao: 'votar', tipo: it.tipo, id, op: b.dataset.op });
-  if (!r.ok) { b.disabled = false; if (r.erro === 'ja_votou') await loadMe(); paintList(); return say(r.erro); }
+  if (!r.ok) { b.disabled = false; if (r.erro === 'ja_votou') await loadMe(); updCard(id); return say(r.erro); }
+  bump();
   if (a === 'des') { it.n = Math.max(0, (it.n || 1) - 1); delete S.me.meus[id]; }
   else { it.n = (it.n || 0) + 1; if (it.tipo === 'votacao') { const k = +b.dataset.op; it.v = it.v || []; it.v[k] = (it.v[k] || 0) + 1; } S.me.meus[id] = { tp: it.tipo, v: +(b.dataset.op || 0), ti: (it.titulo || it.texto || '').slice(0, 80) }; }
-  paintList();
+  updCard(id); loadRecentes();
+});
+document.addEventListener('submit', async e => {
+  const f = e.target.closest('.cm-cf'); if (!f) return; e.preventDefault();
+  const id = f.dataset.id, it = findItem(id), ta = f.querySelector('textarea'), btn = f.querySelector('button'); if (!it) return;
+  if (ta.value.trim().length < 2) return say('curto');
+  if (!(await ensureLogin())) return; if (!S.me) await loadMe();
+  btn.disabled = true; const r = await api({ acao: 'comentar', tipo: it.tipo, id, texto: ta.value }); btn.disabled = false;
+  if (!r.ok) return say(r.erro);
+  bump(); S.com[id] = (S.com[id] || []).concat([r.c]); it.cm = (it.cm || 0) + 1; updCard(id);
+  const nt = document.querySelector(`#i-${id} .cm-cf textarea`); if (nt) nt.focus();
 });
 $c('cm-more').onclick = async () => { await loadList(S.tab, true); paintList(); };
 $c('cm-new').onclick = async () => {
   if (!(await ensureLogin())) return;
   await loadMe();
   if (!S.plano) { toast(ERR.sem_assinatura); return openSubscribe(); }
-  openForm();
+  openForm(S.tab);
 };
 
 /* ---------- minha área ---------- */
 function paintMe() {
   const U = FZAuth.user, box = $c('cm-me');
-  if (!U) { box.innerHTML = `<div class="cm-card"><h3>Entre para ver a sua área</h3><p>Com a sua conta você assina petições, vota, curte e (sendo assinante) cria conteúdo.</p><button class="cm-btn" type="button" id="me-login">Entrar / criar conta</button></div>`; $c('me-login').onclick = () => FZAuth.open().then(() => init()); return; }
+  if (!U) { box.innerHTML = `<div class="cm-card"><h3>Entre para ver a sua área</h3><p>Com a sua conta você assina petições, vota, curte, comenta e (sendo assinante) cria conteúdo.</p><button class="cm-btn" type="button" id="me-login">Entrar / criar conta</button></div>`; $c('me-login').onclick = () => FZAuth.open().then(() => init()); return; }
   const m = S.me || { meus: {}, criados: {} }, cr = Object.entries(m.criados || {}).sort((a, b) => b[0] < a[0] ? -1 : 1), pa = Object.entries(m.meus || {}).sort((a, b) => b[0] < a[0] ? -1 : 1);
-  const tp = { peticao: 'Petição', votacao: 'Votação', post: 'Publicação' }, ini = esc((U.displayName || U.email || '?').charAt(0).toUpperCase());
-  box.innerHTML = `<div class="cm-card"><div class="cm-meta"><span class="cm-av">${ini}</span><span><b>${esc(U.displayName || U.email)}</b> · ${esc(U.email)}</span></div>
-      <p style="margin:0 0 .7rem">${S.plano ? `Assinante <b>${esc(S.plano.plano ? S.plano.plano.charAt(0).toUpperCase() + S.plano.plano.slice(1) : '')}</b> · acesso até <b>${dmy(S.plano.ate)}</b>` : 'Conta gratuita: você pode assinar, votar e curtir. <a href="/assine.html">Assine</a> para criar petições, votações e publicações.'}</p>
+  const tp = { peticao: 'Petição', votacao: 'Votação', post: 'Publicação' }, nome = m.nome || U.displayName || U.email;
+  box.innerHTML = `<div class="cm-card"><div class="cm-meta"><span class="cm-who"><b>${esc(nome)}</b><em>${esc(U.email)}</em></span></div>
+      <div class="cm-me-av">${avHTML(S.uid, nome, m.fv, 'xl')}<div><div class="cm-me-btns"><button class="cm-btn" type="button" id="me-foto">${fzIcon('camera')}${m.fv ? 'Trocar foto' : 'Enviar foto de perfil'}</button>${m.fv ? '<button class="cm-btn ghost" type="button" id="me-fotox">Remover</button>' : ''}</div><input type="file" id="me-file" accept="image/jpeg,image/png,image/webp" hidden><small>Foto quadrada, reduzida automaticamente. Aparece nas suas publicações, petições, votações e comentários.</small></div></div>
+      <p style="margin:.2rem 0 .7rem">${S.plano ? `Assinante <b>${esc(S.plano.plano ? S.plano.plano.charAt(0).toUpperCase() + S.plano.plano.slice(1) : '')}</b> · acesso até <b>${dmy(S.plano.ate)}</b>` : 'Conta gratuita: você pode assinar, votar, curtir e comentar. <a href="/assine.html">Assine</a> para criar petições, votações e publicações.'}</p>
       <label for="me-nome" style="font:700 .72rem Inter,sans-serif">Nome público na comunidade</label>
-      <div style="display:flex;gap:.5rem;margin-top:.25rem;flex-wrap:wrap"><input id="me-nome" maxlength="30" value="${esc(m.nome || U.displayName || '')}" placeholder="Como você quer aparecer" style="flex:1;min-width:180px;padding:.65rem;border:1px solid #D4D4D8;border-radius:6px"><button class="cm-btn" type="button" id="me-salvar">Salvar</button></div>
-      <small style="display:block;color:var(--muted);font-size:.7rem;margin-top:.3rem">Vale para o que você criar daqui em diante. Seu e-mail nunca aparece para os outros.</small></div>
-    <div class="cm-stats"><div class="cm-stat"><b>${cr.length}</b><span>Criados</span></div><div class="cm-stat"><b>${pa.filter(x => x[1].tp === 'peticao').length}</b><span>Assinaturas</span></div><div class="cm-stat"><b>${pa.filter(x => x[1].tp !== 'peticao').length}</b><span>Votos e curtidas</span></div></div>
-    <div class="cm-card"><h3>Meus conteúdos</h3>${cr.length ? cr.map(([id, v]) => `<div class="cm-li"><span><small>${tp[v.tp] || ''}</small>${esc(v.ti)}</span><button type="button" class="cm-btn ghost" data-a="del" data-id="${id}" data-tp="${esc(v.tp)}">Excluir</button></div>`).join('') : '<p style="margin:0;color:var(--muted)">Você ainda não criou nada.</p>'}</div>
+      <div style="display:flex;gap:.5rem;margin-top:.25rem;flex-wrap:wrap"><input id="me-nome" maxlength="30" value="${esc(m.nome || U.displayName || '')}" placeholder="Como você quer aparecer" style="flex:1;min-width:180px;padding:.65rem;border:1px solid #BCCBE3"><button class="cm-btn" type="button" id="me-salvar">Salvar</button></div>
+      <small style="display:block;color:var(--muted);font-size:.7rem;margin-top:.3rem">Vale para o que você criar e comentar daqui em diante. Seu e-mail nunca aparece para os outros.</small></div>
+    <div class="cm-stats"><div class="cm-stat"><b>${cr.length}</b><span>Criados</span></div><div class="cm-stat"><b>${pa.filter(x => x[1].tp === 'peticao').length}</b><span>Assinaturas</span></div><div class="cm-stat"><b>${pa.filter(x => x[1].tp !== 'peticao').length + Object.keys(m.likes || {}).length}</b><span>Votos e curtidas</span></div></div>
+    <div class="cm-card"><h3>Meus conteúdos</h3>${cr.length ? cr.map(([id, v]) => `<div class="cm-li"><span><small>${tp[v.tp] || ''}</small>${esc(v.ti)}</span><span class="cm-li-b"><button type="button" class="cm-btn ghost" data-a="edit-me" data-id="${id}" data-tp="${esc(v.tp)}">Editar</button><button type="button" class="cm-btn ghost" data-a="del" data-id="${id}" data-tp="${esc(v.tp)}">Excluir</button></span></div>`).join('') : '<p style="margin:0;color:var(--muted)">Você ainda não criou nada.</p>'}</div>
     <div class="cm-card"><h3>Minhas participações</h3>${pa.length ? pa.slice(0, 30).map(([id, v]) => `<div class="cm-li"><span><small>${tp[v.tp] || ''}</small>${esc(v.ti)}</span></div>`).join('') : '<p style="margin:0;color:var(--muted)">Você ainda não participou de nada.</p>'}</div>
     <div><button class="cm-btn ghost" type="button" id="me-sair">Sair da conta</button></div>`;
-  $c('me-salvar').onclick = async () => { const r = await api({ acao: 'perfil', nome: $c('me-nome').value }); r.ok ? (S.me.nome = r.nome, toast('Nome atualizado.')) : say(r.erro); };
+  $c('me-salvar').onclick = async () => { const r = await api({ acao: 'perfil', nome: $c('me-nome').value }); r.ok ? (S.me.nome = r.nome, bump(), toast('Nome atualizado.'), paintMe()) : say(r.erro); };
   $c('me-sair').onclick = async () => { await FZAuth.signOut(); location.reload(); };
+  $c('me-foto').onclick = () => $c('me-file').click();
+  $c('me-file').onchange = async ev => {
+    const file = ev.target.files[0]; if (!file) return;
+    const j = await toSquare(file).catch(() => ''); if (!j) return say('imagem');
+    const r = await api({ acao: 'foto', img: j }); if (!r.ok) return say(r.erro);
+    bump(); S.me.fv = r.fv; Object.values(S.lists).forEach(L => L.itens.forEach(x => { if (x.u === S.uid) x.fv = r.fv; })); toast('Foto atualizada.'); paintMe();
+  };
+  const fx = $c('me-fotox'); if (fx) fx.onclick = async () => { const r = await api({ acao: 'foto', remover: true }); if (!r.ok) return say(r.erro); bump(); S.me.fv = 0; Object.values(S.lists).forEach(L => L.itens.forEach(x => { if (x.u === S.uid) x.fv = 0; })); toast('Foto removida.'); paintMe(); };
 }
 
 /* ---------- abas ---------- */
@@ -442,6 +692,7 @@ async function go(tab, keep) {
 }
 document.querySelectorAll('.cm-tab').forEach(t => t.onclick = () => go(t.dataset.tab));
 async function init() {
+  paintPanel(); loadRecentes();
   await FZAuth.ready(); await loadMe();
   const hs = location.hash.replace('#', '').split('/'); S.tab = ['peticao', 'votacao', 'post', 'minha'].includes(hs[0]) ? hs[0] : 'peticao';
   if (hs[1] && S.tab !== 'minha') await loadFocus(S.tab, hs[1]);
